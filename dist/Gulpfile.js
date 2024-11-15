@@ -1,0 +1,90 @@
+import gulp from 'gulp';
+import gulpSass from 'gulp-sass';
+import shell from 'gulp-shell';
+import * as os from 'os';
+import * as dartSass from 'sass';
+import backendSettings from '../settings/backend-settings.json' assert { type: 'json' };
+import masterSettings from '../settings/master-settings.json' assert { type: 'json' };
+import pageSettings from '../settings/page-settings.json' assert { type: 'json' };
+import publicSettings from '../settings/public-settings.json' assert { type: 'json' };
+import { buildPublic, buildPublicLib } from './gulp/public.js';
+import { buildBackend, buildBackendJSW, buildBackendJSWLib, buildBackendLib } from './gulp/backend.js';
+import { checkPages, checkTs, checkTsLib } from './gulp/checks.js';
+import { compileScss } from './gulp/styles.js';
+import { buildPages } from './gulp/pages.js';
+import { previewTemplates, previewTemplatesLib } from './gulp/templates.js';
+import { copyFiles, copyFilesLib } from './gulp/copy.js';
+import { cleanSrc, cleanWix } from './gulp/clean.js';
+import { addTypes, updateWixTypes } from './gulp/types.js';
+import { setProdConfig } from './gulp/pipeline.js';
+import { watchAll } from './gulp/watchers.js';
+import { green, magenta, orange, red } from './index.js';
+import { testLib, test } from './gulp/test.js';
+const sass = gulpSass(dartSass);
+const outputDir = './src';
+const userHomeDir = os.homedir();
+const replaceOptions = {
+    logs: {
+        enabled: false
+    }
+};
+const taskOptions = {
+    enableIncrementalBuild: false,
+    outputDir,
+    sass,
+    userHomeDir,
+    pageSettings,
+    publicSettings,
+    backendSettings,
+    masterSettings,
+    replaceOptions,
+    cwd: process.cwd(),
+};
+gulp.task('check-ts', gulp.parallel(checkTs(), checkTsLib()));
+gulp.task('scss', gulp.parallel(compileScss(taskOptions)));
+gulp.task('build-backend', gulp.parallel(buildBackend(taskOptions), buildBackendLib(taskOptions), buildBackendJSW(taskOptions), buildBackendJSWLib(taskOptions)));
+gulp.task('build-public', gulp.parallel(buildPublic(taskOptions), buildPublicLib(taskOptions)));
+gulp.task('preview-templates', gulp.parallel(previewTemplates(), previewTemplatesLib()));
+gulp.task('copy-files', gulp.parallel(copyFiles(taskOptions), copyFilesLib(taskOptions)));
+gulp.task('test', gulp.parallel(test(), testLib()));
+gulp.task('sync-types', shell.task([
+    'yarn postinstall',
+]));
+gulp.task('fix-wixtypes', gulp.parallel(updateWixTypes(taskOptions)));
+gulp.task('add-wix-types', function (done) {
+    return addTypes(taskOptions, done);
+});
+gulp.task('set-production', gulp.parallel(setProdConfig()));
+gulp.task('start-wix', shell.task([
+    'yarn wix:dev',
+]));
+gulp.task('gen-docs', shell.task([
+    'yarn docs',
+]));
+gulp.task('fix-wix', gulp.series(cleanWix(), 'sync-types', 'fix-wixtypes', 'add-wix-types'));
+gulp.task('build', gulp.parallel('build-backend', 'build-public', buildPages(taskOptions), compileScss(taskOptions), 'copy-files'));
+gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 'fix-wixtypes', 'add-wix-types', 'test', 'build'));
+gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions), 'gen-docs'));
+gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 'start-wix', (done) => checkPages(false, taskOptions.projectSettings?.force ?? false).then(() => done(), (err) => done(err))));
+gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 'build', 'start-dev-env'));
+async function gulpTaskRunner(task) {
+    return new Promise(function (resolve, reject) {
+        gulp.series(task, (done) => {
+            resolve(true);
+            done();
+        })(function (err) {
+            console.log((`💩 ${red.underline.bold("=> Error starting tasks =>")} ${orange(err)}`));
+            if (err) {
+                reject(err);
+            }
+        });
+    });
+}
+export async function runTask(task, moduleSettings, projectSettings) {
+    taskOptions.cwd = moduleSettings.targetFolder;
+    taskOptions.moduleSettings = moduleSettings;
+    taskOptions.projectSettings = projectSettings;
+    console.log("🐕" + magenta.underline(' => Starting Task => ' + orange(task)));
+    await gulpTaskRunner(task);
+    console.log("🐶" + green.underline.bold(' => Task completed: ' + task));
+}

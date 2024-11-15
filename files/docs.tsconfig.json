@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "outDir": "../src",
+    "rootDir": "../typescript",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "preserveConstEnums": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "declaration": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "public/*": ["./**/public/*"],
+      "backend/*": ["./**/backend/*"],
+      "pages/*": ["./**/pages/*"],
+      "types/*": ["./**/types/*"]
+    },
+    "typeRoots": ["./**/types", "../node_modules/@types"]
+  },
+  "exclude": [
+    "../node_modules",
+    "../.wix",
+    "**/*.js",
+    "node_modules",
+    "./wix",
+    "./**/*.test.ts"
+  ]
+}

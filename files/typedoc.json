@@ -1,0 +1,19 @@
+{
+    "entryPoints": ["typescript/**/*.ts", "typescript/**/*.tsx"],
+    "entryPointStrategy": "expand",
+    "out": "docs",
+    "plugin": ["typedoc-theme-hierarchy"],
+    "theme": "hierarchy",
+    "tsconfig": "docs.tsconfig.json",
+    "excludeExternals": true,
+    "externalPattern":[
+        "**/node_modules/**",
+        "./.wix/**",
+        ".wix/**"
+    ],
+    "exclude": [
+        "./.wix/**/*",
+        ".wix/**/*"
+    ],
+    "name": "Wix-lucy"
+}

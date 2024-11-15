@@ -1,0 +1,31 @@
+{
+    "modules": {},
+    "wixSettings": {
+        "compilerOptions": {
+            "composite": true,
+            "noEmit": false,
+            "lib": [],
+            "jsx": "react-jsx"
+        },
+        "exclude": ["**/*.js"]
+    },
+    "initialized": false,
+    "wixPackages": {
+        "@hey-api/openapi-ts": "0.55.1"
+    },
+    "devPackages": {
+        "@wix/cli": "1.1.50"
+    },
+    "scripts": {
+        "postinstall": "wix sync-types",
+        "wix:dev": "wix dev",
+        "dev": "lucy-cli dev",
+        "lint": "eslint .",
+        "docs": "typedoc --tsconfig typescript/tsconfig.json --skipErrorChecking",
+        "build": "lucy-cli build-prod",
+        "fix-wix": "lucy-cli fix",
+        "tsc": "tsc -p ./typescript/tsconfig.json --noEmit",
+        "test": "jest --config jest.config.ts --passWithNoTests",
+        "test:watch": "jest --config jest.config.ts --watch"
+    }
+}

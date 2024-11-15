@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "composite": true,
+    "jsx": "react-jsx",
+    "noEmit": false,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["DOM"],
+    "paths": {
+      "backend/*.web.js": [],
+      "backend/*.web": [],
+      "public/*": [],
+      "backend/*": [],
+      "wix-types/*": ["../wix-code-types/dist/types/*"],
+      "types/*": []
+    }
+  },
+  "include": []
+}
