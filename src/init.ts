@@ -36,6 +36,7 @@ export async function init(moduleSettings: ModuleSettings, projectSettings: Proj
 
 	moduleSettings.settings.initialized = true;
 
+	fs.rm(join(moduleSettings.targetFolder, '.eslintrc.json'), { recursive: false });
 	fs.writeFile(join(moduleSettings.targetFolder, 'lucy.json'), JSON.stringify(moduleSettings.settings, null, 2));
 
 	console.log(chalk.greenBright.underline('🐶 => Initialization done!'));

@@ -25,6 +25,7 @@ export async function init(moduleSettings, projectSettings) {
     await editJson(join(moduleSettings.targetFolder, 'typedoc.json'), ['name'], [path.basename(moduleSettings.targetFolder)]);
     await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules);
     moduleSettings.settings.initialized = true;
+    fs.rm(join(moduleSettings.targetFolder, '.eslintrc.json'), { recursive: false });
     fs.writeFile(join(moduleSettings.targetFolder, 'lucy.json'), JSON.stringify(moduleSettings.settings, null, 2));
     console.log(chalk.greenBright.underline('🐶 => Initialization done!'));
 }
