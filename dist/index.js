@@ -5,12 +5,11 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 import settings from './settings.json' assert { type: 'json' };
 import projectPackageJSON from '../package.json' assert { type: 'json' };
-import lucyJSON from '../files/lucy.json' assert { type: 'json' };
 import { join } from 'path';
 import fs from 'fs/promises';
 import { init } from './init.js';
 import { sync } from './sync.js';
-import { dev, installPackages } from './helpers.js';
+import { runGulp, installPackages } from './helpers.js';
 import { prepare } from './prepare.js';
 export const orange = chalk.hex('#FFA500');
 export const blue = chalk.blueBright;
@@ -27,6 +26,7 @@ const __dirname = dirname(__filename);
  * @returns {Promise<void>}
  */
 async function main() {
+    // INFO: Module settings
     const moduleSettings = {
         packageRoot: dirname(__dirname),
         targetFolder: process.cwd(),
@@ -35,12 +35,10 @@ async function main() {
         wixConfigPath: join(process.cwd(), 'wix.config.json'),
         lucyConfigPath: join(process.cwd(), 'lucy.json'),
         packageJsonPath: join(process.cwd(), 'package.json'),
-        lucyJSON,
-        lockVersion: false
+        force: false,
+        lockVersion: false,
     };
-    let projectSettings = {
-        force: false
-    };
+    let projectSettings = {};
     if (moduleSettings.args.includes('version') || moduleSettings.args.includes('-v')) {
         console.log("🐾" + blue.bold(` => ${projectPackageJSON.version}`));
         return;
@@ -75,13 +73,18 @@ async function main() {
         console.log((`💩 ${red.underline.bold("=> This is not a WIX project =>")} ${orange(moduleSettings.targetFolder)}`));
         return;
     }
+    //INFO: Collect project settings
+    if (moduleSettings.args.includes('-f'))
+        moduleSettings.force = true;
+    if (moduleSettings.args.includes('-l'))
+        moduleSettings.lockVersion = true;
     if (existsSync(moduleSettings.packageJsonPath)) {
         const packageJSONraw = await fs.readFile(join(moduleSettings.packageJsonPath), 'utf8');
         try {
             projectSettings.packageJSON = JSON.parse(packageJSONraw);
-            if (moduleSettings.args.includes('-f')) {
+            if (moduleSettings.force) {
                 console.log("❗️" + red.underline(' => Forcing'));
-                projectSettings.force = true;
+                moduleSettings.force = true;
             }
         }
         catch (parseError) {
@@ -104,24 +107,35 @@ async function main() {
         }
         ;
     }
+    if (!projectSettings.lucySettings?.initialized) {
+        if (!moduleSettings.args.includes('init')) {
+            return console.log(yellow.underline.bold('🐶 => Project not Initialized! Please initialize using "lucy-cli init"'));
+        }
+    }
     if (moduleSettings.args.includes('-l'))
         moduleSettings.lockVersion = true;
+    // INFO: Run commands
     if (moduleSettings.args.includes('init')) {
+        if (projectSettings.lucySettings?.initialized && !moduleSettings.force) {
+            console.log((`💩 ${red.underline.bold("=> This project is already initialized =>")} ${orange(moduleSettings.targetFolder)}`));
+            console.log("🐕" + magenta.underline(' => Use -f to force initialization'));
+            return;
+        }
         console.log("🐕" + magenta.underline(' => Initializing project'));
         init(moduleSettings, projectSettings);
         return;
     }
     if (moduleSettings.args.includes('prepare')) {
-        console.log("🐕" + magenta.underline(' => Preparing project'));
-        init(moduleSettings, projectSettings);
+        await prepare(moduleSettings, projectSettings);
         return;
     }
     if (moduleSettings.args.includes('install')) {
-        await installPackages(moduleSettings.settings.wixPackages, moduleSettings.settings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
-        return;
-    }
-    if (moduleSettings.args.includes('prepare')) {
-        await prepare(moduleSettings, projectSettings);
+        if (!projectSettings.lucySettings?.initialized) {
+            console.log((`💩 ${red.underline.bold("=> This project is not initialized =>")} ${orange(moduleSettings.targetFolder)}`));
+            console.log("🐕" + magenta.underline(' => Use init to initialize'));
+            return;
+        }
+        await installPackages(projectSettings.lucySettings.wixPackages, projectSettings.lucySettings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
         return;
     }
     if (moduleSettings.args.includes('sync')) {
@@ -129,18 +143,18 @@ async function main() {
         return;
     }
     if (moduleSettings.args.includes('dev')) {
-        dev(moduleSettings, projectSettings, 'dev');
+        runGulp(moduleSettings, projectSettings, 'dev');
         return;
     }
     if (moduleSettings.args.includes('build-prod')) {
-        dev(moduleSettings, projectSettings, 'build-prod');
+        runGulp(moduleSettings, projectSettings, 'build-prod');
         return;
     }
     if (moduleSettings.args.includes('fix')) {
-        dev(moduleSettings, projectSettings, 'fix');
+        runGulp(moduleSettings, projectSettings, 'fix-wix');
         return;
     }
     console.log("🐕" + blue.underline.bold(' => Running dev'));
-    dev(moduleSettings, projectSettings, 'dev');
+    runGulp(moduleSettings, projectSettings, 'dev');
 }
 main();

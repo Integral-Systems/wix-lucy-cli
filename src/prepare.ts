@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { ModuleSettings, ProjectSettings, blue, green, orange, red } from './index.js';
+import { ModuleSettings, ProjectSettings, blue, green, orange, red, magenta } from './index.js';
 import { gitInit, installPackages } from './helpers.js';
 
 /**
@@ -10,14 +10,15 @@ import { gitInit, installPackages } from './helpers.js';
  */
 export async function prepare(moduleSettings: ModuleSettings, projectSettings: ProjectSettings) {
 	
-	if(projectSettings.lucySettings?.initialized) {
-		console.log((`💩 ${red.underline.bold("=> This project is already initialized =>")} ${orange(moduleSettings.targetFolder)}`));
+	if(!projectSettings.lucySettings?.initialized) {
+		console.log((`💩 ${red.underline.bold("=> This project is not initialized =>")} ${orange(moduleSettings.targetFolder)}`));
+		console.log("🐕" + magenta.underline(' => Use init to initialize'));
 		return;
 	}
 
-	await installPackages(moduleSettings.settings.wixPackages, moduleSettings.settings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
+	await installPackages(projectSettings.lucySettings.wixPackages, projectSettings.lucySettings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
 
-	await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules ? projectSettings?.lucySettings?.modules : moduleSettings.settings.modules);
+	await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules);
 
-	console.log(chalk.greenBright.underline('🐶 => Initialization done!'));
+	console.log(chalk.greenBright.underline('🐶 => Prepare done!'));
 }

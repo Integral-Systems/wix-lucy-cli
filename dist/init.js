@@ -23,7 +23,9 @@ export async function init(moduleSettings, projectSettings) {
     await installPackages(moduleSettings.settings.wixPackages, moduleSettings.settings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
     await editJson(join(moduleSettings.targetFolder, 'jsconfig.json'), ['compilerOptions', 'exclude'], [moduleSettings.settings.wixSettings.compilerOptions, moduleSettings.settings.wixSettings.exclude]);
     await editJson(join(moduleSettings.targetFolder, 'typedoc.json'), ['name'], [path.basename(moduleSettings.targetFolder)]);
-    await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules ? projectSettings?.lucySettings?.modules : moduleSettings.settings.modules);
+    await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules);
+    moduleSettings.settings.initialized = true;
+    fs.writeFile(join(moduleSettings.targetFolder, 'lucy.json'), JSON.stringify(moduleSettings.settings, null, 2));
     console.log(chalk.greenBright.underline('🐶 => Initialization done!'));
 }
 /**

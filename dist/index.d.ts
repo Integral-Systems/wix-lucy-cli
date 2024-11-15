@@ -1,6 +1,4 @@
 #!/usr/bin/env node --no-warnings
-import settings from './settings.json';
-import lucyJSON from '../files/lucy.json';
 export type LucySettings = {
     modules: {
         [llibName: string]: string;
@@ -32,16 +30,14 @@ export type ModuleSettings = {
     wixConfigPath: string;
     lucyConfigPath: string;
     packageJsonPath: string;
-    settings: typeof settings;
-    lucyJSON: typeof lucyJSON;
+    settings: LucySettings;
     lockVersion: boolean;
+    force: boolean;
 };
 export type ProjectSettings = {
     modules?: Record<string, string>;
     lucySettings?: LucySettings;
     packageJSON?: Record<string, any>;
-    lucyJSON?: Record<string, any>;
-    force: boolean;
 };
 export declare const orange: import("chalk").ChalkInstance;
 export declare const blue: import("chalk").ChalkInstance;

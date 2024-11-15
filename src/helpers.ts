@@ -63,7 +63,7 @@ export async function gitInit(cwd: string, modules: Record<string, string>) {
 }
 
 
-export async function dev(moduleSettings: ModuleSettings, projectSettings: ProjectSettings, task: string) {
+export async function runGulp(moduleSettings: ModuleSettings, projectSettings: ProjectSettings, task: string) {
     // Get the directory name of the current module
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);

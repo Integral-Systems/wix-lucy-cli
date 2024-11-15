@@ -170,7 +170,7 @@ gulp.task('start-dev-env', gulp.parallel(
 	watchAll(taskOptions),
 	'test',
 	'start-wix',
-	(done) => checkPages(false, taskOptions.projectSettings?.force ?? false).then(() => done(), (err) => done(err)),
+	(done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err)),
 ));
 
 gulp.task('dev', gulp.series(
@@ -187,8 +187,8 @@ async function gulpTaskRunner(task: string) {
 			resolve(true);
 			done();
 		})(function (err) {
-			console.log((`💩 ${red.underline.bold("=> Error starting tasks =>")} ${orange(err)}`));
 			if (err) {
+				console.log((`💩 ${red.underline.bold("=> Error starting tasks =>")} ${orange(err)}`));
 				reject(err);
 			}
 		});

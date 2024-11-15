@@ -56,7 +56,7 @@ export async function gitInit(cwd, modules) {
     }
     console.log("🐶" + green.underline(' => All Modules cloned!'));
 }
-export async function dev(moduleSettings, projectSettings, task) {
+export async function runGulp(moduleSettings, projectSettings, task) {
     // Get the directory name of the current module
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
