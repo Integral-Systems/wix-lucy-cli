@@ -7,7 +7,7 @@
     "jsx": "react-jsx",
     "noEmit": false,
     "noUncheckedIndexedAccess": true,
-    "lib": ["DOM"],
+    "lib": ["DOM", "es2015"],
     "paths": {
       "backend/*.web.js": [],
       "backend/*.web": [],

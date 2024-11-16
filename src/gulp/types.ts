@@ -33,6 +33,7 @@ export function updateWixTypes(options: TaskOptions) {
 		masterSettings.include = [ "../../../typescript/public/**/*", "index.d.ts", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*" ] as never;
 		// Add module to pageSettings
 		pageSettings.compilerOptions.paths['types/*'] = [ "../../../typescript/types/*" ] as never;
+		pageSettings.compilerOptions.paths['backend/*'] = [ "../../../typescript/backend/*.jsw.ts" ] as never;
 		pageSettings.include = [ "../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*" ] as never;
 
 		if (modules) {
@@ -63,13 +64,13 @@ export function updateWixTypes(options: TaskOptions) {
 				pageSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`] as never;
 				pageSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`] as never;
 				pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
-				pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*` as never);
+				pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.jsw.ts` as never);
 				pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
 				pageSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*` ] as never[]);
 			}
 		}
 
-		return gulp.src(['./.wix/types/*/*.json', '!./.wix/types/wix-code-types/*.json'])
+		return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/*.json'])
 		.pipe(flatmap(function(stream: NodeJS.ReadableStream, file: File) {
 			count ++;
 			if (file.dirname.endsWith('public')) return stream.pipe(jeditor(publicSettings)).pipe(jeditor((json: any) => processJson(json)));

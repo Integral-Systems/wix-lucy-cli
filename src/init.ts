@@ -36,9 +36,15 @@ export async function init(moduleSettings: ModuleSettings, projectSettings: Proj
 
 	moduleSettings.settings.initialized = true;
 
-	await fs.rm(join(moduleSettings.targetFolder, '.eslintrc.json'), { recursive: false }).catch(e => {
-		console.log((`💩 ${red.underline.bold("=> Could not delete .eslintrc.json")}`));
-	});
+	const eslintrcPath = join(moduleSettings.targetFolder, '.eslintrc.json');
+	if(existsSync(eslintrcPath)) {
+		console.log((`🐕 ${blue.underline.bold("=> Deleting .eslintrc.json")}`));
+		await fs.rm(join(eslintrcPath), { recursive: false }).catch(e => {
+			console.log((`💩 ${red.underline.bold("=> Could not delete .eslintrc.json ")} ${red.bold("=> ", e)}`));
+		});
+	}
+
+	console.log((`🐕 ${blue.underline.bold("=> Writing settings to lucy.json")}`));
 	await fs.writeFile(join(moduleSettings.targetFolder, 'lucy.json'), JSON.stringify(moduleSettings.settings, null, 2));
 
 	console.log(chalk.greenBright.underline('🐶 => Initialization done!'));

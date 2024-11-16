@@ -37,7 +37,7 @@ export type LucySettings = {
 	scripts: {
 		[commandName: string]: string;
 	};
-  };
+};
 
 export type ModuleSettings = {
 	packageRoot: string;

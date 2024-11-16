@@ -29,6 +29,7 @@ export function updateWixTypes(options) {
         masterSettings.include = ["../../../typescript/public/**/*", "index.d.ts", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
         // Add module to pageSettings
         pageSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
+        pageSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.jsw.ts"];
         pageSettings.include = ["../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
         if (modules) {
             for (const [name] of Object.entries(modules)) {
@@ -58,12 +59,12 @@ export function updateWixTypes(options) {
                 pageSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`];
                 pageSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`];
                 pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
+                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.jsw.ts`);
                 pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
                 pageSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`]);
             }
         }
-        return gulp.src(['./.wix/types/*/*.json', '!./.wix/types/wix-code-types/*.json'])
+        return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/*.json'])
             .pipe(flatmap(function (stream, file) {
             count++;
             if (file.dirname.endsWith('public'))
