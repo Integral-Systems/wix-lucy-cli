@@ -11,7 +11,7 @@ export function updateWixTypes(options) {
     return () => {
         const { publicSettings, backendSettings, masterSettings, pageSettings, replaceOptions } = options;
         let count = 0;
-        const modules = options.moduleSettings?.settings.modules;
+        const modules = Object.assign({}, options.projectSettings?.modules, options.projectSettings?.lucySettings?.modules);
         let localModules = undefined;
         if (options.projectSettings?.lucySettings) {
             localModules = options.projectSettings.lucySettings.modules;
@@ -19,6 +19,7 @@ export function updateWixTypes(options) {
         // Add module to publicSettings
         publicSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         publicSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
+        publicSettings.compilerOptions.paths['public/*'] = ["../../../typescript/public/*.ts"];
         publicSettings.include = ["../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
         // Add module to backendSettings
         backendSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
@@ -33,12 +34,10 @@ export function updateWixTypes(options) {
         pageSettings.include = ["../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
         if (modules) {
             for (const [name] of Object.entries(modules)) {
-                console.error(`Adding module ${name} to WIX types`);
                 // Add module to publicSettings
                 publicSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`];
                 publicSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`];
                 publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
                 publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
                 publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
                 publicSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`]);
@@ -110,8 +109,8 @@ export function addTypes(options, done) {
         .pipe(replace('type ', 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
     const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        .pipe(insert.prepend("import { FrontendAPISchema } from '../../../../../../lib/public/models/common/frontendApi.model';\nimport '@total-typescript/ts-reset';\n"))
-        .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPISchema;\n', replaceOptions))
+        .pipe(insert.prepend("import { FrontendAPI } from '../../../../../../typescript/public/models/frontendApi.model';\nimport '@total-typescript/ts-reset';\n"))
+        .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
     return merge(processPages, processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {

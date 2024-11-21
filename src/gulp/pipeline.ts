@@ -5,14 +5,14 @@ import replace from 'gulp-string-replace';
 import { blue, red } from '../index.js';
 
 export function setProdConfig() {
-    const droneTag = process.env.DRONE_TAG || 'development';
+    const tag = process.env.GIT_TAG || 'development';
     const regexGit = /gitTag:\s*(.*),/g;
     const regexDev = /devMode:\s*(.*),/g;
 
     return () => {
         return gulp
-            .src(['./typescript/public/constants/config.ts']) 
-            .pipe(replace(regexGit, `gitTag: '${droneTag}',`))
+            .src(['./typescript/public/constants/env.ts']) 
+            .pipe(replace(regexGit, `gitTag: '${tag}',`))
             .pipe(replace(regexDev, `devMode: false,`))
             .pipe(gulp.dest((file: File) => {
                 const filePath = file.dirname;

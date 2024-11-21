@@ -11,7 +11,6 @@
       "backend/*.web.js": [],
       "backend/*.web": [],
       "mocks": [],
-      "backend/*": [],
       "public/*": [],
       "types/*": [],
       "wix-types/*": ["../wix-code-types/dist/types/*"]
