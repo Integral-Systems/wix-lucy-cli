@@ -17,7 +17,7 @@
         "strictNullChecks": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noUncheckedIndexedAccess": true,
+        "noUncheckedIndexedAccess": false,
         "noImplicitThis": false,
         "strictBindCallApply": false,
         "strictFunctionTypes": true,

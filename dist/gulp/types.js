@@ -17,62 +17,116 @@ export function updateWixTypes(options) {
             localModules = options.projectSettings.lucySettings.modules;
         }
         // Add module to publicSettings
+        publicSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
+        publicSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        publicSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         publicSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         publicSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
         publicSettings.compilerOptions.paths['public/*'] = ["../../../typescript/public/*.ts"];
-        publicSettings.include = ["../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
+        publicSettings.include = [
+            "../../../typescript/public/**/*",
+            "../../../typescript/__mocks__/**/*",
+        ];
         // Add module to backendSettings
         backendSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         backendSettings.compilerOptions.paths['types/*'] = [`../../../typescript/types/*`];
-        backendSettings.include = ["../../../typescript/backend/**/*.web.js", "../../../typescript/__mocks__/**/*"];
+        backendSettings.include = [
+            "../../../typescript/backend/**/*",
+            "../../../typescript/__mocks__/**/*"
+        ];
         // Add module to masterSettings
+        masterSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
+        masterSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        masterSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         masterSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
-        masterSettings.include = ["../../../typescript/public/**/*", "index.d.ts", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
+        masterSettings.include = [
+            "../../../typescript/public/**/*",
+            "../../../typescript/__mocks__/**/*",
+        ];
         // Add module to pageSettings
+        pageSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
+        pageSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         pageSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
-        pageSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.jsw.ts"];
-        pageSettings.include = ["../../../typescript/public/**/*", "../../../typescript/__mocks__/**/*", "../../../typescript/backend/**/*"];
+        pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
+        pageSettings.include = [
+            "../../../typescript/public/**/*",
+            "../../../typescript/__mocks__/**/*",
+        ];
         if (modules) {
             for (const [name] of Object.entries(modules)) {
                 // Add module to publicSettings
-                publicSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`];
-                publicSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`];
+                publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+                publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
                 publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                publicSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`]);
+                publicSettings.include.push(...[
+                    `../../../${name}/public/**/*`,
+                    `../../../${name}__mocks__/**/*`,
+                ]);
                 // Add module to backendSettings
                 backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 backendSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
                 backendSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
                 backendSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                backendSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`, `../../../${name}/backend/**/*.web.ts`]);
+                backendSettings.include.push(...[
+                    `../../../${name}/public/**/*`,
+                    `../../../${name}__mocks__/**/*`,
+                    `../../../${name}/backend/**/*`
+                ]);
                 // Add module to masterSettings
-                masterSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`];
-                masterSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`];
+                masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+                masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
                 masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                masterSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`]);
+                masterSettings.include.push(...[
+                    `../../../${name}/public/**/*`,
+                    `../../../${name}__mocks__/**/*`,
+                ]);
                 // Add module to pageSettings
-                pageSettings.compilerOptions.paths['backend/*.web.js'] = [`../../../${name}/backend/*.web.ts`];
-                pageSettings.compilerOptions.paths['backend/*.web'] = [`../../../${name}/backend/*.web.ts`];
+                pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+                pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.jsw.ts`);
                 pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                pageSettings.include.push(...[`../../../${name}/public/**/*`, `../../../${name}/backend/**/*.web.js`, `../../../${name}__mocks__/**/*`, `../../../${name}/backend/**/*`]);
+                pageSettings.include.push(...[
+                    `../../../${name}/public/**/*`,
+                    `../../../${name}__mocks__/**/*`,
+                ]);
             }
         }
-        return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/*.json'])
+        return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/**/*'])
             .pipe(flatmap(function (stream, file) {
             count++;
-            if (file.dirname.endsWith('public'))
-                return stream.pipe(jeditor(publicSettings)).pipe(jeditor((json) => processJson(json)));
-            if (file.dirname.endsWith('backend'))
-                return stream.pipe(jeditor(backendSettings)).pipe(jeditor((json) => processJson(json)));
-            if (file.dirname.endsWith('masterPage'))
-                return stream.pipe(jeditor(masterSettings)).pipe(jeditor((json) => processJson(json)));
-            return stream.pipe(jeditor(pageSettings)).pipe(jeditor((json) => processJson(json)));
+            if (file.dirname.endsWith('public')) {
+                return stream.pipe(jeditor(publicSettings))
+                    .pipe(jeditor((json) => cleanTsConfig(json)))
+                    .pipe(jeditor((json) => processJson(json)))
+                    .pipe(replace('"../backend.d.ts",', '', replaceOptions))
+                    .pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
+            }
+            if (file.dirname.endsWith('backend')) {
+                return stream.pipe(jeditor(backendSettings))
+                    .pipe(jeditor((json) => cleanTsConfig(json)))
+                    .pipe(jeditor((json) => processJson(json)));
+            }
+            ;
+            if (file.dirname.endsWith('masterPage')) {
+                return stream.pipe(jeditor(masterSettings))
+                    .pipe(jeditor((json) => cleanTsConfig(json)))
+                    .pipe(jeditor((json) => processJson(json)))
+                    .pipe(replace('"../backend.d.ts",', '', replaceOptions))
+                    .pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
+            }
+            ;
+            return stream.pipe(jeditor(pageSettings))
+                .pipe(jeditor((json) => cleanTsConfig(json)))
+                .pipe(jeditor((json) => processJson(json)))
+                .pipe(replace('"../backend.d.ts",', '', replaceOptions))
+                .pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
         }))
             .pipe(replace('masterPage.masterPage.js', 'masterPage.ts', replaceOptions))
             .pipe(replace('/src/', '/typescript/', replaceOptions))
@@ -157,18 +211,54 @@ function removeDuplicatesFromArray(arr) {
 }
 function processJson(obj) {
     if (Array.isArray(obj)) {
-        return removeDuplicatesFromArray(obj);
+        // Process arrays and remove duplicate items
+        const uniqueArray = removeDuplicatesFromArray(obj);
+        return uniqueArray.length > 0 ? uniqueArray : undefined; // Remove empty arrays
     }
     else if (obj && typeof obj === 'object') {
+        // Process objects, ensuring keys are unique
         const result = {};
+        const seenKeys = new Set();
         for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                result[key] = processJson(obj[key]);
+                if (!seenKeys.has(key)) {
+                    const processedValue = processJson(obj[key]);
+                    if (processedValue !== undefined) { // Remove keys with undefined values
+                        seenKeys.add(key);
+                        result[key] = processedValue;
+                    }
+                }
             }
         }
-        return result;
+        // If all keys were empty or undefined, return undefined
+        return Object.keys(result).length > 0 ? result : undefined;
     }
     else {
+        // Return primitive values as-is
         return obj;
     }
+}
+function cleanTsConfig(json) {
+    // Process the paths object to remove duplicates
+    if (json.compilerOptions?.paths) {
+        for (const key in json.compilerOptions.paths) {
+            if (Array.isArray(json.compilerOptions.paths[key])) {
+                const uniquePaths = [...new Set(json.compilerOptions.paths[key])];
+                json.compilerOptions.paths[key] = uniquePaths.length > 0 ? uniquePaths : undefined;
+            }
+        }
+    }
+    // Process the include array to remove duplicates
+    if (Array.isArray(json.include)) {
+        const uniqueIncludes = [...new Set(json.include)];
+        json.include = uniqueIncludes.length > 0 ? uniqueIncludes : undefined;
+    }
+    // Remove empty or undefined fields
+    if (json.compilerOptions?.paths) {
+        json.compilerOptions.paths = Object.fromEntries(Object.entries(json.compilerOptions.paths).filter(([_, value]) => value !== undefined));
+    }
+    if (json.include?.length === 0) {
+        delete json.include;
+    }
+    return json;
 }
