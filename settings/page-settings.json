@@ -7,7 +7,6 @@
     "jsx": "react-jsx",
     "noEmit": false,
     "noUncheckedIndexedAccess": true,
-    "lib": ["DOM", "ESNext"],
     "paths": {
       "backend/*.web.js": [],
       "backend/*.web": [],

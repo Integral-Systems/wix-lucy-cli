@@ -6,7 +6,6 @@
     "strict": true,
     "jsx": "react-jsx",
     "strictNullChecks": true,
-    "lib": ["DOM", "ESNext"],
     "paths": {
       "backend/*.web.js": [],
       "backend/*.web": [],

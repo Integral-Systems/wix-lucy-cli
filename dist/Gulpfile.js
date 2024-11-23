@@ -7,19 +7,19 @@ import backendSettings from '../settings/backend-settings.json' assert { type: '
 import masterSettings from '../settings/master-settings.json' assert { type: 'json' };
 import pageSettings from '../settings/page-settings.json' assert { type: 'json' };
 import publicSettings from '../settings/public-settings.json' assert { type: 'json' };
-import { buildPublic, buildPublicLib } from './gulp/public.js';
-import { buildBackend, buildBackendJSW, buildBackendJSWLib, buildBackendLib } from './gulp/backend.js';
-import { checkPages, checkTs, checkTsLib } from './gulp/checks.js';
+import { buildPublic } from './gulp/public.js';
+import { buildBackend, buildBackendJSW } from './gulp/backend.js';
+import { checkPages, checkTs } from './gulp/checks.js';
 import { compileScss } from './gulp/styles.js';
 import { buildPages } from './gulp/pages.js';
-import { previewTemplates, previewTemplatesLib } from './gulp/templates.js';
-import { copyFiles, copyFilesLib } from './gulp/copy.js';
+import { previewTemplates } from './gulp/templates.js';
+import { copyFiles } from './gulp/copy.js';
 import { cleanSrc, cleanWix } from './gulp/clean.js';
 import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { green, magenta, orange, red } from './index.js';
-import { testLib, test } from './gulp/test.js';
+import { test } from './gulp/test.js';
 const sass = gulpSass(dartSass);
 const outputDir = './src';
 const userHomeDir = os.homedir();
@@ -40,13 +40,13 @@ const taskOptions = {
     replaceOptions,
     cwd: process.cwd(),
 };
-gulp.task('check-ts', gulp.parallel(checkTs(), checkTsLib()));
+gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));
 gulp.task('scss', gulp.parallel(compileScss(taskOptions)));
-gulp.task('build-backend', gulp.parallel(buildBackend(taskOptions), buildBackendLib(taskOptions), buildBackendJSW(taskOptions), buildBackendJSWLib(taskOptions)));
-gulp.task('build-public', gulp.parallel(buildPublic(taskOptions), buildPublicLib(taskOptions)));
-gulp.task('preview-templates', gulp.parallel(previewTemplates(), previewTemplatesLib()));
-gulp.task('copy-files', gulp.parallel(copyFiles(taskOptions), copyFilesLib(taskOptions)));
-gulp.task('test', gulp.parallel(test(), testLib()));
+gulp.task('build-backend', gulp.parallel(buildBackend(taskOptions), buildBackendJSW(taskOptions)));
+gulp.task('build-public', gulp.parallel(buildPublic(taskOptions)));
+gulp.task('preview-templates', gulp.parallel(previewTemplates(taskOptions)));
+gulp.task('copy-files', gulp.parallel(copyFiles(taskOptions)));
+gulp.task('test', gulp.parallel(test(taskOptions)));
 gulp.task('sync-types', shell.task([
     'yarn postinstall',
 ]));
