@@ -9,6 +9,7 @@ import merge from 'merge-stream';
 import * as insert from 'gulp-insert';
 import { blue, red, yellow } from '../index.js';
 import tap from 'gulp-tap';
+import { TSConfig } from '../models';
 
 export function updateWixTypes(options: TaskOptions) {
     return () => {
@@ -111,29 +112,29 @@ export function updateWixTypes(options: TaskOptions) {
 			count ++;
 			if (file.dirname.endsWith('public')) {
 				return stream.pipe(jeditor(publicSettings))
-						.pipe(jeditor((json: any) => cleanTsConfig(json)))
-						.pipe(jeditor((json: any) => processJson(json)))
-						.pipe(replace('"../backend.d.ts",', '', replaceOptions))
-						.pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
-			}
-			if (file.dirname.endsWith('backend')) {
-				return stream.pipe(jeditor(backendSettings))
-						.pipe(jeditor((json: any) => cleanTsConfig(json)))
-						.pipe(jeditor((json: any) => processJson(json)))
-			};
-			if (file.dirname.endsWith('masterPage')) {
-				return stream.pipe(jeditor(masterSettings))
-						.pipe(jeditor((json: any) => cleanTsConfig(json)))
-						.pipe(jeditor((json: any) => processJson(json)))
-						.pipe(replace('"../backend.d.ts",', '', replaceOptions))
-						.pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
-			};
-			
-			return stream.pipe(jeditor(pageSettings))
 					.pipe(jeditor((json: any) => cleanTsConfig(json)))
 					.pipe(jeditor((json: any) => processJson(json)))
 					.pipe(replace('"../backend.d.ts",', '', replaceOptions))
 					.pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
+			}
+			if (file.dirname.endsWith('backend')) {
+				return stream.pipe(jeditor(backendSettings))
+					.pipe(jeditor((json: any) => cleanTsConfig(json)))
+					.pipe(jeditor((json: any) => processJson(json)))
+			};
+			if (file.dirname.endsWith('masterPage')) {
+				return stream.pipe(jeditor(masterSettings))
+					.pipe(jeditor((json: any) => cleanTsConfig(json)))
+					.pipe(jeditor((json: any) => processJson(json)))
+					.pipe(replace('"../backend.d.ts",', '', replaceOptions))
+					.pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
+			};
+			
+			return stream.pipe(jeditor(pageSettings))
+				.pipe(jeditor((json: any) => cleanTsConfig(json)))
+				.pipe(jeditor((json: any) => processJson(json)))
+				.pipe(replace('"../backend.d.ts",', '', replaceOptions))
+				.pipe(replace('"../../../src/backend/\\*\\*/\\*.web.js",', '', replaceOptions));
 		}))
 		.pipe(replace('masterPage.masterPage.js', 'masterPage.ts', replaceOptions))
 		.pipe(replace('/src/', '/typescript/', replaceOptions))
@@ -259,33 +260,19 @@ function processJson(obj: any): any {
     }
 }
 
-function cleanTsConfig(json: any): any {
-    // Process the paths object to remove duplicates
-    if (json.compilerOptions?.paths) {
-        for (const key in json.compilerOptions.paths) {
-            if (Array.isArray(json.compilerOptions.paths[key])) {
-                const uniquePaths = [...new Set(json.compilerOptions.paths[key])];
-                json.compilerOptions.paths[key] = uniquePaths.length > 0 ? uniquePaths : undefined;
-            }
-        }
-    }
+function cleanTsConfig(json: TSConfig): TSConfig {
+	// const paths: Record<string, string[]> = {};
+	if (json.compilerOptions?.paths) {
+		for (const [key, value] of Object.entries(json.compilerOptions.paths)) {
+			const uniquePaths = new Set(value);
+			json.compilerOptions.paths[key] = Array.from(uniquePaths);
+			// paths[key] = Array.from(uniquePaths);
+		}
+		// json.compilerOptions.paths = paths;
+	}
+	json.include = Array.from(new Set(json.include));
+	json.exclude = Array.from(new Set(json.exclude));
+	json.files = Array.from(new Set(json.files));
 
-    // Process the include array to remove duplicates
-    if (Array.isArray(json.include)) {
-        const uniqueIncludes = [...new Set(json.include)];
-        json.include = uniqueIncludes.length > 0 ? uniqueIncludes : undefined;
-    }
-
-    // Remove empty or undefined fields
-    if (json.compilerOptions?.paths) {
-        json.compilerOptions.paths = Object.fromEntries(
-            Object.entries(json.compilerOptions.paths).filter(([_, value]) => value !== undefined)
-        );
-    }
-
-    if (json.include?.length === 0) {
-        delete json.include;
-    }
-
-    return json;
+	return json;
 }

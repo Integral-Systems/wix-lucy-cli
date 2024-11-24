@@ -239,26 +239,17 @@ function processJson(obj) {
     }
 }
 function cleanTsConfig(json) {
-    // Process the paths object to remove duplicates
+    // const paths: Record<string, string[]> = {};
     if (json.compilerOptions?.paths) {
-        for (const key in json.compilerOptions.paths) {
-            if (Array.isArray(json.compilerOptions.paths[key])) {
-                const uniquePaths = [...new Set(json.compilerOptions.paths[key])];
-                json.compilerOptions.paths[key] = uniquePaths.length > 0 ? uniquePaths : undefined;
-            }
+        for (const [key, value] of Object.entries(json.compilerOptions.paths)) {
+            const uniquePaths = new Set(value);
+            json.compilerOptions.paths[key] = Array.from(uniquePaths);
+            // paths[key] = Array.from(uniquePaths);
         }
+        // json.compilerOptions.paths = paths;
     }
-    // Process the include array to remove duplicates
-    if (Array.isArray(json.include)) {
-        const uniqueIncludes = [...new Set(json.include)];
-        json.include = uniqueIncludes.length > 0 ? uniqueIncludes : undefined;
-    }
-    // Remove empty or undefined fields
-    if (json.compilerOptions?.paths) {
-        json.compilerOptions.paths = Object.fromEntries(Object.entries(json.compilerOptions.paths).filter(([_, value]) => value !== undefined));
-    }
-    if (json.include?.length === 0) {
-        delete json.include;
-    }
+    json.include = Array.from(new Set(json.include));
+    json.exclude = Array.from(new Set(json.exclude));
+    json.files = Array.from(new Set(json.files));
     return json;
 }
