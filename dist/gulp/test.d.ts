@@ -1,2 +1,2 @@
-export declare function test(): () => any;
-export declare function testLib(): () => any;
+import { TaskOptions } from '../Gulpfile.js';
+export declare function test(options: TaskOptions): import("undertaker").TaskFunction;

@@ -7,6 +7,7 @@ import { spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { ModuleSettings, ProjectSettings } from '.';
+import { exec } from 'child_process';
 
 import { blue, green, orange, red } from './index.js';
 
@@ -76,4 +77,25 @@ export async function runGulp(moduleSettings: ModuleSettings, projectSettings: P
 
     // Check if 'dev' task exists
     gulpfile.runTask(task, moduleSettings, projectSettings)
+}
+
+
+/**
+ * Clean up and run a command before exiting the process.
+ */
+export function handleExit() {
+    const cwd = process.cwd();
+    const command = `watchman watch-del '${cwd}'`;
+
+	console.log("🐕" + blue.underline(' => Cleaning up...'));
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`💩 Failed to run cleanup: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`⚠️  Watchman stderr: ${stderr}`);
+        }
+        console.log(`✅ Watchman cleanup success: ${stdout}`);
+    });
 }

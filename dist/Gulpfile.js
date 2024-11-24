@@ -20,6 +20,7 @@ import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { green, magenta, orange, red } from './index.js';
 import { test } from './gulp/test.js';
+import { getModulesSync } from './gulp/helpers.js';
 const sass = gulpSass(dartSass);
 const outputDir = './src';
 const userHomeDir = os.homedir();
@@ -39,6 +40,7 @@ const taskOptions = {
     masterSettings,
     replaceOptions,
     cwd: process.cwd(),
+    modulesSync: getModulesSync(),
 };
 gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));
 gulp.task('scss', gulp.parallel(compileScss(taskOptions)));

@@ -3,7 +3,7 @@ import glob from 'glob';
 import * as path from 'path';
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
-import { blue, green, magenta, red, yellow } from '../index.js';
+import { blue, green, magenta, orange, red, yellow } from '../index.js';
 /**
  *  Extracts a match from a file
  * @param {string} filePath File path
@@ -115,31 +115,30 @@ export async function checkPages(fail, force) {
         }
     });
 }
-export function checkTs() {
-    const tsProject = ts.createProject('./lib/tsconfig.json', { noEmit: true });
-    return () => {
-        return gulp.src(['lib/typescript/**/*.ts', '!lib/typescript/types/**/*.ts'], { cwd: 'typescript' })
+export function checkTs(options) {
+    const folders = ['typescript'];
+    if (options.modulesSync) {
+        for (const module of Object.keys(options.modulesSync)) {
+            folders.push(module);
+        }
+    }
+    // Create tasks for each folder
+    const tasks = folders.map((folder) => {
+        const tsProject = ts.createProject(`./${folder}/tsconfig.json`, { noEmit: true });
+        const taskName = `test-${folder}`; // Create a unique name for each task
+        const task = () => gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`], { cwd: folder })
             .pipe(tsProject(ts.reporter.fullReporter()))
             .on('error', function () {
-            console.log("💩" + red.underline.bold(' => Typescript error!'));
+            console.log("💩" + red.underline.bold(` => Typescriptcheck for ${orange(folder)} failed!`));
             this.emit('end');
         })
             .on('end', function () {
-            console.log("🐶" + blue.underline(' => Typescriptcheck succeeded!'));
+            console.log("🐶" + blue.underline(` => Typescriptcheck for ${orange(folder)} succeeded!`));
         });
-    };
-}
-export function checkTsLib() {
-    const tsProject = ts.createProject('./lib/tsconfig.json', { noEmit: true });
-    return () => {
-        return gulp.src(['lib/typescript/**/*.ts', '!lib/typescript/types/**/*.ts'], { cwd: 'typescript' })
-            .pipe(tsProject(ts.reporter.fullReporter()))
-            .on('error', function () {
-            console.log("💩" + red.underline.bold(' => Typescript (LIB) error!'));
-            this.emit('end');
-        })
-            .on('end', function () {
-            console.log("🐶" + blue.underline(' => Typescript check (LIB) succeeded!'));
-        });
-    };
+        // Register the task with Gulp
+        Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging
+        return task;
+    });
+    // Run all tasks in parallel
+    return gulp.parallel(...tasks);
 }

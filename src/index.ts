@@ -11,7 +11,7 @@ import fs from 'fs/promises';
 
 import { init } from './init.js';
 import { sync } from './sync.js';
-import { runGulp, installPackages } from './helpers.js';
+import { runGulp, installPackages, handleExit } from './helpers.js';
 import { prepare } from './prepare.js';
 
 export type LucySettings = {
@@ -70,6 +70,11 @@ const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(__filename);
 
+process.on('SIGINT', () => {
+    console.log("🐕 Received Ctrl+C, cleaning up...");
+    handleExit();
+    process.exit(); // Exit the process explicitly
+});
 
 /**
  * Main function
@@ -169,6 +174,7 @@ async function main(): Promise<void> {
 
 	if(moduleSettings.args.includes('-l')) moduleSettings.lockVersion = true;
 
+	console.log("🐕" + magenta.underline(' => Lucy CLI => RUNNING: ' + orange('Press Ctrl+C to stop.')));
 	// INFO: Run commands
 	if(moduleSettings.args.includes('init')){
 		if(projectSettings.lucySettings?.initialized && !moduleSettings.force) {

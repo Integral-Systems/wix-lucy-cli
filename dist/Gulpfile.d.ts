@@ -16,6 +16,7 @@ export type TaskOptions = {
     masterSettings: typeof masterSettings;
     pageSettings: typeof pageSettings;
     publicSettings: typeof publicSettings;
+    modulesSync: Record<string, string> | undefined;
     cwd: string;
 };
 export interface File {

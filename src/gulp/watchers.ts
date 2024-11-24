@@ -1,92 +1,47 @@
 import gulp from 'gulp';
 import { TaskOptions } from '../Gulpfile.js';
 import { green } from '../index.js';
-import { buildBackend, buildBackendJSW, buildBackendJSWLib, buildBackendLib } from './backend.js';
-import { buildPublic, buildPublicLib } from './public.js';
+import { buildBackend, buildBackendJSW } from './backend.js';
+import { buildPublic } from './public.js';
 import { buildPages } from './pages.js';
-import { copyFiles, copyFilesLib } from './copy.js';
-import { previewTemplates, previewTemplatesLib } from './templates.js';
-import { checkPages, checkTs, checkTsLib } from './checks.js';
-import { testLib, test } from './test.js';
+import { copyFiles } from './copy.js';
+import { previewTemplates } from './templates.js';
+import { checkPages, checkTs } from './checks.js';
+import { test } from './test.js';
 
 let taskOptions: TaskOptions;
 
 export function watchSCSS() {
     return gulp.watch([
-        'typescript/styles/**/*.scss', 
-        'lib/styles/**/*.scss'], 
+        '*/styles/**/*.scss'
+    ], 
         gulp.parallel('scss')
     );
 }
 
 export function watchBackend() {
     return 	gulp.watch([
-		'typescript/backend/**/*.ts', 
-		'typescript/backend/**/*.tsx', 
-		'!typescript/backend/**/*.spec.ts',
-        '!typescript/backend/**/*.jsw.ts', 
+		'*/backend/**/*.ts', 
+		'*/backend/**/*.tsx', 
+		'!*/backend/**/*.spec.ts',
+        '!*/backend/**/*.jsw.ts', 
+        '!src/**/**',
 	], gulp.parallel(
-        test(),
-        checkTs(),
+        test(taskOptions),
+        checkTs(taskOptions),
         buildBackend(taskOptions),
-        )
-    );
-}
-
-export function watchBackendLib() {
-    return 	gulp.watch([
-		'lib/backend/**/*.ts', 
-		'lib/backend/**/*.tsx', 
-		'!lib/backend/**/*.spec.ts',
-        '!lib/backend/**/*.jsw.ts', 
-	], gulp.parallel(
-        testLib(),
-        checkTsLib(),
-        buildBackendLib(taskOptions)
-        )
-    );
-}
-
-export function watchJSW() {
-    return gulp.watch(['typescript/backend/**/*.jsw.ts'], 
-    gulp.parallel(
-        test(),
-        checkTs(),
-        buildBackendJSW(taskOptions)
-        )
-    );
-}
-
-export function watchJSWLib() {
-    return gulp.watch(['lib/backend/**/*.jsw.ts'], 
-    gulp.parallel(
-        testLib(),
-        checkTsLib(),
-        buildBackendJSWLib(taskOptions)
         )
     );
 }
 
 export function watchPublic() {
     return gulp.watch([
-		'typescript/public/**/*.ts', 
-		'typescript/public/**/*.tsx',
+		'*/public/**/*.ts', 
+		'*/public/**/*.tsx',
 	], gulp.parallel(
-        test(),
-        checkTs(),
+        test(taskOptions),
+        checkTs(taskOptions),
         buildPublic(taskOptions),
-        )
-    );
-}
-
-export function watchPublicLib() {
-    return gulp.watch([
-		'lib/public/**/*.ts', 
-		'lib/public/**/*.tsx',
-	], gulp.parallel(
-        testLib(),
-        checkTsLib(),
-        buildPublicLib(taskOptions),
         )
     );
 }
@@ -94,7 +49,7 @@ export function watchPublicLib() {
 export function watchPages() {
     return 	gulp.watch('typescript/pages/**/*.ts', 
     gulp.parallel(
-        checkTs(),
+        checkTs(taskOptions),
         buildPages(taskOptions),
         )
     );
@@ -102,42 +57,23 @@ export function watchPages() {
 
 export function watchFiles() {
     return 	gulp.watch([
-		'typescript/backend/**/*', 
-		'typescript/public/**/*', 
-		'typescript/pages/**/*', 
-		'!typescript/**/*.ts',
+		'*/backend/**/*', 
+		'*/public/**/*', 
+		'*/pages/**/*', 
+		'!*/**/*.ts',
+        '!*/**/*.tsx',
 	], gulp.parallel(copyFiles(taskOptions)));
-}
-
-export function watchFilesLib() {
-    return 	gulp.watch([
-		'lib/backend/**/*', 
-		'lib/public/**/*', 
-		'lib/pages/**/*', 
-		'!lib/**/*.ts',
-	], gulp.parallel(copyFilesLib(taskOptions)));
 }
 
 export function watchTemplates() {
     return	gulp.watch([
-		'typescript/backend/templates/**/*.tsx', 
-		'typescript/backend/templates/data/*.json', 
-		'!typescript/backend/templates/render.ts',
+		'*/backend/templates/**/*.tsx', 
+		'*/backend/templates/data/*.json', 
+		'!*/backend/templates/render.ts',
 	], gulp.parallel(
-        previewTemplates(),
-        test()
-        )
-    );
-}
-
-export function watchTemplatesLib() {
-    return	gulp.watch([
-		'lib/backend/templates/**/*.tsx', 
-		'lib/backend/templates/data/*.json', 
-		'!lib/backend/templates/render.ts',
-	], gulp.parallel(
-        previewTemplatesLib(),
-        testLib(),
+        previewTemplates(taskOptions),
+        test(taskOptions),
+        checkTs(taskOptions),
         )
     );
 }
@@ -160,16 +96,10 @@ export function watchAll(options: TaskOptions) {
     return gulp.parallel(
         watchSCSS,
         watchBackend,
-        watchBackendLib,
-        watchJSW,
-        watchJSWLib,
         watchPublic,
-        watchPublicLib,
         watchPages,
-        watchFilesLib,
         watchFiles,
         watchTemplates,
-        watchTemplatesLib,
         watchTypes,
     );
 }

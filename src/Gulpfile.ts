@@ -9,19 +9,20 @@ import masterSettings from '../settings/master-settings.json' assert { type: 'js
 import pageSettings from '../settings/page-settings.json' assert { type: 'json' };
 import publicSettings from '../settings/public-settings.json' assert { type: 'json' };
 
-import { buildPublic, buildPublicLib } from './gulp/public.js';
-import { buildBackend, buildBackendHTTP, buildBackendJSW, buildBackendJSWLib, buildBackendLib } from './gulp/backend.js';
-import { checkPages, checkTs, checkTsLib } from './gulp/checks.js';
+import { buildPublic } from './gulp/public.js';
+import { buildBackend, buildBackendJSW } from './gulp/backend.js';
+import { checkPages, checkTs } from './gulp/checks.js';
 import { compileScss } from './gulp/styles.js';
 import { buildPages } from './gulp/pages.js';
-import { previewTemplates, previewTemplatesLib } from './gulp/templates.js';
-import { copyFiles, copyFilesLib } from './gulp/copy.js';
+import { previewTemplates } from './gulp/templates.js';
+import { copyFiles } from './gulp/copy.js';
 import { cleanSrc, cleanWix } from './gulp/clean.js';
 import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { ModuleSettings, ProjectSettings, green, magenta, orange, red } from './index.js';
-import { testLib, test } from './gulp/test.js';
+import { test } from './gulp/test.js';
+import { getModulesSync } from './gulp/helpers.js';
 
 const sass = gulpSass(dartSass);
 
@@ -37,6 +38,7 @@ export type TaskOptions = {
 	masterSettings: typeof masterSettings,
 	pageSettings: typeof pageSettings,
 	publicSettings: typeof publicSettings,
+	modulesSync: Record<string, string> | undefined;
 	cwd: string;
 }
 
@@ -64,11 +66,11 @@ const taskOptions: TaskOptions = {
 	masterSettings, 
 	replaceOptions,
 	cwd: process.cwd(),
+	modulesSync: getModulesSync(),
 }
 
 gulp.task('check-ts', gulp.parallel( 
-	checkTs(),
-	checkTsLib(),
+	checkTs(taskOptions),
 ));
 
 gulp.task('scss', gulp.parallel( 
@@ -77,30 +79,24 @@ gulp.task('scss', gulp.parallel(
 
 gulp.task('build-backend', gulp.parallel( 
 	buildBackend(taskOptions),
-	buildBackendLib(taskOptions),
 	buildBackendJSW(taskOptions),
-	buildBackendJSWLib(taskOptions),
 	// buildBackendHTTP(taskOptions),
 ));
 
 gulp.task('build-public', gulp.parallel( 
 	buildPublic(taskOptions),
-	buildPublicLib(taskOptions),
 ));
 
 gulp.task('preview-templates', gulp.parallel(
-	previewTemplates(),
-	previewTemplatesLib()
+	previewTemplates(taskOptions),
 ));
 
 gulp.task('copy-files', gulp.parallel(
 	copyFiles(taskOptions),
-	copyFilesLib(taskOptions)
 ));
 
 gulp.task('test', gulp.parallel(
-	test(),
-	testLib(),
+	test(taskOptions),
 ));
 
 gulp.task('sync-types', shell.task([
@@ -196,7 +192,7 @@ async function gulpTaskRunner(task: string) {
 }
 
 export async function runTask(task: string, moduleSettings: ModuleSettings, projectSettings: ProjectSettings) {
-	taskOptions.cwd = moduleSettings.targetFolder;
+	taskOptions.cwd =  moduleSettings.targetFolder;
 	taskOptions.moduleSettings = moduleSettings;
 	taskOptions.projectSettings = projectSettings;
 	console.log("🐕" + magenta.underline(' => Starting Task => ' +  orange(task)));

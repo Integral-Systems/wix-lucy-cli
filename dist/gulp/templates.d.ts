@@ -1,2 +1,2 @@
-export declare function previewTemplates(): () => any;
-export declare function previewTemplatesLib(): () => any;
+import { TaskOptions } from '../Gulpfile';
+export declare function previewTemplates(options: TaskOptions): import("undertaker").TaskFunction;

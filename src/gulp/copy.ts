@@ -1,48 +1,47 @@
 import gulp from 'gulp';
 import chalk from 'chalk';
 import { TaskOptions } from '../Gulpfile';
-import { blue, red } from '../index.js';
+import { blue, orange, red } from '../index.js';
 
 export function copyFiles(options: TaskOptions) {
-    const { outputDir} = options;
-
-    return () => {
-        return gulp.src([
-			'typescript/**/*', 
-			'!typescript/*tsconfig.json', 
-			'!typescript/**/*.ts', 
-			'!typescript/**/*.tsx', 
-			'!typescript/types/**/**', 
-			'!typescript/__mocks__/**/**', 
-			'!typescript/styles/**',
-		])
-		.pipe(gulp.dest(outputDir))
-		.on('error', function () {
-			console.log("💩" + red.underline.bold(' => Copy of files failed!'));
-			this.emit('end');
-		})
-		.on('end', function() { console.log("🐶" + blue.underline(' => Copy of files succeeded!')); });
+    const folders = ['typescript'];
+    if (options.modulesSync){
+        for (const module of Object.keys(options.modulesSync)) {
+            folders.push(module);
+        }
     }
-}
 
-export function copyFilesLib(options: TaskOptions) {
-    const { outputDir} = options;
+    // Create tasks for each folder
+    const tasks = folders.map((folder) => {
+		const { outputDir} = options;
 
-    return () => {
-        return gulp.src([
-			'typescript/**/*', 
-			'!typescript/*tsconfig.json', 
-			'!typescript/**/*.ts', 
-			'!typescript/**/*.tsx', 
-			'!typescript/types/**/**', 
-			'!typescript/__mocks__/**/**', 
-			'!typescript/styles/**',
-		])
-		.pipe(gulp.dest(outputDir))
-		.on('error', function () {
-			console.log("💩" + red.underline.bold(' => Copy of files (LIB) failed!'));
-			this.emit('end');
-		})
-		.on('end', function() { console.log("🐶" + blue.underline(' => Copy of files (LIB) succeeded!')); });
-    }
+
+        const taskName = `copy-${folder}`; // Create a unique name for each task
+
+        const task = () =>
+			gulp.src([
+				`${folder}/**/*`, 
+				`!${folder}/*tsconfig.json`, 
+				`!${folder}/**/*.ts`, 
+				`!${folder}/**/*.tsx`, 
+				`!${folder}/types/**/**`, 
+				`!${folder}/__mocks__/**/**`, 
+				`!${folder}/styles/**`,
+			])
+			.pipe(gulp.dest(outputDir))
+                .on('error', function () {
+                    console.log("💩" + red.underline.bold(` => Copy of files for ${orange(folder)} failed!`));
+                    this.emit('end');
+                })
+                .on('end', function () {
+                    console.log("🐶" + blue.underline(` => Copy of files for ${orange(folder)} succeeded!`));
+                });
+
+        // Register the task with Gulp
+        Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging
+        return task;
+    });
+
+    // Run all tasks in parallel
+    return gulp.parallel(...tasks);
 }
