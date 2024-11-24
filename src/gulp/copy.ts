@@ -15,7 +15,6 @@ export function copyFiles(options: TaskOptions) {
     const tasks = folders.map((folder) => {
 		const { outputDir} = options;
 
-
         const taskName = `copy-${folder}`; // Create a unique name for each task
 
         const task = () =>

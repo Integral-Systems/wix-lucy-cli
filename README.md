@@ -1,12 +1,19 @@
 # Lucy-CLI
 
-![Lucy-CLI](lucy.jpg)
+![Lucy-CLI](lucy.jpg){ width=300px height=200px }
 
 ## Motivation
 
 Lucy-CLI was developed out of a personal need to gain full TypeScript support for Wix Velo projects. Typically, using Wix’s GitHub integration provides JSON docs and basic type support, but I aimed for a more integrated TypeScript experience, especially for larger projects that benefit from enhanced type safety.
 
 Lucy, my loyal dog, accompanied me during long nights working on a major project where I developed this CLI. Her companionship and resilience inspired the name "Lucy-CLI."
+
+## CAUTION: Thing to keep in mind before using Lucy-CLI
+
+This CLI is still in development and may have bugs. Please use it with caution.
+Libraries are expected to have the same folder structure as  the main typescript folder except for the pages folder.
+(backend, public, styles)
+The lucy CLI is opinionated and may not work with all projects.
 
 ## What It Does
 
@@ -27,7 +34,28 @@ Lucy-CLI is designed to streamline the setup and management of TypeScript within
 5. **Configurable Setup**  
    - After initialization, Lucy-CLI creates a `lucy-config.json` configuration file where you can modify settings, add dev packages, specify Wix packages, and configure git submodules.
 
----
+6. **Execute render functions**  
+   - Lucy-CLI can execute render functions located in the backend template folder, allowing you to test render functions locally.
+
+7. **compile sccs files**  
+   - Lucy-CLI can compile scss files to css files.
+   - It compiles styles/global.scss file to global.css.
+
+8. **Wix NPM Package Installation**
+   - Lucy-CLI can install Wix npm packages from the `lucy.json` file in the project directory.
+
+9. **Teting with Jest**
+   - Lucy-CLI can run tests with Jest.
+   - It runs tests located backend folder with the file name ending with `.spec.ts`.
+   - it creates a code coverage report in the coverage folder in the lib folders and typescript folders.
+
+10. **Linting with ESLint**
+    - Lucy-CLI can lint the code with ESLint.
+    - It uses the ESLint configuration in the `.eslintrc.cjs` file in the project directory.  
+
+11. **Add git version during production build**
+      - Lucy-CLI can add the git version to the production build.
+      - It adds the git version to the `public/constant/env.ts` file in the public folder under the key gitTag.
 
 ## Commands & Options
 
