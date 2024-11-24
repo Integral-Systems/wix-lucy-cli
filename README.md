@@ -1,6 +1,6 @@
 # Lucy-CLI
 
-![Lucy-CLI](lucy.jpg){ width=300px height=200px }
+![Lucy-CLI](lucy.jpg)
 
 ## Motivation
 
