@@ -1,19 +1,29 @@
+/** @type { import('typedoc').TypeDocOptionMap & import('typedoc-plugin-merge-modules').Config } */
 {
-    "entryPoints": ["typescript/**/*.ts", "typescript/**/*.tsx"],
-    "entryPointStrategy": "expand",
-    "out": "docs",
-    "plugin": ["typedoc-theme-hierarchy"],
-    "theme": "hierarchy",
-    "tsconfig": "docs.tsconfig.json",
-    "excludeExternals": true,
-    "externalPattern":[
-        "**/node_modules/**",
-        "./.wix/**",
-        ".wix/**"
-    ],
-    "exclude": [
-        "./.wix/**/*",
-        ".wix/**/*"
-    ],
-    "name": "Wix-lucy"
+  "entryPoints": [
+    "*/**/*.ts",
+    "*/**/*.tsx"
+  ],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "plugin": [
+    "typedoc-theme-hierarchy",
+    "typedoc-plugin-zod",
+    "typedoc-plugin-merge-modules"
+  ],
+  "theme": "hierarchy",
+  "tsconfig": "docs.tsconfig.json",
+  "excludeExternals": true,
+  "externalPattern": [
+    "**/node_modules/**",
+    "**/.wix/**",
+    ".wix/**"
+  ],
+  "exclude": [
+    "./.wix/**/*",
+    ".wix/**/*"
+  ],
+  "name": "Wix-lucy",
+  "mergeModulesRenameDefaults": true, 
+  "mergeModulesMergeMode": "project",
 }

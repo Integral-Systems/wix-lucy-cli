@@ -13,6 +13,7 @@ export function buildBackend(options) {
     const { outputDir, enableIncrementalBuild } = options;
     const gulpEsbuild = createGulpEsbuild({
         incremental: enableIncrementalBuild,
+        pipe: true,
     });
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
@@ -51,6 +52,7 @@ export function buildBackendJSW(options) {
     const { outputDir, enableIncrementalBuild } = options;
     const gulpEsbuild = createGulpEsbuild({
         incremental: enableIncrementalBuild,
+        pipe: true,
     });
     // Create tasks for each folder
     const tasks = folders.map((folder) => {

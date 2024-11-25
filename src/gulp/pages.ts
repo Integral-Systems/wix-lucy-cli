@@ -8,6 +8,7 @@ export function buildPages(options: TaskOptions) {
     const { outputDir, enableIncrementalBuild} = options;
     const gulpEsbuild = createGulpEsbuild({
         incremental: enableIncrementalBuild, // enables the esbuild's incremental build
+        pipe: true, // enables the esbuild's pipe mode
     });
 
     return () => {

@@ -16,6 +16,7 @@ export function buildPublic(options: TaskOptions) {
     const { outputDir, enableIncrementalBuild } = options;
     const gulpEsbuild = createGulpEsbuild({
         incremental: enableIncrementalBuild,
+        pipe: true,
     });
 
     // Create tasks for each folder

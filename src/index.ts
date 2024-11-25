@@ -13,6 +13,7 @@ import { init } from './init.js';
 import { sync } from './sync.js';
 import { runGulp, installPackages, handleExit } from './helpers.js';
 import { prepare } from './prepare.js';
+import { spawnSync } from 'child_process';
 
 export type LucySettings = {
 	modules: {
@@ -113,6 +114,7 @@ async function main(): Promise<void> {
 		console.log("🦮 " + magenta.bold('sync') + "               : Synchronizes the database (not Implemented)");
 		console.log("🦮 " + magenta.bold('install') + "            : Installs all Wix npm packages listed in the 'lucy.json' file in the project directory.");
 		console.log("🦮 " + magenta.bold('fix') + "                : Runs a fix command to resolve common issues in development or production settings.");
+		console.log("🦮 " + magenta.bold('docs') + "               : Generates documentation for the project.");
 		console.log("\nOptions:");
 		console.log("🦮 " + magenta.bold('-h, help') + "           : Displays this help message.");
 		console.log("🦮 " + magenta.bold('-v, version') + "        : Displays the current version of Lucy CLI as defined in the project’s package.json.");
@@ -188,6 +190,14 @@ async function main(): Promise<void> {
 		return;
 	}
 
+
+	if(moduleSettings.args.includes('docs')){
+		const res = spawnSync('yarn docs', { shell: true, stdio: 'inherit' });
+		if (res.error) {
+			return console.log((`💩 ${red.underline.bold("=> Failed to install dev packages =>")} ${orange(res.error.message)}`));
+		}
+		return console.log("🐕" + blue.underline(` => Docs generated!`));
+	}
 
 	if(moduleSettings.args.includes('prepare')){
 		await prepare( moduleSettings, projectSettings);
