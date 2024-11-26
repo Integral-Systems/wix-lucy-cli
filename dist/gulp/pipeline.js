@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import * as path from 'path';
 import replace from 'gulp-string-replace';
-import { blue, red } from '../index.js';
+import { blue, orange, red } from '../index.js';
 export function setProdConfig() {
     const tag = process.env.GIT_TAG || 'development';
     const regexGit = /gitTag:\s*(.*),/g;
@@ -16,8 +16,9 @@ export function setProdConfig() {
             const outputDir = path.dirname(filePath);
             return path.join(`${outputDir}/constants`);
         }))
-            .on('error', function () {
+            .on('error', function (e) {
             console.log("💩" + red.underline.bold(' => Setting the git tag failed!'));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () {

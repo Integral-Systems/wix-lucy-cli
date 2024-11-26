@@ -5,7 +5,7 @@ import flatmap from 'gulp-flatmap';
 import jeditor from 'gulp-json-editor';
 import merge from 'merge-stream';
 import * as insert from 'gulp-insert';
-import { blue, red, yellow } from '../index.js';
+import { blue, orange, red, yellow } from '../index.js';
 import tap from 'gulp-tap';
 export function updateWixTypes(options) {
     return () => {
@@ -141,7 +141,7 @@ export function updateWixTypes(options) {
         }))
             .on('error', function (e) {
             console.log("💩" + red.underline.bold('Modification of WIX configs failed!'));
-            console.error(e);
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () { console.log("🐶" + blue.underline(`Modification of ${yellow(count)} WIX configs succeeded!`)); });
@@ -168,8 +168,8 @@ export function addTypes(options, done) {
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
     return merge(processPages, processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {
-        console.error(e);
         console.log("💩" + red.underline.bold(' => Updating WIX failed!'));
+        console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
         this.emit('end');
         done();
     })

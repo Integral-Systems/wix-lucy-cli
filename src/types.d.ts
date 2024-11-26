@@ -5,3 +5,4 @@ declare module 'gulp-string-replace';
 declare module 'gulp-wait';
 declare module 'gulp-jest';
 declare module 'gulp-flatmap';
+declare module 'gulp-swc';

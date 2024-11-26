@@ -40,8 +40,9 @@ export function test(options) {
                 'public/(.*)': '<rootDir>/public/$1'
             }
         }))
-            .on('error', function () {
+            .on('error', function (e) {
             console.log("💩" + red.underline.bold(` => Tests for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () {

@@ -133,7 +133,7 @@ gulp.task('fix-wix', gulp.series(
 gulp.task('build', gulp.parallel(
 	'build-backend', 
 	'build-public', 
-	buildPages(taskOptions), 
+	buildPages(taskOptions),
 	compileScss(taskOptions), 
 	'copy-files'
 	)
@@ -196,6 +196,10 @@ export async function runTask(task: string, moduleSettings: ModuleSettings, proj
 	taskOptions.moduleSettings = moduleSettings;
 	taskOptions.projectSettings = projectSettings;
 	console.log("🐕" + magenta.underline(' => Starting Task => ' +  orange(task)));
+	try {
 	await gulpTaskRunner(task);
+	} catch (err) {
+		console.log((`💩 ${red.underline.bold("=> Error starting tasks =>")} ${orange(err)}`));
+	}
 	console.log("🐶" + green.underline.bold(' => Task completed: ' + task));
 }

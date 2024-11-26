@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import * as path from 'path';
 import { File } from '../Gulpfile';
 import replace from 'gulp-string-replace';
-import { blue, red } from '../index.js';
+import { blue, orange, red } from '../index.js';
 
 export function setProdConfig() {
     const tag = process.env.GIT_TAG || 'development';
@@ -20,8 +20,9 @@ export function setProdConfig() {
         
                 return path.join(`${outputDir}/constants`);
             }))
-            .on('error', function () {
+            .on('error', function (e: Error) {
                 console.log("💩" + red.underline.bold(' => Setting the git tag failed!'));
+                console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                 this.emit('end');
             })
             .on('end', function() { console.log("🐶" + blue.underline(' => Setting the git tag succeeded!')); 

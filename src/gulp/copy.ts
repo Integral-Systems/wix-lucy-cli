@@ -28,8 +28,9 @@ export function copyFiles(options: TaskOptions) {
 				`!${folder}/styles/**`,
 			])
 			.pipe(gulp.dest(outputDir))
-                .on('error', function () {
+                .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Copy of files for ${orange(folder)} failed!`));
+                    console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                     this.emit('end');
                 })
                 .on('end', function () {

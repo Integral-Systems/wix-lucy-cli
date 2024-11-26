@@ -87,6 +87,11 @@ export async function runTask(task, moduleSettings, projectSettings) {
     taskOptions.moduleSettings = moduleSettings;
     taskOptions.projectSettings = projectSettings;
     console.log("🐕" + magenta.underline(' => Starting Task => ' + orange(task)));
-    await gulpTaskRunner(task);
+    try {
+        await gulpTaskRunner(task);
+    }
+    catch (err) {
+        console.log((`💩 ${red.underline.bold("=> Error starting tasks =>")} ${orange(err)}`));
+    }
     console.log("🐶" + green.underline.bold(' => Task completed: ' + task));
 }

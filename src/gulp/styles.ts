@@ -21,9 +21,15 @@ export function compileScss(options: TaskOptions) {
         const task = () =>
             gulp.src(['typescript/styles/global.scss'])
                 .pipe(sass().on('error', sass.logError))
+                .on('error', function (e: Error) {
+                    console.log("💩" + red.underline.bold(` => Build of SCSS files for ${orange(folder)} failed!`));
+                    console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+                    this.emit('end');
+                })
                 .pipe(gulp.dest(`${outputDir}/styles`))
-                .on('error', function () {
+                .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Compiling of scss files for ${orange(folder)} failed!`));
+                    console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                     this.emit('end');
                 })
                 .on('end', function () {

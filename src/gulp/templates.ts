@@ -25,8 +25,9 @@ export function previewTemplates(options: TaskOptions) {
                     `!${folder}/backend/templates/render.ts`,
                 ])
                 .pipe(exec((file: File) => `npx ts-node-esm -T ${file.path}`, taskOpt))
-                    .on('error', function () {
+                    .on('error', function (e: Error) {
                         console.log("💩" + red.underline.bold(` => Render of Template for ${orange(folder)} failed!`));
+                        console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                         this.emit('end');
                     })
                     .on('end', function () {

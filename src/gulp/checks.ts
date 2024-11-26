@@ -136,8 +136,9 @@ export function checkTs(options: TaskOptions) {
         const task = () =>
             gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`], { cwd: folder })
 				.pipe(tsProject(ts.reporter.fullReporter()))
-                .on('error', function () {
+                .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Typescriptcheck for ${orange(folder)} failed!`));
+					console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                     this.emit('end');
                 })
                 .on('end', function () {

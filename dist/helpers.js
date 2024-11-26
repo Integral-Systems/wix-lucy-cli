@@ -5,7 +5,8 @@ import { spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
-import { blue, green, orange, red } from './index.js';
+import os from 'os';
+import { blue, green, orange, red, yellow, magenta } from './index.js';
 export async function installPackages(wixPackages, devPackages, cwd, locked) {
     if (locked)
         console.log("🐕" + blue.underline(` => Installing & version locked packages!`));
@@ -71,18 +72,83 @@ export async function runGulp(moduleSettings, projectSettings, task) {
 /**
  * Clean up and run a command before exiting the process.
  */
-export function handleExit() {
+export function cleanupWatchers() {
+    console.log(`🧹 ${magenta.underline('Cleaning up Watchman watchers...')}`);
     const cwd = process.cwd();
-    const command = `watchman watch-del '${cwd}'`;
-    console.log("🐕" + blue.underline(' => Cleaning up...'));
+    const command = `watchman watch-del "${cwd}"`; // Adjust for Windows paths
     exec(command, (error, stdout, stderr) => {
         if (error) {
-            console.error(`💩 Failed to run cleanup: ${error.message}`);
+            console.error(`💩 ${red.underline('Failed to run cleanup:')} ${orange(error.message)}`);
             return;
         }
         if (stderr) {
-            console.error(`⚠️  Watchman stderr: ${stderr}`);
+            console.error(`⚠️ ${yellow.underline('Watchman stderr:')} ${stderr}`);
         }
-        console.log(`✅ Watchman cleanup success: ${stdout}`);
+        console.log(`✅ ${green.underline('Watchman cleanup success:')} ${stdout}`);
+    });
+}
+/**
+ * Kill all processes matching a specific substring in their command, with a fallback for Windows.
+ * @param {string} processPattern - The substring to match (e.g., "wix:dev" or "@wix/cli/bin/wix.cjs").
+ */
+export function killAllProcesses(processPattern) {
+    const isWindows = os.platform() === 'win32';
+    const command = isWindows
+        ? `tasklist /FI "IMAGENAME eq node.exe" /FO CSV | findstr "${processPattern}"` // Adjust for Node.js processes
+        : `ps -eo pid,command | grep "${processPattern}" | grep -v grep`;
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`💩 ${red.underline('Failed to find processes:')} ${orange(error.message)}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`⚠️ ${yellow.underline('Error output:')} ${stderr}`);
+        }
+        if (!stdout.trim()) {
+            console.log(`ℹ️ ${blue.underline(`No processes found matching pattern:`)} ${orange(processPattern)}`);
+            return;
+        }
+        console.log(`📝 ${magenta.underline('Found matching processes:')}\n${stdout}`);
+        const lines = stdout.trim().split('\n');
+        const pids = isWindows
+            ? lines.map(line => line.match(/"(\d+)"/)?.[1]) // Extract PID from Windows tasklist output
+            : lines.map(line => line.trim().split(/\s+/)[0]).filter(pid => !isNaN(Number(pid)));
+        pids.forEach(pid => {
+            if (!pid)
+                return;
+            try {
+                const killCommand = isWindows
+                    ? `taskkill /PID ${pid} /T /F` // Forcefully terminate the process on Windows
+                    : `kill -SIGTERM ${pid}`;
+                exec(killCommand, (killError) => {
+                    if (killError) {
+                        console.error(`⚠️ ${yellow.underline('Failed to kill process with PID')} ${orange(pid)}: ${red(killError.message)}`);
+                    }
+                    else {
+                        console.log(`✅ ${green.underline('Killed process with PID:')} ${orange(pid)}`);
+                    }
+                });
+                // Schedule SIGKILL fallback for non-Windows platforms
+                if (!isWindows) {
+                    setTimeout(() => {
+                        try {
+                            process.kill(parseInt(pid, 10), 'SIGKILL');
+                            console.log(`🔪 ${red.underline('Sent SIGKILL to process with PID:')} ${orange(pid)} (fallback).`);
+                        }
+                        catch (killError) {
+                            if (killError.code === 'ESRCH') {
+                                console.log(`✅ ${green.underline('Process with PID')} ${orange(pid)} ${green.underline('already terminated.')}`);
+                            }
+                            else {
+                                console.error(`⚠️ ${yellow.underline('Failed to send SIGKILL to process with PID')} ${orange(pid)}: ${red(killError.message)}`);
+                            }
+                        }
+                    }, 10000);
+                }
+            }
+            catch (err) {
+                console.error(`⚠️ ${yellow.underline('Failed to kill process with PID')} ${orange(pid)}: ${red(err.message)}`);
+            }
+        });
     });
 }

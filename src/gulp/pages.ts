@@ -1,26 +1,36 @@
 import gulp from 'gulp';
 import { TaskOptions } from '../Gulpfile';
-import { createGulpEsbuild } from 'gulp-esbuild';
 import * as path from 'path';
-import { blue, red } from '../index.js';
+import { blue, orange, red } from '../index.js';
+import swc from 'gulp-swc';
+
+const swcOptions = {
+    jsc: {
+        target: 'es2020',
+        parser: {
+            syntax: "typescript",
+            tsx: true,
+        },
+    },
+};
 
 export function buildPages(options: TaskOptions) {
-    const { outputDir, enableIncrementalBuild} = options;
-    const gulpEsbuild = createGulpEsbuild({
-        incremental: enableIncrementalBuild, // enables the esbuild's incremental build
-        pipe: true, // enables the esbuild's pipe mode
-    });
+    const { outputDir} = options;
 
     return () => {
         return gulp.src('typescript/pages/*.ts')
-            .pipe(gulpEsbuild({
-                bundle: false,
-            }))
-            .pipe(gulp.dest(path.join(outputDir, 'pages')))
-            .on('error', function () {
-                console.log("💩" + red.underline.bold(' => Build of Pages TS files failed!'));
-                this.emit('end');
-            })
-            .on('end', function() { console.log("🐶" + blue.underline(' => Build of Pages TS files succeeded!')); });
+            .pipe(swc(swcOptions))
+                .on('error', function (e: Error) {
+                    console.log("💩" + red.underline.bold(` => Build of Pages files failed!`));
+                    console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+                    this.emit('end');
+                })
+                .pipe(gulp.dest(path.join(outputDir, 'pages')))
+                .on('error', function (e: Error) {
+                    console.log("💩" + red.underline.bold(' => Build of Pages TS files failed!'));
+                    console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+                    this.emit('end');
+                })
+                .on('end', function() { console.log("🐶" + blue.underline(' => Build of Pages TS files succeeded!')); });
     };
 }

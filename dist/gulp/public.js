@@ -1,7 +1,16 @@
 import gulp from 'gulp';
-import { createGulpEsbuild } from 'gulp-esbuild';
 import * as path from 'path';
 import { blue, orange, red } from '../index.js';
+import swc from 'gulp-swc';
+const swcOptions = {
+    jsc: {
+        target: 'es2020',
+        parser: {
+            syntax: "typescript",
+            tsx: true,
+        },
+    },
+};
 export function buildPublic(options) {
     const folders = ['typescript'];
     if (options.modulesSync) {
@@ -9,11 +18,7 @@ export function buildPublic(options) {
             folders.push(module);
         }
     }
-    const { outputDir, enableIncrementalBuild } = options;
-    const gulpEsbuild = createGulpEsbuild({
-        incremental: enableIncrementalBuild,
-        pipe: true,
-    });
+    const { outputDir } = options;
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
         const taskName = `build_Public-${folder}`; // Create a unique name for each task
@@ -21,15 +26,16 @@ export function buildPublic(options) {
             `${folder}/public/**/*.ts`,
             `${folder}/public/**/*.tsx`,
         ])
-            .pipe(gulpEsbuild({
-            bundle: false,
-            loader: {
-                '.tsx': 'tsx',
-            },
-        }))
-            .pipe(gulp.dest(path.join(outputDir, 'public')))
-            .on('error', function () {
+            .pipe(swc(swcOptions))
+            .on('error', function (e) {
             console.log("💩" + red.underline.bold(` => Build of Public files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+            this.emit('end');
+        })
+            .pipe(gulp.dest(path.join(outputDir, 'public')))
+            .on('error', function (e) {
+            console.log("💩" + red.underline.bold(` => Build of Public files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () {

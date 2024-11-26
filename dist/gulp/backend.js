@@ -1,8 +1,17 @@
 import gulp from 'gulp';
-import { createGulpEsbuild } from 'gulp-esbuild';
 import rename from 'gulp-rename';
 import * as path from 'path';
 import { blue, orange, red } from '../index.js';
+import swc from 'gulp-swc';
+const swcOptions = {
+    jsc: {
+        target: 'es2020',
+        parser: {
+            syntax: "typescript",
+            tsx: true,
+        },
+    },
+};
 export function buildBackend(options) {
     const folders = ['typescript'];
     if (options.modulesSync) {
@@ -10,11 +19,7 @@ export function buildBackend(options) {
             folders.push(module);
         }
     }
-    const { outputDir, enableIncrementalBuild } = options;
-    const gulpEsbuild = createGulpEsbuild({
-        incremental: enableIncrementalBuild,
-        pipe: true,
-    });
+    const { outputDir } = options;
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
         const taskName = `build_Backend-${folder}`; // Create a unique name for each task
@@ -24,12 +29,17 @@ export function buildBackend(options) {
             `!${folder}/backend/**/*.jsw.ts`,
             `!${folder}/backend/**/*.spec.ts`,
         ])
-            .pipe(gulpEsbuild({
-            bundle: false,
-        }))
-            .pipe(gulp.dest(path.join(outputDir, 'backend')))
-            .on('error', function () {
+            .pipe(swc(swcOptions))
+            .pipe(swc(swcOptions))
+            .on('error', function (e) {
             console.log("💩" + red.underline.bold(` => Build of Backend files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+            this.emit('end');
+        })
+            .pipe(gulp.dest(path.join(outputDir, 'backend')))
+            .on('error', function (e) {
+            console.log("💩" + red.underline.bold(` => Build of Backend files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () {
@@ -49,24 +59,29 @@ export function buildBackendJSW(options) {
             folders.push(module);
         }
     }
-    const { outputDir, enableIncrementalBuild } = options;
-    const gulpEsbuild = createGulpEsbuild({
-        incremental: enableIncrementalBuild,
-        pipe: true,
-    });
+    const swcOptions = {
+        jsc: {
+            target: 'es6',
+        },
+    };
+    const { outputDir } = options;
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
         const taskName = `build-${folder}`; // Create a unique name for each task
         const task = () => gulp.src([
             `${folder}/backend/**/*.jsw.ts`,
         ])
-            .pipe(gulpEsbuild({
-            bundle: false,
-        }))
+            .pipe(swc(swcOptions))
+            .on('error', function (e) {
+            console.log("💩" + red.underline.bold(` => Build of Public files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+            this.emit('end');
+        })
             .pipe(rename({ extname: '' }))
             .pipe(gulp.dest(path.join(outputDir, 'backend')))
-            .on('error', function () {
+            .on('error', function (e) {
             console.log("💩" + red.underline.bold(` => Build of JSW files for ${orange(folder)} failed!`));
+            console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
             this.emit('end');
         })
             .on('end', function () {

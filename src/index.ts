@@ -11,7 +11,7 @@ import fs from 'fs/promises';
 
 import { init } from './init.js';
 import { sync } from './sync.js';
-import { runGulp, installPackages, handleExit } from './helpers.js';
+import { runGulp, installPackages, killAllProcesses, cleanupWatchers } from './helpers.js';
 import { prepare } from './prepare.js';
 import { spawnSync } from 'child_process';
 
@@ -71,10 +71,50 @@ const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(__filename);
 
+// const cwd = process.cwd();
+// const command = `watchman watch-del '${cwd}'`;
+// killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+// killAllProcesses('wix:dev');   
+
+
+process.on('exit', (code) => {
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');   
+    cleanupWatchers();
+	console.log(`🚪 ${magenta.underline('Process exiting with code:')} ${orange(code)}`);
+});
+
 process.on('SIGINT', () => {
-    console.log("🐕 Received Ctrl+C, cleaning up...");
-    handleExit();
-    process.exit(); // Exit the process explicitly
+	console.log(`🐕 ${green.underline('Received Ctrl+C (SIGINT), cleaning up...')}`);
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
+
+process.on('SIGTERM', () => {
+	console.log(`🛑 ${red.underline('Received termination signal (SIGTERM), cleaning up...')}`);
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
+
+process.on('uncaughtException', (error) => {
+	console.error(`💥 ${red.underline('Uncaught Exception:')}`, error);
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(1); // Exit with an error code
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.error(`🚨 ${yellow.underline('Unhandled Rejection at:')} ${orange(promise)}`);
+	console.error(`🚨 ${red.underline('Reason:')} ${reason}`);    cleanupWatchers();
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(1); // Exit with an error code
 });
 
 /**
