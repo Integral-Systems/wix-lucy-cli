@@ -70,6 +70,17 @@ Lucy-CLI comes with a range of commands and options to help manage your Wix Velo
 - **`sync`**: Synchronizes the database and any dependencies or configurations necessary for the project.
 - **`install`**: Installs all Wix npm packages listed in the `wixpkgs.json` file in the project directory.
 - **`fix`**: Runs a fix command to resolve common issues in development or production settings.
+- **🦮 `docs`**  
+  Generates documentation for the project.
+
+- **🦮 `cypress`**  
+  Starts the Cypress test runner.
+
+- **🦮 `e2e`**  
+  Starts the Cypress test runner in CI mode.  
+  **Usage:** `e2e <someKey> <someID>`  
+  - **`someKey`**: The key for the test.  
+  - **`someID`**: The build ID for the test.
 
 ### Options
 

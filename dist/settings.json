@@ -57,6 +57,8 @@
         "fix-wix": "lucy-cli fix-wix",
         "tsc": "tsc -p ./typescript/tsconfig.json --noEmit",
         "test": "jest --config jest.config.ts --passWithNoTests",
-        "test:watch": "jest --config jest.config.ts --watch"
+        "test:watch": "jest --config jest.config.ts --watch",
+        "cypress": "cypress open",
+        "e2e": "cypress-cloud run --parallel --record"
     }
 }

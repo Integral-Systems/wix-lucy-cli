@@ -155,6 +155,8 @@ async function main(): Promise<void> {
 		console.log("🦮 " + magenta.bold('install') + "            : Installs all Wix npm packages listed in the 'lucy.json' file in the project directory.");
 		console.log("🦮 " + magenta.bold('fix') + "                : Runs a fix command to resolve common issues in development or production settings.");
 		console.log("🦮 " + magenta.bold('docs') + "               : Generates documentation for the project.");
+		console.log("🦮 " + magenta.bold('cypress') + "            : Starts the cypress test runner.");
+		console.log("🦮 " + magenta.bold('e2e') + "                : Starts the cypress test runner in CI mode. first argument is the key second is the build id <e2e <somekey <someID>");
 		console.log("\nOptions:");
 		console.log("🦮 " + magenta.bold('-h, help') + "           : Displays this help message.");
 		console.log("🦮 " + magenta.bold('-v, version') + "        : Displays the current version of Lucy CLI as defined in the project’s package.json.");
@@ -234,9 +236,38 @@ async function main(): Promise<void> {
 	if(moduleSettings.args.includes('docs')){
 		const res = spawnSync('yarn docs', { shell: true, stdio: 'inherit' });
 		if (res.error) {
-			return console.log((`💩 ${red.underline.bold("=> Failed to install dev packages =>")} ${orange(res.error.message)}`));
+			return console.log((`💩 ${red.underline.bold("=> Failed to Docs generated => ")} ${orange(res.error.message)}`));
 		}
 		return console.log("🐕" + blue.underline(` => Docs generated!`));
+	}
+
+	if(moduleSettings.args.includes('cypress')){
+		const res = spawnSync('yarn cypress', { shell: true, stdio: 'inherit' });
+		if (res.error) {
+			return console.log((`💩 ${red.underline.bold("=> Failed to start cypress => ")} ${orange(res.error.message)}`));
+		}
+		return console.log("🐕" + blue.underline(` => Started Cypress`));
+	}
+
+	if (moduleSettings.args.includes('e2e')) {
+		// Extract arguments
+		const e2eIndex = moduleSettings.args.indexOf('e2e');
+		const key = moduleSettings.args[e2eIndex + 1];
+		const buildId = moduleSettings.args[e2eIndex + 2];
+	
+		// Validate that both arguments are provided
+		if (!key && !buildId) {
+			console.log(`💩 ${red.underline.bold("=> Missing required arguments:")} ${orange("key")} and ${orange("build ID")}`);
+			process.exit(1);
+		}
+	
+		// Run Cypress with the provided arguments
+		const res = spawnSync(`yarn e2e --key ${key} --ci-build-id ${buildId}`, { shell: true, stdio: 'inherit' });
+		if (res.error) {
+			console.log(`💩 ${red.underline.bold("=> Failed to start Cypress =>")} ${orange(res.error.message)}`);
+			process.exit(1);
+		}
+		return console.log("🐕 " + blue.underline(`=> Started Cypress successfully`));
 	}
 
 	if(moduleSettings.args.includes('prepare')){

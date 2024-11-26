@@ -135,12 +135,13 @@ export function checkTs(options: TaskOptions) {
 
         const task = () =>
             gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`], { cwd: folder })
-				.pipe(tsProject(ts.reporter.fullReporter()))
+				.pipe(tsProject(ts.reporter.fullReporter(true)))
                 .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Typescriptcheck for ${orange(folder)} failed!`));
 					console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                     this.emit('end');
                 })
+				
                 .on('end', function () {
                     console.log("🐶" + blue.underline(` => Typescriptcheck for ${orange(folder)} succeeded!`));
                 });
