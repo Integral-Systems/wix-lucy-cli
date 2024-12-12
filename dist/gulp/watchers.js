@@ -17,7 +17,6 @@ export function watchBackend() {
     return gulp.watch([
         '*/backend/**/*.ts',
         '*/backend/**/*.tsx',
-        '!*/backend/**/*.spec.ts',
         '!*/backend/**/*.jsw.ts',
         '!src/**/**',
     ], gulp.parallel(test(taskOptions), checkTs(taskOptions), buildBackend(taskOptions)));

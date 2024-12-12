@@ -133,6 +133,7 @@ gulp.task('fix-wix', gulp.series(
 gulp.task('build', gulp.parallel(
 	'build-backend', 
 	'build-public', 
+	'preview-templates',
 	buildPages(taskOptions),
 	compileScss(taskOptions), 
 	'copy-files'

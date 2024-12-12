@@ -9,6 +9,10 @@ const swcOptions = {
             syntax: "typescript",
             tsx: true,
         },
+        preserveAllComments: false,
+        minify: {
+            compress: true // equivalent to {}
+        }
     },
 };
 export function buildPages(options) {

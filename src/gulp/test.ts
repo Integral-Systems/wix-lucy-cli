@@ -38,10 +38,12 @@ export function test(options: TaskOptions) {
                 coverageDirectory: './coverage',
                 coverageReporters: ['clover', 'json', 'lcov', 'text'],
                 rootDir: `./${folder}`,
+                roots: [...folders.map(folder => `../${folder}`)],
                 testMatch: ['**/*.spec.ts'],
                 passWithNoTests: true,
                 moduleNameMapper: {
-                    'public/(.*)': '<rootDir>/public/$1'
+                    'public/(.*)': [...folders.map(folder => `../${folder}/$1`)],
+                    'backend/(.*)': [...folders.map(folder => `../${folder}/$1`)],
                 }
             }))
                 .on('error', function (e: Error) {
@@ -60,4 +62,45 @@ export function test(options: TaskOptions) {
 
     // Run all tasks in parallel
     return gulp.parallel(...tasks);
+
+    // return () => {
+    //     return gulp.src([
+    //         ...folders.map(folder => `${folder}/backend/**/*.spec.ts`)
+    //         ])
+    //         .pipe(jest({
+    //             verbose: true,
+    //             extensionsToTreatAsEsm: ['.ts'],
+    //             transform: {
+    //                 '^.+\\.tsx?$': [
+    //                     'ts-jest',
+    //                     {
+    //                         tsconfig: `./typescript/tsconfig.json`,
+    //                         usESM: true,
+    //                     },
+    //                 ],
+    //             },
+    //             preset: 'ts-jest',
+    //             setupFilesAfterEnv: [],
+    //             testEnvironment: 'node',
+    //             collectCoverage: true,
+    //             coverageDirectory: './coverage',
+    //             coverageReporters: ['clover', 'json', 'lcov', 'text'],
+    //             rootDir: `./typescript`,
+    //             roots: [`.`],
+    //             testMatch: ['**/*.spec.ts'],
+    //             passWithNoTests: true,
+    //             moduleNameMapper: {
+    //                 'public/(.*)': [...folders.map(folder => `${folder}/$1`)],
+    //                 'backend/(.*)': [...folders.map(folder => `${folder}/$1`)],
+    //             }
+    //         }))
+    //             .on('error', function (e: Error) {
+    //                 console.log("💩" + red.underline.bold(` => Tests for failed!`));
+    //                 console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+    //                 this.emit('end');
+    //             })
+    //             .on('end', function () {
+    //                 console.log("🐶" + blue.underline(` => Tests succeeded!`));
+    //             });
+    // }
 }

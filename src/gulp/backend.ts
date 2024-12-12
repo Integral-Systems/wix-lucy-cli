@@ -12,7 +12,13 @@ const swcOptions = {
         parser: {
             syntax: "typescript",
             tsx: true,
+            decorators: true,
+            // preserveAllComments: true
         },
+        preserveAllComments: false,
+        minify: {
+            compress: true // equivalent to {}
+          }
     },
 };
 
@@ -37,7 +43,6 @@ export function buildBackend(options: TaskOptions) {
                 `!${folder}/backend/**/*.jsw.ts`,
                 `!${folder}/backend/**/*.spec.ts`,
             ])
-                .pipe(swc(swcOptions))
                 .pipe(swc(swcOptions))
                 .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Build of Backend files for ${orange(folder)} failed!`));
