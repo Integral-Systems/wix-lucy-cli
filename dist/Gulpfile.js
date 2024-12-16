@@ -63,7 +63,7 @@ gulp.task('add-wix-types', function (done) {
 });
 gulp.task('set-production', gulp.parallel(setProdConfig()));
 gulp.task('start-wix', shell.task([
-    'sleep 3; yarn wix:dev',
+    'yarn wix:dev',
 ]));
 gulp.task('gen-docs', shell.task([
     'yarn docs',
