@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
 import os from 'os';
+import fs from 'fs';
 import { blue, green, orange, red, yellow, magenta } from './index.js';
 export async function installPackages(wixPackages, devPackages, cwd, locked) {
     if (locked)
@@ -43,11 +44,19 @@ export async function installPackages(wixPackages, devPackages, cwd, locked) {
     }
 }
 export async function gitInit(cwd, modules) {
-    const git = simpleGit({ baseDir: cwd });
-    for (const [name, url] of Object.entries(modules)) {
+    for (const [name, repo] of Object.entries(modules)) {
         console.log(chalk.green.underline.bold(`Cloning ${name}`));
+        const git = simpleGit({ baseDir: cwd });
         try {
-            await git.submoduleAdd(url, name);
+            const repoPath = path.resolve(cwd, name);
+            if (!fs.existsSync(repoPath)) {
+                await git.submoduleAdd(repo.url, name);
+            }
+            if (fs.existsSync(repoPath)) {
+                console.log(`🐕 ${blue.underline(' => Module already cloned!')}`);
+            }
+            const localGit = simpleGit({ baseDir: `${cwd}/${name}` });
+            await localGit.checkout(repo.branch);
         }
         catch (err) {
             console.log((`💩 ${red.underline.bold("=> Command failed =>")} ${orange(err)}`));

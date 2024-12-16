@@ -30,32 +30,42 @@ Lucy-CLI is designed to streamline the setup and management of TypeScript within
 
 4. **Git Submodule Support**  
    - Includes support for git submodules, providing full type support within submodules and enabling the use of libraries and types across projects.
+   - To add a submodule, include the following in the `lucy.json` file:
 
-5. **Configurable Setup**  
+      ``` json
+      "modules": {
+        "<repoName>": {
+          "url": "String",
+          "branch": "String"
+        }
+      }
+      ```
+
+1. **Configurable Setup**  
    - After initialization, Lucy-CLI creates a `lucy-config.json` configuration file where you can modify settings, add dev packages, specify Wix packages, and configure git submodules.
 
-6. **Execute render functions**  
+2. **Execute render functions**  
    - Lucy-CLI can execute render functions located in the backend template folder, allowing you to test render functions locally.
 
-7. **compile sccs files**  
+3. **compile sccs files**  
    - Lucy-CLI can compile scss files to css files.
    - It compiles styles/global.scss file to global.css.
 
-8. **Wix NPM Package Installation**
+4. **Wix NPM Package Installation**
    - Lucy-CLI can install Wix npm packages from the `lucy.json` file in the project directory.
 
-9. **Teting with Vitest**
+5. **Teting with Vitest**
    - Lucy-CLI can run tests with Vitest.
    - It runs tests located backend folder with the file name ending with `.spec.ts`.
    - it creates a code coverage report in the coverage folder in the lib folders and typescript folders.
    - Vitest is looking for mokes in typescript folder and lib folder.
      - You can add additional mock folders in vitest.config.ts file.
 
-10. **Linting with ESLint**
+6.  **Linting with ESLint**
     - Lucy-CLI can lint the code with ESLint.
     - It uses the ESLint configuration in the `.eslintrc.cjs` file in the project directory.  
 
-11. **Add git version during production build**
+7.  **Add git version during production build**
       - Lucy-CLI can add the git version to the production build.
       - It adds the git version to the `public/constant/env.ts` file in the public folder under the key gitTag.
 

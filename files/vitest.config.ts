@@ -16,10 +16,10 @@ export default defineConfig({
 			resolveId(source) {
 
 				if (source.startsWith('wix')){
-					const baseName = source.replace(/^wix/, '');
+					const moduleName = source.replace(/^wix/, '');
 					const candidates = [
-						path.resolve(__dirname, './lib/__mocks__/wix' + baseName),
-						path.resolve(__dirname, './typescript/__mocks__/wix' + baseName),
+						path.resolve(__dirname, './lib/__mocks__/wix' + moduleName),
+						path.resolve(__dirname, './typescript/__mocks__/wix' + moduleName),
 					];
 
 					for (const candidate of candidates){
@@ -42,16 +42,4 @@ export default defineConfig({
 		},
 		alias: {}
 	},
-	// resolve: {
-	// 	alias: [
-	// 		{
-	// 			find: /^wix(.*)$/,
-	// 			replacement: path.resolve(__dirname, './lib/__mocks__/wix$1'),
-	// 		},
-	// 		{
-	// 			find: /^wix(.*)$/,
-	// 			replacement: path.resolve(__dirname, './typescript/__mocks__/wix$1'),
-	// 		},
-	// 	],
-	// },
 });

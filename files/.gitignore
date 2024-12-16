@@ -1,4 +1,9 @@
+# dependencies
+.idea/
+jsconfig.json
 node_modules
 .vscode/
 .idea/
 jsconfig.json
+.yarn
+.wix/debug.log

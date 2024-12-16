@@ -4,19 +4,23 @@
     },
     "compilerOptions": {
         "outDir": "../src",
-        "rootDir": "../typescript",
+        "rootDir": ".",
         "target": "ES2020",
-        "module": "ESNext",
+        "module": "ES2020",
         "moduleResolution": "Node",
         "preserveConstEnums": true,
         "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
+        "skipLibCheck": false,
+        "allowJs": true,
         "declaration": true,
+        "jsx": "react",
         "strict": true,
+        "alwaysStrict": false,
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
+        "exactOptionalPropertyTypes": true,
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
@@ -30,22 +34,21 @@
             }
         ],
         "paths": {
-            "public/*": ["./public/*", "../lib/public/*"],
-            "backend/*": ["./backend/*", "../lib/backend/*"],
-            "pages/*": ["./pages/*", "../lib/pages/*"],
-            "types/*": ["./types/*", "../lib/types/*"]
+            "public/*": ["./public/*"],
+            "backend/*": ["./backend/*"],
+            "pages/*": ["./pages/*"],
+            "types/*": ["./types/*"]
         },
             "typeRoots": [
                 "./types", 
-                "../lib/types",
                 "../node_modules/@types"
             ]
     },
-    "exclude": ["../node_modules", "../.wix", "node_modules", "./wix", "./**/*.test.ts"],
+    "exclude": ["../node_modules", "../.wix", "node_modules", "./wix", "./**/*.spec.ts", "../src/**/*"],
     "include":[
         "!*.d.ts",
         "public/**/*.tsx",
-        "../lib/public/**/*tsx"
+        "**/*.ts"
     ],
     "references": [
         {

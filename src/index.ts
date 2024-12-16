@@ -17,7 +17,10 @@ import { spawnSync } from 'child_process';
 
 export type LucySettings = {
 	modules: {
-		[llibName: string]: string;
+		[llibName: string]: {
+			url: string;
+			branch: string;
+		};
 	};
 	wixSettings: {
 		compilerOptions: {

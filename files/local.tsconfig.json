@@ -34,8 +34,8 @@
       }
     ],
     "paths": {
-      "public/*": ["./lib/public/*", "./typescript/public/*"],
-      "backend/*": ["./lib/backend/*", "./typescript/backend/*"],
+      "public/*": ["./typescript/public/*", "./lib/public/*"],
+      "backend/*": ["./typescript/backend/*", "./lib/backend/*"],
       "pages/*": ["./pages/*"],
       "types/*": ["./types/*"]
     },

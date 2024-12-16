@@ -1,4 +1,3 @@
-/** @type { import('typedoc').TypeDocOptionMap & import('typedoc-plugin-merge-modules').Config } */
 {
   "entryPoints": [
     "*/**/*.ts",
@@ -7,22 +6,20 @@
   "entryPointStrategy": "expand",
   "out": "docs",
   "plugin": [
-    "typedoc-github-theme",
+    "typedoc-github-theme"
   ],
   "tsconfig": "local.tsconfig.json",
   "excludeExternals": true,
   "externalPattern": [
     "**/node_modules/**",
     "**/.wix/**",
-    ".wix/**",
+    ".wix/**"
   ],
   "exclude": [
     "./.wix/**/*",
     ".wix/**/*",
     "cypress/**",
-    "**/__mocks__/**",
+    "**/__mocks__/**"
   ],
-  "name": "wix-integraleakademie",
-  // "mergeModulesRenameDefaults": false, // NEW option of TypeDoc added by this plugin
-  // "mergeModulesMergeMode": "project", // NEW option of TypeDoc added by this plugin
+  "name": "Wix-lucy"
 }
