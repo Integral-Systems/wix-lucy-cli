@@ -7,23 +7,22 @@
   "entryPointStrategy": "expand",
   "out": "docs",
   "plugin": [
-    "typedoc-theme-hierarchy",
-    "typedoc-plugin-zod",
-    "typedoc-plugin-merge-modules"
+    "typedoc-github-theme",
   ],
-  "theme": "hierarchy",
-  "tsconfig": "docs.tsconfig.json",
+  "tsconfig": "local.tsconfig.json",
   "excludeExternals": true,
   "externalPattern": [
     "**/node_modules/**",
     "**/.wix/**",
-    ".wix/**"
+    ".wix/**",
   ],
   "exclude": [
     "./.wix/**/*",
-    ".wix/**/*"
+    ".wix/**/*",
+    "cypress/**",
+    "**/__mocks__/**",
   ],
-  "name": "Wix-lucy",
-  "mergeModulesRenameDefaults": true, 
-  "mergeModulesMergeMode": "project",
+  "name": "wix-integraleakademie",
+  // "mergeModulesRenameDefaults": false, // NEW option of TypeDoc added by this plugin
+  // "mergeModulesMergeMode": "project", // NEW option of TypeDoc added by this plugin
 }

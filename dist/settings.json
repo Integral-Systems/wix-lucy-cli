@@ -41,9 +41,6 @@
         "ts-node": "^10.9.2",
         "tsx": "^4.19.2",
         "typedoc": "0.27.1",
-        "typedoc-plugin-merge-modules": "^6.0.3",
-        "typedoc-plugin-zod": "^1.3.0",
-        "typedoc-theme-hierarchy": "^5.0.3",
         "typescript": "5.6.3",
         "typescript-eslint": "^8.15.0",
         "typescript-eslint-language-service": "^5.0.5",
@@ -60,7 +57,7 @@
         "build": "lucy-cli build-prod",
         "fix-wix": "lucy-cli fix-wix",
         "tsc": "tsc -p ./typescript/tsconfig.json --noEmit",
-        "test": "vitest --ui",
+        "test": "vitest --ui --coverage",
         "coverage": "vitest run --coverage",
         "cypress": "cypress open",
         "e2e": "cypress-cloud run --parallel --record"

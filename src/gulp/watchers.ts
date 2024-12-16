@@ -7,7 +7,6 @@ import { buildPages } from './pages.js';
 import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkPages, checkTs } from './checks.js';
-import { test } from './test.js';
 import shell from 'gulp-shell';
 
 let taskOptions: TaskOptions;
@@ -29,7 +28,9 @@ export function watchBackend() {
 	], gulp.parallel(
         checkTs(taskOptions),
         buildBackend(taskOptions),
-        )
+        shell.task([
+            'yarn docs',
+        ]))
     );
 }
 
@@ -40,7 +41,9 @@ export function watchPublic() {
 	], gulp.parallel(
         checkTs(taskOptions),
         buildPublic(taskOptions),
-        )
+        shell.task([
+            'yarn docs',
+        ]))
     );
 }
 

@@ -20,8 +20,7 @@ import { cleanSrc, cleanWix } from './gulp/clean.js';
 import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
-import { ModuleSettings, ProjectSettings, green, magenta, orange, red } from './index.js';
-import { test } from './gulp/test.js';
+import { ModuleSettings, ProjectSettings, blue, green, magenta, orange, red } from './index.js';
 import { getModulesSync } from './gulp/helpers.js';
 
 const sass = gulpSass(dartSass);
@@ -95,13 +94,16 @@ gulp.task('copy-files', gulp.parallel(
 	copyFiles(taskOptions),
 ));
 
-gulp.task('test', gulp.parallel(
-	// test(taskOptions),
-	shell.task([
-		'sleep 2; yarn test',
-	])
-));
-
+gulp.task('test', function () {
+	return shell.task(
+		['yarn test'],
+		{ ignoreErrors: true }
+	)().then(() => {
+		console.log("🐕" + blue.underline.bold(' => Exited test task!'));
+	}).catch(err => {
+		console.log("💩" + red.underline.bold(' => Error in test task!'));
+	});
+});
 
 gulp.task('sync-types', shell.task([
 	'yarn postinstall',
@@ -120,7 +122,7 @@ gulp.task('set-production', gulp.parallel(
 ));
 
 gulp.task('start-wix', shell.task([
-	'yarn wix:dev',
+	'sleep 3; yarn wix:dev',
 ]));
 
 gulp.task('gen-docs', shell.task([
@@ -169,7 +171,7 @@ gulp.task('build-prod', gulp.series(
 
 gulp.task('start-dev-env', gulp.parallel(
 	watchAll(taskOptions),
-	// 'test',
+	'test',
 	'start-wix',
 	(done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err)),
 ));

@@ -44,10 +44,12 @@ Lucy-CLI is designed to streamline the setup and management of TypeScript within
 8. **Wix NPM Package Installation**
    - Lucy-CLI can install Wix npm packages from the `lucy.json` file in the project directory.
 
-9. **Teting with Vitest(Not working)**
-   - Lucy-CLI can run tests with Jest.
+9. **Teting with Vitest**
+   - Lucy-CLI can run tests with Vitest.
    - It runs tests located backend folder with the file name ending with `.spec.ts`.
    - it creates a code coverage report in the coverage folder in the lib folders and typescript folders.
+   - Vitest is looking for mokes in typescript folder and lib folder.
+     - You can add additional mock folders in vitest.config.ts file.
 
 10. **Linting with ESLint**
     - Lucy-CLI can lint the code with ESLint.

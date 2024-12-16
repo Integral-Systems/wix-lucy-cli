@@ -1,0 +1,53 @@
+{
+  "typeAcquisition": {
+    "enable": true
+  },
+  "compilerOptions": {
+    "outDir": "../src",
+    "rootDir": ".",
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "preserveConstEnums": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": false,
+    "allowJs": true,
+    "declaration": true,
+    "jsx": "react",
+    "strict": true,
+    "alwaysStrict": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "@styled/typescript-styled-plugin"
+      },
+      {
+        "name": "typescript-eslint-language-service"
+      }
+    ],
+    "paths": {
+      "public/*": ["./lib/public/*", "./typescript/public/*"],
+      "backend/*": ["./lib/backend/*", "./typescript/backend/*"],
+      "pages/*": ["./pages/*"],
+      "types/*": ["./types/*"]
+    },
+    "typeRoots": ["./types", "../node_modules/@types"]
+  },
+  "exclude": [
+    "../node_modules",
+    "../.wix",
+    "node_modules",
+    "./wix",
+    "./**/*.test.ts",
+    "../src/**/*"
+  ],
+  "include": ["!*.d.ts", "public/**/*.tsx", "**/*.ts"]
+}

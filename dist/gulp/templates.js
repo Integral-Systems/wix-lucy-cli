@@ -19,7 +19,7 @@ export function previewTemplates(options) {
             `${folder}/backend/templates/data/*.json`,
             `!${folder}/backend/templates/render.ts`,
         ])
-            .pipe(exec((file) => `npx tsx --tsconfig ${file.dirname}/../../local.tsconfig.json ${file.path}`, taskOpt))
+            .pipe(exec((file) => `npx tsx --tsconfig ./local.tsconfig.json ${file.path}`, taskOpt))
             .on('error', function (e) {
             console.log("💩" + red.underline.bold(` => Render of Template for ${orange(folder)} failed!`));
             console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
