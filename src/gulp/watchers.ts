@@ -8,6 +8,7 @@ import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkPages, checkTs } from './checks.js';
 import { test } from './test.js';
+import shell from 'gulp-shell';
 
 let taskOptions: TaskOptions;
 
@@ -26,7 +27,6 @@ export function watchBackend() {
         '!*/backend/**/*.jsw.ts', 
         '!src/**/**',
 	], gulp.parallel(
-        test(taskOptions),
         checkTs(taskOptions),
         buildBackend(taskOptions),
         )
@@ -38,7 +38,6 @@ export function watchPublic() {
 		'*/public/**/*.ts', 
 		'*/public/**/*.tsx',
 	], gulp.parallel(
-        test(taskOptions),
         checkTs(taskOptions),
         buildPublic(taskOptions),
         )
@@ -71,7 +70,6 @@ export function watchTemplates() {
 		'!*/backend/templates/render.ts',
 	], gulp.parallel(
         previewTemplates(taskOptions),
-        test(taskOptions),
         checkTs(taskOptions),
         )
     );

@@ -96,8 +96,12 @@ gulp.task('copy-files', gulp.parallel(
 ));
 
 gulp.task('test', gulp.parallel(
-	test(taskOptions),
+	// test(taskOptions),
+	shell.task([
+		'sleep 2; yarn test',
+	])
 ));
+
 
 gulp.task('sync-types', shell.task([
 	'yarn postinstall',
@@ -145,7 +149,7 @@ gulp.task('build-pipeline', gulp.series(
 	'set-production',
 	'fix-wixtypes', 
 	'add-wix-types',
-	'test',
+	// 'test',
 	'build',
 ));
 
@@ -165,7 +169,7 @@ gulp.task('build-prod', gulp.series(
 
 gulp.task('start-dev-env', gulp.parallel(
 	watchAll(taskOptions),
-	'test',
+	// 'test',
 	'start-wix',
 	(done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err)),
 ));

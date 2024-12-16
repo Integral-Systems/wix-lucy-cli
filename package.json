@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "lucy-cli",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Lucy Framework for WIX Studio Editor",
   "main": ".dist/index.js",
   "scripts": {
@@ -68,8 +68,8 @@
     "ts-node": "^10.9.1",
     "typedoc": "0.26.11",
     "typedoc-theme-hierarchy": "5.0.3",
-    "velo-sync": "^0.0.9",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "velo-sync": "^0.0.9"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

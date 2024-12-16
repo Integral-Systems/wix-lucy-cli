@@ -35,11 +35,9 @@
         "eslint-plugin-named-import-spacing": "^1.0.3",
         "eslint-plugin-promise": "^7.2.1",
         "eslint-plugin-simple-import-sort": "^12.1.1",
-        "jest": "^29.7.0",
         "prettier": "^3.3.3",
         "react": "^18.3.1",
         "sass": "^1.81.0",
-        "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "tsx": "^4.19.2",
         "typedoc": "0.27.1",
@@ -48,7 +46,10 @@
         "typedoc-theme-hierarchy": "^5.0.3",
         "typescript": "5.6.3",
         "typescript-eslint": "^8.15.0",
-        "typescript-eslint-language-service": "^5.0.5"
+        "typescript-eslint-language-service": "^5.0.5",
+        "vitest": "^2.1.8",
+        "vitest-tsconfig-paths": "^3.4.1",
+        "vite-tsconfig-paths": "^5.1.4"
     },
     "scripts": {
         "postinstall": "wix sync-types",
@@ -59,8 +60,8 @@
         "build": "lucy-cli build-prod",
         "fix-wix": "lucy-cli fix-wix",
         "tsc": "tsc -p ./typescript/tsconfig.json --noEmit",
-        "test": "jest --config jest.config.ts --passWithNoTests",
-        "test:watch": "jest --config jest.config.ts --watch",
+        "test": "vitest --ui",
+        "coverage": "vitest run --coverage",
         "cypress": "cypress open",
         "e2e": "cypress-cloud run --parallel --record"
     }

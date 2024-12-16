@@ -19,7 +19,6 @@ import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { green, magenta, orange, red } from './index.js';
-import { test } from './gulp/test.js';
 import { getModulesSync } from './gulp/helpers.js';
 const sass = gulpSass(dartSass);
 const outputDir = './src';
@@ -48,7 +47,11 @@ gulp.task('build-backend', gulp.parallel(buildBackend(taskOptions), buildBackend
 gulp.task('build-public', gulp.parallel(buildPublic(taskOptions)));
 gulp.task('preview-templates', gulp.parallel(previewTemplates(taskOptions)));
 gulp.task('copy-files', gulp.parallel(copyFiles(taskOptions)));
-gulp.task('test', gulp.parallel(test(taskOptions)));
+gulp.task('test', gulp.parallel(
+// test(taskOptions),
+shell.task([
+    'sleep 2; yarn test',
+])));
 gulp.task('sync-types', shell.task([
     'yarn postinstall',
 ]));
@@ -65,9 +68,13 @@ gulp.task('gen-docs', shell.task([
 ]));
 gulp.task('fix-wix', gulp.series(cleanWix(), 'sync-types', 'fix-wixtypes', 'add-wix-types'));
 gulp.task('build', gulp.parallel('build-backend', 'build-public', 'preview-templates', buildPages(taskOptions), compileScss(taskOptions), 'copy-files'));
-gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 'fix-wixtypes', 'add-wix-types', 'test', 'build'));
+gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 'fix-wixtypes', 'add-wix-types', 
+// 'test',
+'build'));
 gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions), 'gen-docs'));
-gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 'start-wix', (done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err))));
+gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 
+// 'test',
+'start-wix', (done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err))));
 gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 'build', 'start-dev-env'));
 async function gulpTaskRunner(task) {
     return new Promise(function (resolve, reject) {

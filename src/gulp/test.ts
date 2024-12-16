@@ -4,55 +4,32 @@ import gulpJest from 'gulp-jest';
 import { TaskOptions } from '../Gulpfile.js';
 const jest = gulpJest.default;
 
+const taskOpt = {
+    continueOnError: true,
+};
 export function test(options: TaskOptions) {
     const folders = ['typescript'];
-    if (options.modulesSync){
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    // if (options.modulesSync){
+    //     for (const module of Object.keys(options.modulesSync)) {
+    //         folders.push(module);
+    //     }
+    // }
     
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
-        const taskName = `tests-${folder}`; // Create a unique name for each task
+        const taskName = `tests-coverage-${folder}`; // Create a unique name for each task
         const task = () =>
             gulp.src([
                 `${folder}/backend/**/*.spec.ts`,
             ])
-            .pipe(jest({
-                verbose: true,
-                extensionsToTreatAsEsm: ['.ts'],
-                transform: {
-                    '^.+\\.tsx?$': [
-                        'ts-jest',
-                        {
-                            tsconfig: `./${folder}/tsconfig.json`,
-                            usESM: true,
-                        },
-                    ],
-                },
-                preset: 'ts-jest',
-                setupFilesAfterEnv: [],
-                testEnvironment: 'node',
-                collectCoverage: true,
-                coverageDirectory: './coverage',
-                coverageReporters: ['clover', 'json', 'lcov', 'text'],
-                rootDir: `./${folder}`,
-                roots: [...folders.map(folder => `../${folder}`)],
-                testMatch: ['**/*.spec.ts'],
-                passWithNoTests: true,
-                moduleNameMapper: {
-                    'public/(.*)': [...folders.map(folder => `../${folder}/$1`)],
-                    'backend/(.*)': [...folders.map(folder => `../${folder}/$1`)],
-                }
-            }))
+            .pipe(exec((file: File) => `yarn coverage`, taskOpt))
                 .on('error', function (e: Error) {
-                    console.log("💩" + red.underline.bold(` => Tests for ${orange(folder)} failed!`));
+                    console.log("💩" + red.underline.bold(` => Failed to generate coverage for ${orange(folder)} failed!`));
                     console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
                     this.emit('end');
                 })
                 .on('end', function () {
-                    console.log("🐶" + blue.underline(` => Tests for ${orange(folder)} succeeded!`));
+                    console.log("🐶" + blue.underline(` => Coverage for ${orange(folder)} succeeded!`));
                 });
 
         // Register the task with Gulp
@@ -103,4 +80,8 @@ export function test(options: TaskOptions) {
     //                 console.log("🐶" + blue.underline(` => Tests succeeded!`));
     //             });
     // }
+}
+
+function exec(arg0: (file: File) => string, taskOpt: { continueOnError: boolean; }): any {
+    throw new Error('Function not implemented.');
 }

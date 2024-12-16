@@ -6,7 +6,6 @@ import { buildPages } from './pages.js';
 import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkTs } from './checks.js';
-import { test } from './test.js';
 let taskOptions;
 export function watchSCSS() {
     return gulp.watch([
@@ -19,13 +18,13 @@ export function watchBackend() {
         '*/backend/**/*.tsx',
         '!*/backend/**/*.jsw.ts',
         '!src/**/**',
-    ], gulp.parallel(test(taskOptions), checkTs(taskOptions), buildBackend(taskOptions)));
+    ], gulp.parallel(checkTs(taskOptions), buildBackend(taskOptions)));
 }
 export function watchPublic() {
     return gulp.watch([
         '*/public/**/*.ts',
         '*/public/**/*.tsx',
-    ], gulp.parallel(test(taskOptions), checkTs(taskOptions), buildPublic(taskOptions)));
+    ], gulp.parallel(checkTs(taskOptions), buildPublic(taskOptions)));
 }
 export function watchPages() {
     return gulp.watch('typescript/pages/**/*.ts', gulp.parallel(checkTs(taskOptions), buildPages(taskOptions)));
@@ -44,7 +43,7 @@ export function watchTemplates() {
         '*/backend/templates/**/*.tsx',
         '*/backend/templates/data/*.json',
         '!*/backend/templates/render.ts',
-    ], gulp.parallel(previewTemplates(taskOptions), test(taskOptions), checkTs(taskOptions)));
+    ], gulp.parallel(previewTemplates(taskOptions), checkTs(taskOptions)));
 }
 export function watchTypes() {
     return gulp.watch([
