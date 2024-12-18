@@ -68,6 +68,9 @@ Lucy-CLI is designed to streamline the setup and management of TypeScript within
 7.  **Add git version during production build**
       - Lucy-CLI can add the git version to the production build.
       - It adds the git version to the `public/constant/env.ts` file in the public folder under the key gitTag.
+7. **Use velo-sync to synchronize local collection with wix**
+      - Lucy-CLI can synchronize the local collection with the wix collection.
+      - More information can be found in the [velo-sync](https://www.npmjs.com/package/velo-sync) documentation.
 
 ## Commands & Options
 
@@ -79,7 +82,7 @@ Lucy-CLI comes with a range of commands and options to help manage your Wix Velo
 - **`dev`**: Starts the development environment, including setting up any required services for local development.
 - **`build-prod`**: Builds the project in production mode, optimizing files for deployment.
 - **`prepare`**: Re-runs initialization commands, useful for setting up a pre-configured environment.
-- **`sync`**: Synchronizes the database and any dependencies or configurations necessary for the project.
+- **`velo-sync`**: Synchronizes the collections.
 - **`install`**: Installs all Wix npm packages listed in the `wixpkgs.json` file in the project directory.
 - **`fix`**: Runs a fix command to resolve common issues in development or production settings.
 - **🦮 `docs`**: Generates documentation for the project.
@@ -129,7 +132,7 @@ Commands:
 🦮 dev                : Starts the development environment. This includes setting up any required services for local development.
 🦮 build-prod         : Builds the project in production mode, optimizing files for deployment.
 🦮 prepare            : Prepares the project by re-running initialization commands. Useful for setting up a pre-configured environment.
-🦮 sync               : Synchronizes the database and any dependencies or configurations necessary for the project.
+🦮 velo-sync          : Synchronizes the collections.
 🦮 install            : Installs all Wix npm packages listed in the 'wixpkgs.json' file in the project directory.
 🦮 fix                : Runs a fix command to resolve common issues in development or production settings.
 🦮 docs               : Generates documentation for the project.
