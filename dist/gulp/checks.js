@@ -1,9 +1,10 @@
 import * as fs from 'fs';
-import { glob } from 'glob';
+import globPkg from 'glob';
 import * as path from 'path';
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
 import { blue, green, magenta, orange, red, yellow } from '../index.js';
+const { glob } = globPkg;
 /**
  *  Extracts a match from a file
  * @param {string} filePath File path
