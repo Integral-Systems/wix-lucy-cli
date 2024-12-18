@@ -22,6 +22,11 @@ export default tseslint.config(
 			'named-import-spacing': namedImportSpacing,
 			jsdoc,
 		},
+		settings: {
+			'import/resolver': {
+				typescript: {}
+			}
+		},
 		languageOptions: {
 			parser: tseslint.parser,
 			parserOptions: {
@@ -37,6 +42,12 @@ export default tseslint.config(
 			},
 		},
 		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					'patterns': ['*/backend/*', '*/**/public/*']
+				}
+			],
 			'no-restricted-syntax': [
 				'error',
 				{

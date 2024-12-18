@@ -176,3 +176,15 @@ export function killAllProcesses(processPattern: string) {
         });
     });
 }
+
+export interface VeloSyncConfig {
+    siteUrl: string;
+    secret: string;
+}
+export async function saveConfig(config:VeloSyncConfig, file: string) {
+    await fs.promises.writeFile(file, JSON.stringify(config));
+}
+export async function readConfig(file: string): Promise<VeloSyncConfig> {
+    let content = await fs.promises.readFile(file, 'utf-8');
+    return JSON.parse(content);
+}

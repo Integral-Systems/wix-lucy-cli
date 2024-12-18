@@ -161,3 +161,10 @@ export function killAllProcesses(processPattern) {
         });
     });
 }
+export async function saveConfig(config, file) {
+    await fs.promises.writeFile(file, JSON.stringify(config));
+}
+export async function readConfig(file) {
+    let content = await fs.promises.readFile(file, 'utf-8');
+    return JSON.parse(content);
+}

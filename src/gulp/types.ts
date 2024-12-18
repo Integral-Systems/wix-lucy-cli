@@ -159,9 +159,9 @@ export function updateWixTypes(options: TaskOptions) {
 
 export function addTypes(options: TaskOptions, done: gulp.TaskFunctionCallback): NodeJS.ReadWriteStream {
 	const { replaceOptions } = options;
-	const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
-		.pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
-		.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
+	// const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
+	// 	.pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
+	// 	.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
 
 	const exportTypes = gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
 		.pipe(replace('interface ', 'export interface ', replaceOptions))
@@ -176,12 +176,12 @@ export function addTypes(options: TaskOptions, done: gulp.TaskFunctionCallback):
 		.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
 
 	const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-		.pipe(insert.prepend("import { FrontendAPI } from '../../../../../../typescript/public/models/frontendApi.model';\nimport '@total-typescript/ts-reset';\n"))
-		.pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
+		.pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
+		// .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
 		.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
 
 	return merge(
-		processPages,
+		// processPages,
 		processCommon,
 		exportTypesBeta,
 		exportTypes,

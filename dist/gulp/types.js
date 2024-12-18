@@ -149,9 +149,9 @@ export function updateWixTypes(options) {
 }
 export function addTypes(options, done) {
     const { replaceOptions } = options;
-    const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
-        .pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
-        .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
+    // const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
+    // 	.pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
+    // 	.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
     const exportTypes = gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
         .pipe(replace('interface ', 'export interface ', replaceOptions))
         .pipe(replace('enum ', 'export enum ', replaceOptions))
@@ -163,10 +163,12 @@ export function addTypes(options, done) {
         .pipe(replace('type ', 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
     const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        .pipe(insert.prepend("import { FrontendAPI } from '../../../../../../typescript/public/models/frontendApi.model';\nimport '@total-typescript/ts-reset';\n"))
-        .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
+        .pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
+        // .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
-    return merge(processPages, processCommon, exportTypesBeta, exportTypes)
+    return merge(
+    // processPages,
+    processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {
         console.log("💩" + red.underline.bold(' => Updating WIX failed!'));
         console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));

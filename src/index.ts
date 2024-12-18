@@ -53,6 +53,7 @@ export type ModuleSettings = {
 	settings: LucySettings;
 	lockVersion: boolean;
 	force: boolean;
+	veloConfigName: string;
 }
 
 export type ProjectSettings = {
@@ -136,6 +137,7 @@ async function main(): Promise<void> {
 		packageJsonPath: join(process.cwd(), 'package.json'),
 		force: false,
 		lockVersion: false,
+		veloConfigName: 'config.json'
 	}
 
 	let projectSettings: ProjectSettings = {}; 
@@ -143,6 +145,12 @@ async function main(): Promise<void> {
 	if(moduleSettings.args.includes('version') || moduleSettings.args.includes('-v')){
 		console.log("🐾" + blue.bold(` => ${projectPackageJSON.version}`));
         
+		return;
+	}
+	// Run velo sync
+	if(moduleSettings.args.includes('velo-sync')){
+		await sync(moduleSettings, projectSettings);
+
 		return;
 	}
 
@@ -154,7 +162,7 @@ async function main(): Promise<void> {
 		console.log("🦮 " + magenta.bold('dev') + "                : Starts the development environment. This includes setting up any required services for local development.");
 		console.log("🦮 " + magenta.bold('build-prod') + "         : Builds the project in production mode, optimizing files for deployment.");
 		console.log("🦮 " + magenta.bold('prepare') + "            : Prepares the project by installing packages & initializing git modules, configured in lucy.json");
-		console.log("🦮 " + magenta.bold('sync') + "               : Synchronizes the database (not Implemented)");
+		console.log("🦮 " + magenta.bold('velo-sync') + "          : Synchronizes wix collections(velo-sync -h for help)");
 		console.log("🦮 " + magenta.bold('install') + "            : Installs all Wix npm packages listed in the 'lucy.json' file in the project directory.");
 		console.log("🦮 " + magenta.bold('fix') + "                : Runs a fix command to resolve common issues in development or production settings.");
 		console.log("🦮 " + magenta.bold('docs') + "               : Generates documentation for the project.");
@@ -223,6 +231,7 @@ async function main(): Promise<void> {
 
 	console.log("🐕" + magenta.underline(' => Lucy CLI => RUNNING: ' + orange('Press Ctrl+C to stop.')));
 	// INFO: Run commands
+
 	if(moduleSettings.args.includes('init')){
 		if(projectSettings.lucySettings?.initialized && !moduleSettings.force) {
 			console.log((`💩 ${red.underline.bold("=> This project is already initialized =>")} ${orange(moduleSettings.targetFolder)}`));
@@ -289,12 +298,7 @@ async function main(): Promise<void> {
 
 		return;
 	}
-	
-	if(moduleSettings.args.includes('sync')){
-		sync(moduleSettings, projectSettings);
 
-		return;
-	}
 
 	if(moduleSettings.args.includes('dev')){
 		runGulp(moduleSettings, projectSettings, 'dev');

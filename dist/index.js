@@ -78,10 +78,16 @@ async function main() {
         packageJsonPath: join(process.cwd(), 'package.json'),
         force: false,
         lockVersion: false,
+        veloConfigName: 'config.json'
     };
     let projectSettings = {};
     if (moduleSettings.args.includes('version') || moduleSettings.args.includes('-v')) {
         console.log("🐾" + blue.bold(` => ${projectPackageJSON.version}`));
+        return;
+    }
+    // Run velo sync
+    if (moduleSettings.args.includes('velo-sync')) {
+        await sync(moduleSettings, projectSettings);
         return;
     }
     if (moduleSettings.args.includes('help') || moduleSettings.args.includes('-h')) {
@@ -92,7 +98,7 @@ async function main() {
         console.log("🦮 " + magenta.bold('dev') + "                : Starts the development environment. This includes setting up any required services for local development.");
         console.log("🦮 " + magenta.bold('build-prod') + "         : Builds the project in production mode, optimizing files for deployment.");
         console.log("🦮 " + magenta.bold('prepare') + "            : Prepares the project by installing packages & initializing git modules, configured in lucy.json");
-        console.log("🦮 " + magenta.bold('sync') + "               : Synchronizes the database (not Implemented)");
+        console.log("🦮 " + magenta.bold('velo-sync') + "          : Synchronizes wix collections(velo-sync -h for help)");
         console.log("🦮 " + magenta.bold('install') + "            : Installs all Wix npm packages listed in the 'lucy.json' file in the project directory.");
         console.log("🦮 " + magenta.bold('fix') + "                : Runs a fix command to resolve common issues in development or production settings.");
         console.log("🦮 " + magenta.bold('docs') + "               : Generates documentation for the project.");
@@ -213,10 +219,6 @@ async function main() {
             return;
         }
         await installPackages(projectSettings.lucySettings.wixPackages, projectSettings.lucySettings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
-        return;
-    }
-    if (moduleSettings.args.includes('sync')) {
-        sync(moduleSettings, projectSettings);
         return;
     }
     if (moduleSettings.args.includes('dev')) {

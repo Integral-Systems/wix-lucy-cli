@@ -11,3 +11,9 @@ export declare function cleanupWatchers(): void;
  * @param {string} processPattern - The substring to match (e.g., "wix:dev" or "@wix/cli/bin/wix.cjs").
  */
 export declare function killAllProcesses(processPattern: string): void;
+export interface VeloSyncConfig {
+    siteUrl: string;
+    secret: string;
+}
+export declare function saveConfig(config: VeloSyncConfig, file: string): Promise<void>;
+export declare function readConfig(file: string): Promise<VeloSyncConfig>;

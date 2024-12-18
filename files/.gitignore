@@ -4,6 +4,6 @@ jsconfig.json
 node_modules
 .vscode/
 .idea/
-jsconfig.json
-.yarn
+.yarn/
 .wix/debug.log
+config.json

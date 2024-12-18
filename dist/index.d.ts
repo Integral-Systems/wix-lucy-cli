@@ -36,6 +36,7 @@ export type ModuleSettings = {
     settings: LucySettings;
     lockVersion: boolean;
     force: boolean;
+    veloConfigName: string;
 };
 export type ProjectSettings = {
     modules?: Record<string, string>;
