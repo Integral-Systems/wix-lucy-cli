@@ -1,10 +1,43 @@
 import * as fs from 'fs';
-import globPkg from 'glob';
+import glob from 'glob';
 import * as path from 'path';
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
 import { blue, green, magenta, orange, red, yellow } from '../index.js';
-const { glob } = globPkg;
+// /**
+//  *  Extracts a match from a file
+//  * @param {string} filePath File path
+//  * @param {string} pattern Pattern to match
+//  */
+// function extractMatchFromFile(filePath: string, pattern: string) {
+// 	return new Promise((resolve, reject) => {
+// 		fs.readFile(filePath, 'utf8', (err, data) => {
+// 			if (err){
+// 				reject(err);
+// 				return;
+// 			}
+// 			const regex = new RegExp(pattern);
+// 			const match = regex.exec(data);
+// 			const capturedGroup = match ? match.groups?.page : null;
+// 			resolve(capturedGroup);
+// 		});
+// 	});
+// }
+// async function readFilesInFolder(folderPath: string, pattern: string | null, globPattern: string): Promise<Object[]> {
+//     const files = await glob(path.join(folderPath, globPattern));
+//     const filenameList: Object[] = [];
+//     for (const file of files) {
+//         if (pattern) {
+//             const capturedGroup = await extractMatchFromFile(file, pattern);
+//             if (capturedGroup) {
+//                 filenameList.push(capturedGroup);
+//             }
+//         } else {
+//             filenameList.push(path.basename(file));
+//         }
+//     }
+//     return filenameList;
+// }
 /**
  *  Extracts a match from a file
  * @param {string} filePath File path
@@ -24,21 +57,52 @@ function extractMatchFromFile(filePath, pattern) {
         });
     });
 }
-async function readFilesInFolder(folderPath, pattern, globPattern) {
-    const files = await glob(path.join(folderPath, globPattern));
-    const filenameList = [];
-    for (const file of files) {
-        if (pattern) {
-            const capturedGroup = await extractMatchFromFile(file, pattern);
-            if (capturedGroup) {
-                filenameList.push(capturedGroup);
+/**
+ * Reads files in a folder
+ * @param {string} folderPath Folder path
+ * @param {string} pattern Pattern to match
+ * @param {string} globPattern Glob pattern
+ */
+function readFilesInFolder(folderPath, pattern, globPattern) {
+    return new Promise((resolve, reject) => {
+        glob(path.join(folderPath, globPattern), (err, files) => {
+            if (err) {
+                reject(err);
+                return;
             }
-        }
-        else {
-            filenameList.push(path.basename(file));
-        }
-    }
-    return filenameList;
+            const filenameList = [];
+            /**
+             * Traverse files
+             * @param {number} index Index
+             */
+            function traverseFiles(index) {
+                if (index === files.length) {
+                    resolve(filenameList);
+                    return;
+                }
+                const file = files[index];
+                if (pattern) {
+                    if (!file)
+                        return;
+                    extractMatchFromFile(file, pattern)
+                        .then((capturedGroup) => {
+                        if (capturedGroup) {
+                            filenameList.push(capturedGroup);
+                        }
+                        traverseFiles(index + 1);
+                    })
+                        .catch(reject);
+                }
+                if (!pattern) {
+                    if (!file)
+                        return;
+                    filenameList.push(path.basename(file));
+                    traverseFiles(index + 1);
+                }
+            }
+            traverseFiles(0);
+        });
+    });
 }
 export async function checkPages(fail, force) {
     console.log("🐕" + green.underline.bold(' => Checking pages...'));
