@@ -6271,7 +6271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4":
+"glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.2.3":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -9056,6 +9056,7 @@ __metadata:
     eslint-plugin-jsdoc: 50.5.0
     eslint-plugin-named-import-spacing: ^1.0.3
     eslint-plugin-simple-import-sort: 12.1.1
+    glob: ^7.2.3
     gulp: 4.0.2
     gulp-clean: ^0.4.0
     gulp-cli: 3.0.0
