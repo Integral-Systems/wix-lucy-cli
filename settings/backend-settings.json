@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": false,
+    "declaration": false,
     "experimentalDecorators": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx",

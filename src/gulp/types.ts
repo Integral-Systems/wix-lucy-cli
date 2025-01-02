@@ -32,6 +32,9 @@ export function updateWixTypes(options: TaskOptions) {
 		publicSettings.include = [ 
 			"../../../typescript/public/**/*", 
 			"../../../typescript/__mocks__/**/*", 
+			// "../../../typescript/backend/**/*.jsw.ts",
+			// "../../../typescript/backend/**/*.web.ts",
+			// "../../../typescript/backend/**/*.web"
 		] as never;
 
 		// Add module to backendSettings
@@ -39,7 +42,10 @@ export function updateWixTypes(options: TaskOptions) {
 		backendSettings.compilerOptions.paths['types/*'] = [ `../../../typescript/types/*` ] as never;
 		backendSettings.include = [ 
 			"../../../typescript/backend/**/*", 
-			"../../../typescript/__mocks__/**/*" 
+			"../../../typescript/__mocks__/**/*",
+			// "../../../typescript/backend/**/*.jsw.ts",
+			// "../../../typescript/backend/**/*.web.ts",
+			// "../../../typescript/backend/**/*.web"
 		] as never;	
 		// Add module to masterSettings
 		masterSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
@@ -49,6 +55,9 @@ export function updateWixTypes(options: TaskOptions) {
 		masterSettings.include = [ 
 			"../../../typescript/public/**/*", 
 			"../../../typescript/__mocks__/**/*", 
+			// "../../../typescript/backend/**/*.jsw.ts",
+			// "../../../typescript/backend/**/*.web.ts",
+			// "../../../typescript/backend/**/*.web"
 		] as never;
 		// Add module to pageSettings
 		pageSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
@@ -59,6 +68,9 @@ export function updateWixTypes(options: TaskOptions) {
 		pageSettings.include = [ 
 			"../../../typescript/public/**/*", 
 			"../../../typescript/__mocks__/**/*", 
+			// "../../../typescript/backend/**/*.jsw.ts",
+			// "../../../typescript/backend/**/*.web.ts",
+			// "../../../typescript/backend/**/*.web"
 		] as never;
 
 		if (modules) {
@@ -73,6 +85,9 @@ export function updateWixTypes(options: TaskOptions) {
 				publicSettings.include.push(...[
 					`../../../${name}/public/**/*`, 
 					`../../../${name}__mocks__/**/*`, 
+					// `../../../${name}/backend/**/*.jsw.ts`,
+					// `../../../${name}/backend/**/*.web.ts`,
+					// `../../../${name}/backend/**/*.web`
 				] as never[]);
 				// Add module to backendSettings
 				backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
@@ -82,7 +97,10 @@ export function updateWixTypes(options: TaskOptions) {
 				backendSettings.include.push(...[
 					`../../../${name}/public/**/*`, 
 					`../../../${name}__mocks__/**/*`, 
-					`../../../${name}/backend/**/*` 
+					`../../../${name}/backend/**/*`,
+					// `../../../${name}/backend/**/*.jsw.ts`,
+					// `../../../${name}/backend/**/*.web.ts`,
+					// `../../../${name}/backend/**/*.web`
 				] as never[]);
 				// Add module to masterSettings
 				masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
@@ -93,6 +111,9 @@ export function updateWixTypes(options: TaskOptions) {
 				masterSettings.include.push(...[
 					`../../../${name}/public/**/*`, 
 					`../../../${name}__mocks__/**/*`, 
+					// `../../../${name}/backend/**/*.jsw.ts`,
+					// `../../../${name}/backend/**/*.web.ts`,
+					// `../../../${name}/backend/**/*.web`
 				] as never[]);
 				// Add module to pageSettings
 				pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
@@ -103,6 +124,9 @@ export function updateWixTypes(options: TaskOptions) {
 				pageSettings.include.push(...[
 					`../../../${name}/public/**/*`, 
 					`../../../${name}__mocks__/**/*`, 
+					// `../../../${name}/backend/**/*.jsw.ts`,
+					// `../../../${name}/backend/**/*.web.ts`,
+					// `../../../${name}/backend/**/*.web`
 				] as never[]);
 			}
 		}

@@ -26,13 +26,19 @@ export function updateWixTypes(options) {
         publicSettings.include = [
             "../../../typescript/public/**/*",
             "../../../typescript/__mocks__/**/*",
+            // "../../../typescript/backend/**/*.jsw.ts",
+            // "../../../typescript/backend/**/*.web.ts",
+            // "../../../typescript/backend/**/*.web"
         ];
         // Add module to backendSettings
         backendSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         backendSettings.compilerOptions.paths['types/*'] = [`../../../typescript/types/*`];
         backendSettings.include = [
             "../../../typescript/backend/**/*",
-            "../../../typescript/__mocks__/**/*"
+            "../../../typescript/__mocks__/**/*",
+            // "../../../typescript/backend/**/*.jsw.ts",
+            // "../../../typescript/backend/**/*.web.ts",
+            // "../../../typescript/backend/**/*.web"
         ];
         // Add module to masterSettings
         masterSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
@@ -42,6 +48,9 @@ export function updateWixTypes(options) {
         masterSettings.include = [
             "../../../typescript/public/**/*",
             "../../../typescript/__mocks__/**/*",
+            // "../../../typescript/backend/**/*.jsw.ts",
+            // "../../../typescript/backend/**/*.web.ts",
+            // "../../../typescript/backend/**/*.web"
         ];
         // Add module to pageSettings
         pageSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
@@ -52,6 +61,9 @@ export function updateWixTypes(options) {
         pageSettings.include = [
             "../../../typescript/public/**/*",
             "../../../typescript/__mocks__/**/*",
+            // "../../../typescript/backend/**/*.jsw.ts",
+            // "../../../typescript/backend/**/*.web.ts",
+            // "../../../typescript/backend/**/*.web"
         ];
         if (modules) {
             for (const [name] of Object.entries(modules)) {
@@ -65,6 +77,9 @@ export function updateWixTypes(options) {
                 publicSettings.include.push(...[
                     `../../../${name}/public/**/*`,
                     `../../../${name}__mocks__/**/*`,
+                    // `../../../${name}/backend/**/*.jsw.ts`,
+                    // `../../../${name}/backend/**/*.web.ts`,
+                    // `../../../${name}/backend/**/*.web`
                 ]);
                 // Add module to backendSettings
                 backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
@@ -74,7 +89,10 @@ export function updateWixTypes(options) {
                 backendSettings.include.push(...[
                     `../../../${name}/public/**/*`,
                     `../../../${name}__mocks__/**/*`,
-                    `../../../${name}/backend/**/*`
+                    `../../../${name}/backend/**/*`,
+                    // `../../../${name}/backend/**/*.jsw.ts`,
+                    // `../../../${name}/backend/**/*.web.ts`,
+                    // `../../../${name}/backend/**/*.web`
                 ]);
                 // Add module to masterSettings
                 masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
@@ -85,6 +103,9 @@ export function updateWixTypes(options) {
                 masterSettings.include.push(...[
                     `../../../${name}/public/**/*`,
                     `../../../${name}__mocks__/**/*`,
+                    // `../../../${name}/backend/**/*.jsw.ts`,
+                    // `../../../${name}/backend/**/*.web.ts`,
+                    // `../../../${name}/backend/**/*.web`
                 ]);
                 // Add module to pageSettings
                 pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
@@ -95,6 +116,9 @@ export function updateWixTypes(options) {
                 pageSettings.include.push(...[
                     `../../../${name}/public/**/*`,
                     `../../../${name}__mocks__/**/*`,
+                    // `../../../${name}/backend/**/*.jsw.ts`,
+                    // `../../../${name}/backend/**/*.web.ts`,
+                    // `../../../${name}/backend/**/*.web`
                 ]);
             }
         }

@@ -15,6 +15,15 @@ Libraries are expected to have the same folder structure as  the main typescript
 (backend, public, styles)
 The lucy CLI is opinionated and may not work with all projects.
 
+Importing backend endpoint into the frontend
+Please be aware that the backend endpoint should be imported with the following code:
+
+``` javascript
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import { initialize, InitResponse } from 'backend/lib/initialize.web';
+```
+
 ## What It Does
 
 Lucy-CLI is designed to streamline the setup and management of TypeScript within Wix Velo projects, providing tools to enhance code quality and reduce development time. Here’s what it offers:

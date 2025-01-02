@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/naming-convention */
 import eslint from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import jsdoc from 'eslint-plugin-jsdoc';
@@ -9,7 +7,6 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-	 
 	eslint.configs.recommended,
 	tseslint.configs.recommendedTypeChecked,
 	jsdoc.configs['flat/recommended-typescript'],
@@ -24,7 +21,12 @@ export default tseslint.config(
 		},
 		settings: {
 			'import/resolver': {
-				typescript: {}
+				typescript: {
+					project: [
+						'typescript/tsconfig.json',
+						'lib/tsconfig.json'
+					],
+				}
 			}
 		},
 		languageOptions: {
@@ -45,7 +47,7 @@ export default tseslint.config(
 			'no-restricted-imports': [
 				'error',
 				{
-					'patterns': ['*/backend/*', '*/**/public/*']
+					'patterns': ['*/**/backend/*', '*/**/public/*']
 				}
 			],
 			'no-restricted-syntax': [
@@ -56,9 +58,9 @@ export default tseslint.config(
 				},
 			],
 			'@typescript-eslint/no-unsafe-argument': 'error',
-			'@typescript-eslint/no-unsafe-assignment': 'error',
+			'@typescript-eslint/no-unsafe-assignment': 'off',
 			'@typescript-eslint/no-unsafe-call': 'error',
-			'@typescript-eslint/no-unsafe-member-access': 'error',
+			'@typescript-eslint/no-unsafe-member-access': 'off',
 			'@typescript-eslint/no-unsafe-return': 'error',
 			quotes: [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }],
 			curly: ['error', 'multi-line'],
@@ -98,6 +100,16 @@ export default tseslint.config(
 				{
 					selector: ['variable', 'function'],
 					format: ['camelCase'],
+					leadingUnderscore: 'allow',
+				},
+				{
+					selector: ['objectLiteralMethod',],
+					format: ['camelCase', 'PascalCase'],
+					leadingUnderscore: 'allow',
+				},
+				{
+					selector: ['import',],
+					format: ['camelCase', 'PascalCase'],
 					leadingUnderscore: 'allow',
 				},
 				{

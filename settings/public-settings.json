@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": false,
+    "declaration": false,
     "experimentalDecorators": true,
     "noEmit": false,
     "noUncheckedIndexedAccess": true,

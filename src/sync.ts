@@ -56,12 +56,12 @@ export async function sync(moduleSettings: ModuleSettings, projectSettings: Proj
         }
 
         console.log(chalk.yellow('hello to velo-sync init'));
-        let siteUrl = await askQuestion('what is the url of the site homepage? ');
-        let secret = await askQuestion('what is the velo-sync secret? ');
+        let siteUrl = await askQuestion(orange('what is the url of the site homepage? '));
+        let secret = await askQuestion(orange('what is the velo-sync secret? '));
         rl.close();
         let config: VeloSyncConfig = { siteUrl, secret };
         await saveConfig(config, moduleSettings.veloConfigName);
-        return console.log(chalk.green("🐕" + 'config saved!'));
+        return console.log(chalk.green("🐕" + ' => config saved!'));
 	}
 
     if(moduleSettings.args.includes('is-alive')) {
@@ -69,7 +69,7 @@ export async function sync(moduleSettings: ModuleSettings, projectSettings: Proj
             let config = await readConfig(moduleSettings.veloConfigName);
             console.log("🐕" + green(` => checking if the API for site ${chalk.greenBright(config.siteUrl)} is alive...`));
             await veloAPI.isAlive(config);
-            return console.log(chalk.green("🐕" + `API of site ${chalk.greenBright(config.siteUrl)} is working and alive!!!`));
+            return console.log(chalk.green("🐕" + ` => API of site ${chalk.greenBright(config.siteUrl)} is working and alive!!!`));
         }
         catch (e) {
             if(e instanceof Error)  {
