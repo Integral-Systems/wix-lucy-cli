@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "composite": false,
+    "composite": true,
     "declaration": false,
     "experimentalDecorators": true,
     "noEmit": false,

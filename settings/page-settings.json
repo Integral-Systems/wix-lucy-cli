@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "composite": false,
+    "composite": true,
     "declaration": false,
     "strict": true,
     "strictNullChecks": true,
