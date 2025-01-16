@@ -15,6 +15,13 @@ Libraries are expected to have the same folder structure as  the main typescript
 (backend, public, styles)
 The lucy CLI is opinionated and may not work with all projects.
 
+Yarn: Lucy-CLI is designed to work with yarn. It may not work with npm.
+Make sure you have yarn installed on your machine and it is set to version 3.
+
+```
+yarn set <version> 
+```
+
 Importing backend endpoint into the frontend
 Please be aware that the backend endpoint should be imported with the following code:
 
@@ -23,6 +30,10 @@ Please be aware that the backend endpoint should be imported with the following 
 //@ts-ignore
 import { initialize, InitResponse } from 'backend/lib/initialize.web';
 ```
+
+## Contributing
+
+Contribution are welcome, issue and pull request and I will merge it if i see it fit.
 
 ## What It Does
 

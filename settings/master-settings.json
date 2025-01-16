@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "strictNullChecks": true,
-    "composite": true,
+    "composite": false,
     "declaration": false,
     "jsx": "react-jsx",
     "noEmit": false,
