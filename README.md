@@ -18,9 +18,12 @@ The lucy CLI is opinionated and may not work with all projects.
 Yarn: Lucy-CLI is designed to work with yarn. It may not work with npm.
 Make sure you have yarn installed on your machine and it is set to version 3.
 
-```
+```bash
 yarn set <version> 
 ```
+
+The composite and declaration tsconfig setting int need to be set to false in order to reexport types from the lib folder.
+This is not ideal but it is a limitation of the current version of the CLI.
 
 Importing backend endpoint into the frontend
 Please be aware that the backend endpoint should be imported with the following code:
