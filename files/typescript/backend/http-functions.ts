@@ -3,6 +3,22 @@ import { batchCheckUpdateState, clearStale, getImageUploadUrl, insertItemBatch, 
 import { WixHttpFunctionRequest } from 'wix-http-functions';
 
 /**------------------------------------------------------------------------
+ **                            Health-Check endpoint
+ * This function are for Health-Check 
+ * https://sunnyside-up.wixstudio.com/yeva/_functions/healthCheck
+ *------------------------------------------------------------------------**/
+/**
+ * Handle the HealthCheck request
+ * @param request The request object
+ * @returns The response object
+ */
+
+export function get_healthCheck(request: WixHttpFunctionRequest) {
+    return ok({ body: "I am alive 🦄!" });
+}
+/*--------------- END OF SECTION --------------*/
+
+/**------------------------------------------------------------------------
  **                            Velo-Sync endpoints
  * This function are for the velo-sync functionality
  * https://www.npmjs.com/package/velo-sync
