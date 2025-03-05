@@ -6,7 +6,6 @@ import { buildPages } from './pages.js';
 import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkTs } from './checks.js';
-import shell from 'gulp-shell';
 let taskOptions;
 export function watchSCSS() {
     return gulp.watch([
@@ -19,17 +18,13 @@ export function watchBackend() {
         '*/backend/**/*.tsx',
         '!*/backend/**/*.jsw.ts',
         '!src/**/**',
-    ], gulp.parallel(checkTs(taskOptions), buildBackend(taskOptions), shell.task([
-        'yarn docs',
-    ])));
+    ], gulp.parallel(checkTs(taskOptions), buildBackend(taskOptions)));
 }
 export function watchPublic() {
     return gulp.watch([
         '*/public/**/*.ts',
         '*/public/**/*.tsx',
-    ], gulp.parallel(checkTs(taskOptions), buildPublic(taskOptions), shell.task([
-        'yarn docs',
-    ])));
+    ], gulp.parallel(checkTs(taskOptions), buildPublic(taskOptions)));
 }
 export function watchPages() {
     return gulp.watch('typescript/pages/**/*.ts', gulp.parallel(checkTs(taskOptions), buildPages(taskOptions)));

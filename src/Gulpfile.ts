@@ -165,7 +165,7 @@ gulp.task('build-prod', gulp.series(
 	buildPages(taskOptions),
 	'copy-files',
 	compileScss(taskOptions),
-	'gen-docs'
+	// 'gen-docs'
 ));
 
 

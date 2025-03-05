@@ -28,10 +28,10 @@ export function watchBackend() {
 	], gulp.parallel(
         checkTs(taskOptions),
         buildBackend(taskOptions),
-        shell.task([
-            'yarn docs',
-        ]))
-    );
+        // shell.task([
+        //     'yarn docs',
+        // ])
+    ));
 }
 
 export function watchPublic() {
@@ -41,10 +41,10 @@ export function watchPublic() {
 	], gulp.parallel(
         checkTs(taskOptions),
         buildPublic(taskOptions),
-        shell.task([
-            'yarn docs',
-        ]))
-    );
+        // shell.task([
+        //     'yarn docs',
+        // ])
+    ));
 }
 
 export function watchPages() {
