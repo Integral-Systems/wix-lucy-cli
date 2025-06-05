@@ -3,8 +3,8 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
-import settings from './settings.json' assert { type: 'json' };
-import projectPackageJSON from '../package.json' assert { type: 'json' };
+import settings from './settings.json' with { type: "json" };;
+import projectPackageJSON from '../package.json' with { type: "json" };;
 
 import { join } from 'path';
 import fs from 'fs/promises';

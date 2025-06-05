@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "lucy-cli",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Lucy Framework for WIX Studio Editor",
   "main": ".dist/index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "Typescript"
   ],
   "author": "Gradlon von Känel",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Integral-Systems/wix-lucy-cli/issues"
   },
