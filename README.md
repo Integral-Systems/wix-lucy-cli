@@ -122,8 +122,6 @@ Lucy-CLI comes with a range of commands and options to help manage your Wix Velo
 - **`-f, force`**: Forces specific commands to execute, useful for deleting obsolete pages or initializing missing components.
 - **`-l`**: Locks package versions to those specified in the configuration file during installation.
 
----
-
 ## Examples
 
 Here are some example commands to get started with Lucy-CLI:
@@ -176,3 +174,7 @@ Examples:
 🦮 lucy-cli install    : Installs all Wix npm packages from 'wixpkgs.json'.
 🦮 lucy-cli dev -f     : Starts the dev environment with forced settings.
 🦮 lucy-cli install -l : Installs Wix npm packages, respecting locked versions specified in the configuration.
+```
+
+If you find Lucy-CLI useful, consider supporting the project:
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/gradlon)
