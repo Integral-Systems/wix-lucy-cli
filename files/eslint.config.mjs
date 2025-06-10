@@ -11,7 +11,14 @@ export default tseslint.config(
 	tseslint.configs.recommendedTypeChecked,
 	jsdoc.configs['flat/recommended-typescript'],
 	{
-		ignores: ['./.wix', './src'],
+		ignores: [
+			'./.wix', 
+			'./src',
+			"eslint.config.mjs",
+			"**/*.js"
+		],
+	},
+	{
 		plugins: {
 			'@typescript-eslint': tseslint.plugin,
 			'simple-import-sort': simpleImportSort,
@@ -44,6 +51,7 @@ export default tseslint.config(
 			},
 		},
 		rules: {
+			'no-console': ['error'],
 			'no-restricted-imports': [
 				'error',
 				{
@@ -51,11 +59,23 @@ export default tseslint.config(
 				}
 			],
 			'no-restricted-syntax': [
-				'error',
+				'warn',
 				{
 					selector: 'StaticBlock',
 					message: 'Static blocks are not allowed in classes.',
 				},
+				{
+					selector: "MemberExpression[object.name='globalThis'][property.name='console']",
+					message: 'Using globalThis.console is not allowed.'
+				},
+				{
+					selector: "CallExpression[callee.property.name='runPromise'][callee.object.name='runtime']",
+					message: 'Usage of runtime.runPromise() is discouraged.',
+				},
+				{
+					selector: "CallExpression[callee.property.name='runFork'][callee.object.name='runtime']",
+					message: 'Usage of runtime.runFork() is discouraged.',
+				}
 			],
 			'@typescript-eslint/no-unsafe-argument': 'error',
 			'@typescript-eslint/no-unsafe-assignment': 'off',
@@ -73,7 +93,7 @@ export default tseslint.config(
 			'object-curly-spacing': ['error', 'always'],
 			'space-in-parens': ['error', 'never'],
 			'newline-before-return': 'error',
-			'space-before-blocks': ['error', { functions: 'always', keywords: 'never', classes: 'always' }],
+			'space-before-blocks': ['error', { functions: 'always', keywords: 'always', classes: 'always' }],
 			'comma-spacing': ['error', { before: false, after: true }],
 			'no-multi-spaces': 'error',
 			'import/newline-after-import': ['error', { count: 1 }],
