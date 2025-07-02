@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "composite": false,
     "declaration": false,
     "strict": true,
     "strictNullChecks": true,
+    "composite": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "noEmit": false,

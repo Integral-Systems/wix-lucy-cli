@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "composite": false,
-    "declaration": false,
     "experimentalDecorators": true,
     "noEmit": false,
     "noUncheckedIndexedAccess": true,
     "strict": true,
+    "composite": true,
     "jsx": "react-jsx",
     "strictNullChecks": true,
     "paths": {

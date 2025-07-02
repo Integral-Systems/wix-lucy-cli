@@ -79,7 +79,10 @@ gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production',
 'build'));
 gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions)));
 gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 'start-wix', (done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err))));
-gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 'build', 'start-dev-env'));
+gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 
+// 'build',
+// 'start-dev-env', 
+'check-ts'));
 async function gulpTaskRunner(task) {
     return new Promise(function (resolve, reject) {
         gulp.series(task, (done) => {

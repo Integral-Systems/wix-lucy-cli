@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
+    "composite": true,
     "strictNullChecks": true,
-    "composite": false,
-    "declaration": false,
     "jsx": "react-jsx",
     "noEmit": false,
     "noUncheckedIndexedAccess": true,

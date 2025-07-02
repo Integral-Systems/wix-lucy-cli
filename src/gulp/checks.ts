@@ -173,7 +173,7 @@ export function checkTs(options: TaskOptions) {
         const taskName = `test-${folder}`; // Create a unique name for each task
 
         const task = () =>
-            gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`], { cwd: folder })
+            gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`])
 				.pipe(tsProject(ts.reporter.fullReporter(true)))
                 .on('error', function (e: Error) {
                     console.log("💩" + red.underline.bold(` => Typescriptcheck for ${orange(folder)} failed!`));

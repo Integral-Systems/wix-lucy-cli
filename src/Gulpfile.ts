@@ -179,8 +179,9 @@ gulp.task('start-dev-env', gulp.parallel(
 gulp.task('dev', gulp.series(
 	cleanSrc(taskOptions),
 	'fix-wix',
-	'build',
-	'start-dev-env', 
+	// 'build',
+	// 'start-dev-env', 
+	'check-ts',
 	)
 );
 
