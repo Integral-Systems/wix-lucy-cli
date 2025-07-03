@@ -18,7 +18,7 @@ const swcOptions = {
         preserveAllComments: false,
         minify: {
             compress: true // equivalent to {}
-          }
+        }
     },
 };
 

@@ -2,9 +2,9 @@
   "compilerOptions": {
     "strict": true,
     "composite": true,
+    "noEmit": false,
     "strictNullChecks": true,
     "jsx": "react-jsx",
-    "noEmit": false,
     "noUncheckedIndexedAccess": true,
     "paths": {
       "backend/*.web.js": [],

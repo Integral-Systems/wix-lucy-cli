@@ -74,15 +74,18 @@ gulp.task('gen-docs', shell.task([
 ]));
 gulp.task('fix-wix', gulp.series(cleanWix(), 'sync-types', 'fix-wixtypes', 'add-wix-types'));
 gulp.task('build', gulp.parallel('build-backend', 'build-public', 'preview-templates', buildPages(taskOptions), compileScss(taskOptions), 'copy-files'));
-gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 'fix-wixtypes', 'add-wix-types', 
+gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 
+// 'check-ts',
+'fix-wixtypes', 'add-wix-types', 
 // 'test',
 'build'));
-gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions)));
+gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 
+// 'check-ts',
+'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions)));
 gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 'start-wix', (done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err))));
 gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 
-// 'build',
-// 'start-dev-env', 
-'check-ts'));
+// 'check-ts',
+'build'));
 async function gulpTaskRunner(task) {
     return new Promise(function (resolve, reject) {
         gulp.series(task, (done) => {

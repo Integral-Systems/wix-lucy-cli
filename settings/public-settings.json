@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "noEmit": false,
     "noUncheckedIndexedAccess": true,
     "strict": true,
     "composite": true,
+    "noEmit": false,
     "jsx": "react-jsx",
     "strictNullChecks": true,
     "paths": {

@@ -149,6 +149,7 @@ gulp.task('build', gulp.parallel(
 gulp.task('build-pipeline', gulp.series(
 	cleanSrc(taskOptions),
 	'set-production',
+		// 'check-ts',
 	'fix-wixtypes', 
 	'add-wix-types',
 	// 'test',
@@ -160,6 +161,7 @@ gulp.task('build-prod', gulp.series(
 	cleanSrc(taskOptions),
 	'set-production', 
 	'fix-wix', 
+	// 'check-ts',
 	'build-backend', 
 	'build-public', 
 	buildPages(taskOptions),
@@ -179,9 +181,9 @@ gulp.task('start-dev-env', gulp.parallel(
 gulp.task('dev', gulp.series(
 	cleanSrc(taskOptions),
 	'fix-wix',
-	// 'build',
+	// 'check-ts',
+	'build',
 	// 'start-dev-env', 
-	'check-ts',
 	)
 );
 
