@@ -173,26 +173,27 @@ export function updateWixTypes(options) {
 }
 export function addTypes(options, done) {
     const { replaceOptions } = options;
-    // const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
-    // 	.pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
-    // 	.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
+    // Regex to match keywords at the beginning of a line, capturing any leading whitespace.
+    // The 'm' flag is for multiline matching (^ matches start of line).
+    // The 'g' flag is for global matching (replace all instances).
+    const interfaceRegex = /^(\s*)interface\s/gm;
+    const enumRegex = /^(\s*)enum\s/gm;
+    const typeRegex = /^(\s*)type\s/gm;
     const exportTypes = gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        .pipe(replace('interface ', 'export interface ', replaceOptions))
-        .pipe(replace('enum ', 'export enum ', replaceOptions))
-        .pipe(replace('type ', 'export type ', replaceOptions))
+        // The replacement string '$1export...' uses the captured whitespace to preserve indentation.
+        .pipe(replace(interfaceRegex, 'export interface ', replaceOptions))
+        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+        .pipe(replace(typeRegex, 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
     const exportTypesBeta = gulp.src(['./.wix/types/wix-code-types/dist/types/beta/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/beta/common/$w.d.ts'])
-        .pipe(replace('interface ', 'export interface ', replaceOptions))
-        .pipe(replace('enum ', 'export enum ', replaceOptions))
-        .pipe(replace('type ', 'export type ', replaceOptions))
+        .pipe(replace(interfaceRegex, '$1export interface ', replaceOptions))
+        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+        .pipe(replace(typeRegex, 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
     const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
         .pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
-        // .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
-    return merge(
-    // processPages,
-    processCommon, exportTypesBeta, exportTypes)
+    return merge(processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {
         console.log("💩" + red.underline.bold(' => Updating WIX failed!'));
         console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));

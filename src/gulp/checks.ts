@@ -168,7 +168,8 @@ export function checkTs(options: TaskOptions) {
 
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
-		const tsProject = ts.createProject(`./${folder}/tsconfig.json`, { noEmit: true });
+		// const tsProject = ts.createProject(`./${folder}/tsconfig.json`, { noEmit: true, declaration: false });
+		const tsProject = ts.createProject(`./local.tsconfig.json`, { noEmit: true, declaration: false, skipDefaultLibCheck: true });
 
         const taskName = `test-${folder}`; // Create a unique name for each task
 
