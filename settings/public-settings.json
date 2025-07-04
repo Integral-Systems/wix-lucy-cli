@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "noEmit": false,
     "noUncheckedIndexedAccess": true,
     "strict": true,
-    "composite": true,
+    "composite": false,
+    "noEmit": true,
     "jsx": "react-jsx",
     "strictNullChecks": true,
     "paths": {
       "backend/*.web.js": [],
       "backend/*.web": [],
       "backend/*.jsw": [],
+      "backend/*": [],
       "mocks": [],
       "public/*": [],
       "types/*": [],

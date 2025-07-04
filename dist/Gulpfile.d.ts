@@ -18,6 +18,7 @@ export type TaskOptions = {
     publicSettings: typeof publicSettings;
     modulesSync: Record<string, string> | undefined;
     cwd: string;
+    isWatching?: boolean;
 };
 export interface File {
     path: string;

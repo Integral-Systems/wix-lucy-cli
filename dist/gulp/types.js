@@ -19,6 +19,7 @@ export function updateWixTypes(options) {
         // Add module to publicSettings
         publicSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         publicSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        publicSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         publicSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         publicSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         publicSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
@@ -43,6 +44,7 @@ export function updateWixTypes(options) {
         // Add module to masterSettings
         masterSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         masterSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        masterSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         masterSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         masterSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
         masterSettings.include = [
@@ -55,6 +57,7 @@ export function updateWixTypes(options) {
         // Add module to pageSettings
         pageSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         pageSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        pageSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         pageSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
         pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
@@ -70,6 +73,7 @@ export function updateWixTypes(options) {
                 // Add module to publicSettings
                 publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
@@ -97,6 +101,7 @@ export function updateWixTypes(options) {
                 // Add module to masterSettings
                 masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
@@ -110,6 +115,7 @@ export function updateWixTypes(options) {
                 // Add module to pageSettings
                 pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
@@ -173,26 +179,27 @@ export function updateWixTypes(options) {
 }
 export function addTypes(options, done) {
     const { replaceOptions } = options;
-    // const processPages = gulp.src(['./.wix/types/wix-code-types/dist/types/page/$w.d.ts'])
-    // 	.pipe(replace('declare namespace \\$w {', ' declare namespace $w{\nconst api: $w.Api;\n', replaceOptions))
-    // 	.pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/page/'));
+    // Regex to match keywords at the beginning of a line, capturing any leading whitespace.
+    // The 'm' flag is for multiline matching (^ matches start of line).
+    // The 'g' flag is for global matching (replace all instances).
+    const interfaceRegex = /^(\s*)interface\s/gm;
+    const enumRegex = /^(\s*)enum\s/gm;
+    const typeRegex = /^(\s*)type\s/gm;
     const exportTypes = gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        .pipe(replace('interface ', 'export interface ', replaceOptions))
-        .pipe(replace('enum ', 'export enum ', replaceOptions))
-        .pipe(replace('type ', 'export type ', replaceOptions))
+        // The replacement string '$1export...' uses the captured whitespace to preserve indentation.
+        .pipe(replace(interfaceRegex, 'export interface ', replaceOptions))
+        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+        .pipe(replace(typeRegex, 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
     const exportTypesBeta = gulp.src(['./.wix/types/wix-code-types/dist/types/beta/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/beta/common/$w.d.ts'])
-        .pipe(replace('interface ', 'export interface ', replaceOptions))
-        .pipe(replace('enum ', 'export enum ', replaceOptions))
-        .pipe(replace('type ', 'export type ', replaceOptions))
+        .pipe(replace(interfaceRegex, '$1export interface ', replaceOptions))
+        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+        .pipe(replace(typeRegex, 'export type ', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
     const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
         .pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
-        // .pipe(replace('namespace \\$w {', 'declare namespace $w{\ntype Api = FrontendAPI;\n', replaceOptions))
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
-    return merge(
-    // processPages,
-    processCommon, exportTypesBeta, exportTypes)
+    return merge(processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {
         console.log("💩" + red.underline.bold(' => Updating WIX failed!'));
         console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
