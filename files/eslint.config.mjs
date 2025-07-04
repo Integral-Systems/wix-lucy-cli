@@ -1,4 +1,5 @@
 import eslint from '@eslint/js';
+// @ts-ignore
 import importPlugin from 'eslint-plugin-import';
 import jsdoc from 'eslint-plugin-jsdoc';
 import namedImportSpacing from 'eslint-plugin-named-import-spacing';
@@ -15,6 +16,7 @@ export default tseslint.config(
 			'./.wix', 
 			'./src',
 			"eslint.config.mjs",
+			"cypress.config.mjs",
 			"**/*.js"
 		],
 	},
