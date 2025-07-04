@@ -39,6 +39,7 @@ export type TaskOptions = {
 	publicSettings: typeof publicSettings,
 	modulesSync: Record<string, string> | undefined;
 	cwd: string;
+	isWatching?: boolean;
 }
 
 export interface File {
@@ -67,6 +68,8 @@ const taskOptions: TaskOptions = {
 	cwd: process.cwd(),
 	modulesSync: getModulesSync(),
 }
+
+const watchTaskOptions: TaskOptions = { ...taskOptions, isWatching: true };
 
 gulp.task('check-ts', gulp.parallel( 
 	checkTs(taskOptions),
@@ -97,6 +100,16 @@ gulp.task('copy-files', gulp.parallel(
 gulp.task('test', function () {
 	return shell.task(
 		['yarn test'],
+		{ ignoreErrors: true }
+	)().then(() => {
+		console.log("🐕" + blue.underline.bold(' => Exited test task!'));
+	}).catch(err => {
+		console.log("💩" + red.underline.bold(' => Error in test task!'));
+	});
+});
+gulp.task('test-ci', function () {
+	return shell.task(
+		['yarn test --run'],
 		{ ignoreErrors: true }
 	)().then(() => {
 		console.log("🐕" + blue.underline.bold(' => Exited test task!'));
@@ -149,10 +162,10 @@ gulp.task('build', gulp.parallel(
 gulp.task('build-pipeline', gulp.series(
 	cleanSrc(taskOptions),
 	'set-production',
-		// 'check-ts',
+	'check-ts',
 	'fix-wixtypes', 
 	'add-wix-types',
-	// 'test',
+	'test-ci',
 	'build',
 ));
 
@@ -161,7 +174,8 @@ gulp.task('build-prod', gulp.series(
 	cleanSrc(taskOptions),
 	'set-production', 
 	'fix-wix', 
-	// 'check-ts',
+	'check-ts',
+	'test-ci',
 	'build-backend', 
 	'build-public', 
 	buildPages(taskOptions),
@@ -172,18 +186,18 @@ gulp.task('build-prod', gulp.series(
 
 
 gulp.task('start-dev-env', gulp.parallel(
-	watchAll(taskOptions),
+	watchAll(watchTaskOptions),
 	'test',
 	'start-wix',
+	'check-ts',
 	(done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err)),
 ));
 
 gulp.task('dev', gulp.series(
 	cleanSrc(taskOptions),
 	'fix-wix',
-	'check-ts',
-	// 'build',
-	// 'start-dev-env', 
+	'build',
+	'start-dev-env', 
 	)
 );
 

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "noEmit": false,
+    "composite": false,
+    "noEmit": true,
     "experimentalDecorators": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx",

@@ -25,6 +25,7 @@ export function updateWixTypes(options: TaskOptions) {
 		// Add module to publicSettings
 		publicSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		publicSettings.compilerOptions.paths['backend/*.web.js'] = [ "../../../typescript/backend/*.web.ts" ] as never;
+		publicSettings.compilerOptions.paths['backend/*'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		publicSettings.compilerOptions.paths['backend/*.jsw'] = [ "../../../typescript/backend/*.jsw.ts" ] as never;
 		publicSettings.compilerOptions.paths.mocks = [ "../../../typescript/__mocks__/*" ] as never;
 		publicSettings.compilerOptions.paths['types/*'] = [ "../../../typescript/types/*" ] as never;
@@ -50,6 +51,7 @@ export function updateWixTypes(options: TaskOptions) {
 		// Add module to masterSettings
 		masterSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		masterSettings.compilerOptions.paths['backend/*.web.js'] = [ "../../../typescript/backend/*.web.ts" ] as never;
+		masterSettings.compilerOptions.paths['backend/*'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		masterSettings.compilerOptions.paths['backend/*.jsw'] = [ "../../../typescript/backend/*.jsw.ts" ] as never;
 		masterSettings.compilerOptions.paths['types/*'] = [ "../../../typescript/types/*" ] as never;
 		masterSettings.include = [ 
@@ -62,6 +64,7 @@ export function updateWixTypes(options: TaskOptions) {
 		// Add module to pageSettings
 		pageSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		pageSettings.compilerOptions.paths['backend/*.web.js'] = [ "../../../typescript/backend/*.web.ts" ] as never;
+		pageSettings.compilerOptions.paths['backend/*'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		pageSettings.compilerOptions.paths['backend/*.jsw'] = [ "../../../typescript/backend/*.jsw.ts" ] as never;
 		pageSettings.compilerOptions.paths['types/*'] = [ "../../../typescript/types/*" ] as never;
 		pageSettings.compilerOptions.paths['backend/*.jsw'] = [ "../../../typescript/backend/*.jsw.ts" ] as never;
@@ -78,6 +81,7 @@ export function updateWixTypes(options: TaskOptions) {
 				// Add module to publicSettings
 				publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
 				publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+				publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
 				publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
 				publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
 				publicSettings.compilerOptions.paths.mocks.push(...[ `../../../${name}/__mocks__/*` as never ]);
@@ -105,6 +109,7 @@ export function updateWixTypes(options: TaskOptions) {
 				// Add module to masterSettings
 				masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
 				masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+				masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
 				masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
 				masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
 				masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
@@ -118,6 +123,7 @@ export function updateWixTypes(options: TaskOptions) {
 				// Add module to pageSettings
 				pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
 				pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+				pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
 				pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
 				pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
 				pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);

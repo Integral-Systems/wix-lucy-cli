@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
-    "composite": true,
-    "noEmit": false,
+    "composite": false,
+    "noEmit": true,
     "strictNullChecks": true,
     "jsx": "react-jsx",
     "noUncheckedIndexedAccess": true,
@@ -10,6 +10,7 @@
       "backend/*.web.js": [],
       "backend/*.web": [],
       "backend/*.jsw": [],
+      "backend/*": [],
       "public/*": [],
       "wix-types/*": ["../wix-code-types/dist/types/*"],
       "types/*": []

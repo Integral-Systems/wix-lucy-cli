@@ -19,6 +19,7 @@ export function updateWixTypes(options) {
         // Add module to publicSettings
         publicSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         publicSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        publicSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         publicSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         publicSettings.compilerOptions.paths.mocks = ["../../../typescript/__mocks__/*"];
         publicSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
@@ -43,6 +44,7 @@ export function updateWixTypes(options) {
         // Add module to masterSettings
         masterSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         masterSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        masterSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         masterSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         masterSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
         masterSettings.include = [
@@ -55,6 +57,7 @@ export function updateWixTypes(options) {
         // Add module to pageSettings
         pageSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         pageSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
+        pageSettings.compilerOptions.paths['backend/*'] = ["../../../typescript/backend/*.web.ts"];
         pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
         pageSettings.compilerOptions.paths['types/*'] = ["../../../typescript/types/*"];
         pageSettings.compilerOptions.paths['backend/*.jsw'] = ["../../../typescript/backend/*.jsw.ts"];
@@ -70,6 +73,7 @@ export function updateWixTypes(options) {
                 // Add module to publicSettings
                 publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
@@ -97,6 +101,7 @@ export function updateWixTypes(options) {
                 // Add module to masterSettings
                 masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
@@ -110,6 +115,7 @@ export function updateWixTypes(options) {
                 // Add module to pageSettings
                 pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
                 pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
                 pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
                 pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
                 pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);

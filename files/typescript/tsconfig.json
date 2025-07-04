@@ -3,26 +3,49 @@
         "enable": true
     },
     "compilerOptions": {
-        "outDir": "../src",
-        "rootDir": ".",
-        "target": "ES2020",
+        // --- Path and Module Settings ---
         "module": "ES2020",
         "moduleResolution": "Node",
-        "preserveConstEnums": true,
+        "target": "ES2020",
+        "baseUrl": "..",
+        "paths": {
+            "public/*": ["./public/*"],
+            "backend/*": ["./backend/*"],
+            "pages/*": ["./pages/*"],
+            "types/*": ["./types/*"]
+        },
+        "typeRoots": [
+            "./.wix/types",
+            "./typescript/types",
+            "./node_modules/@types"
+        ],
+        "outDir": "./src",
+        "resolveJsonModule": true,
+        "jsx": "react-jsx",
+        "allowJs": false,
+
+        // --- Declaration File Settings (Crucial for this error) ---
+        "declaration": true,
+        "declarationMap": true,
+
+        // --- Strictness and Checks ---
+        "strict": true,
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
-        "declaration": false,
-        "strict": true,
-        "alwaysStrict": false,  
+        "forceConsistentCasingInFileNames": true,
+        "alwaysStrict": false,
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
+        "exactOptionalPropertyTypes": true,
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
-        "exactOptionalPropertyTypes": true,
-        "noEmit": true,
+
+        // --- Advanced ---
+        "composite": false,
+        "preserveConstEnums": true,
         "plugins": [
             {
                 "name": "@styled/typescript-styled-plugin"
@@ -31,22 +54,15 @@
                 "name": "typescript-eslint-language-service"
             }
         ],
-        "paths": {
-            "public/*": ["./public/*"],
-            "backend/*": ["./backend/*"],
-            "pages/*": ["./pages/*"],
-            "types/*": ["./types/*"]
-        },
-            "typeRoots": [
-                "./types", 
-                "../node_modules/@types"
-            ]
     },
-    "exclude": ["../node_modules", "../.wix", "node_modules", "./wix", "./**/*.spec.ts", "../src/**/*"],
-    "include":[
-        "!*.d.ts",
-        "public/**/*.tsx",
-        "**/*.ts"
+    "include": [
+        "./**/*.ts"
+    ],
+    "exclude": [
+        "../node_modules",
+        "../.wix",
+        "../src",
+        "**/*.spec.ts"
     ],
     "references": [
         {

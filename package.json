@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "lucy-cli",
-  "version": "1.0.15",
+  "version": "1.1.0",
   "description": "Lucy Framework for WIX Studio Editor",
   "main": ".dist/index.js",
   "scripts": {
