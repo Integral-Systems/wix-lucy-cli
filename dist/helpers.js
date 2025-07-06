@@ -1,12 +1,13 @@
 import chalk from 'chalk';
 import { simpleGit } from 'simple-git';
-import { spawnSync } from 'child_process';
+import { spawnSync, exec } from 'child_process';
 // https://www.sergevandenoever.nl/run-gulp4-tasks-programatically-from-node/
-import path from 'path';
+import path, { join } from 'path';
 import { fileURLToPath } from 'url';
-import { exec } from 'child_process';
 import os from 'os';
-import fs from 'fs';
+import fs, { mkdirSync } from 'fs';
+import fse from 'fs-extra';
+import { writeFile } from 'fs/promises';
 import { blue, green, orange, red, yellow, magenta } from './index.js';
 export async function installPackages(wixPackages, devPackages, cwd, locked) {
     if (locked)
@@ -167,4 +168,50 @@ export async function saveConfig(config, file) {
 export async function readConfig(file) {
     let content = await fs.promises.readFile(file, 'utf-8');
     return JSON.parse(content);
+}
+export async function createTemplateFolder(moduleSettings) {
+    const templatesPath = join(os.homedir(), '.lucy-cli');
+    try {
+        mkdirSync(templatesPath);
+        const defaultTemplatePath = join(templatesPath, 'default');
+        mkdirSync(defaultTemplatePath);
+        const sourceFilesPath = join(moduleSettings.packageRoot, 'files');
+        const defaultTemplateFilesPath = join(defaultTemplatePath, 'files');
+        await fse.copy(sourceFilesPath, defaultTemplateFilesPath);
+        const defaultTemplateSettingsPath = join(defaultTemplatePath, 'settings.json');
+        await writeFile(defaultTemplateSettingsPath, JSON.stringify(moduleSettings.settings, null, 2));
+        console.log(green('✅ Default template created successfully!'));
+    }
+    catch (e) {
+        console.log((`💩 ${red.underline.bold("=> Error creating default template =>")} ${orange(e)}`));
+        return;
+    }
+}
+/**
+ * Updates a lucy.json file with dependencies from a package.json file.
+ * It replaces 'wixPackages' with 'dependencies' and 'devPackages' with 'devDependencies'.
+ * @param {string} packageJsonPath - Path to the package.json file.
+ * @param {string} lucyConfigPath - Path to the lucy.json file.
+ */
+export async function updateLucyConfigFromPackageJson(packageJsonPath, lucyConfigPath) {
+    try {
+        console.log(`🐕 Reading package definitions from ${orange(packageJsonPath)}...`);
+        const pkgJsonContent = await fs.promises.readFile(packageJsonPath, 'utf-8');
+        const packageJson = JSON.parse(pkgJsonContent);
+        console.log(`🐕 Reading Lucy configuration from ${orange(lucyConfigPath)}...`);
+        const lucyConfigContent = await fs.promises.readFile(lucyConfigPath, 'utf-8');
+        const lucyConfig = JSON.parse(lucyConfigContent);
+        const { dependencies = {}, devDependencies = {} } = packageJson;
+        // Note: `wixPackages` are installed using `wix install`. If your `dependencies`
+        // contain packages that are not Wix packages, `lucy-cli install` might fail.
+        lucyConfig.wixPackages = dependencies;
+        lucyConfig.devPackages = devDependencies;
+        console.log(`🐕 Writing updated configuration to ${orange(lucyConfigPath)}...`);
+        await fs.promises.writeFile(lucyConfigPath, JSON.stringify(lucyConfig, null, 2));
+        console.log(green.underline('✅ Lucy configuration updated successfully!'));
+    }
+    catch (error) {
+        console.error(`💩 ${red.underline.bold('=> Error updating lucy.json from package.json:')} ${orange(error.message)}`);
+        throw error; // re-throw to allow caller to handle
+    }
 }

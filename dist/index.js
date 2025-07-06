@@ -11,9 +11,10 @@ import { join } from 'path';
 import fs from 'fs/promises';
 import { init } from './init.js';
 import { sync } from './sync.js';
-import { runGulp, installPackages, killAllProcesses, cleanupWatchers } from './helpers.js';
+import { runGulp, installPackages, killAllProcesses, cleanupWatchers, createTemplateFolder, updateLucyConfigFromPackageJson } from './helpers.js';
 import { prepare } from './prepare.js';
-import { spawnSync } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
+import os from 'os';
 export const orange = chalk.hex('#FFA500');
 export const blue = chalk.blueBright;
 export const green = chalk.greenBright;
@@ -87,6 +88,33 @@ async function main() {
         console.log("🐾" + blue.bold(` => ${projectPackageJSON.version}`));
         return;
     }
+    if (moduleSettings.args.includes('templates')) {
+        const templatesPath = join(os.homedir(), '.lucy-cli');
+        if (!existsSync(templatesPath)) {
+            console.log((`💩 ${red.underline.bold("=> Lucy templates folder not found at =>")} ${orange(templatesPath)}`));
+            console.log(chalk.yellow('🐕 Creating templates folder with default template...'));
+            await createTemplateFolder(moduleSettings);
+        }
+        console.log(`🐕 ${blue.underline('Opening templates folder at:')} ${orange(templatesPath)}`);
+        let command;
+        switch (process.platform) {
+            case 'darwin':
+                command = 'open';
+                break;
+            case 'win32':
+                command = 'start';
+                break;
+            default:
+                command = 'xdg-open';
+                break;
+        }
+        const child = spawn(command, [templatesPath], { detached: true, stdio: 'ignore' });
+        child.on('error', (err) => {
+            console.error(`💩 ${red.underline.bold('Failed to open folder:')} ${orange(err.message)}`);
+        });
+        child.unref();
+        return;
+    }
     // Run velo sync
     if (moduleSettings.args.includes('velo-sync')) {
         await sync(moduleSettings, projectSettings);
@@ -105,6 +133,8 @@ async function main() {
         console.log("🦮 " + magenta.bold('fix') + "                : Runs a fix command to resolve common issues in development or production settings.");
         console.log("🦮 " + magenta.bold('docs') + "               : Generates documentation for the project.");
         console.log("🦮 " + magenta.bold('cypress') + "            : Starts the cypress test runner.");
+        console.log("🦮 " + magenta.bold('templates') + "          : Opens the Lucy CLI templates folder.");
+        console.log("🦮 " + magenta.bold('sync-pkgs') + "          : Syncs dependencies from package.json to lucy.json.");
         console.log("🦮 " + magenta.bold('e2e') + "                : Starts the cypress test runner in CI mode. first argument is the key second is the build id <e2e <somekey <someID>");
         console.log("\nOptions:");
         console.log("🦮 " + magenta.bold('-h, help') + "           : Displays this help message.");
@@ -233,6 +263,19 @@ async function main() {
     }
     if (moduleSettings.args.includes('fix')) {
         runGulp(moduleSettings, projectSettings, 'fix-wix');
+        return;
+    }
+    if (moduleSettings.args.includes('sync-pkgs')) {
+        console.log("🐕" + magenta.underline(' => Syncing package.json with lucy.json'));
+        if (!existsSync(moduleSettings.packageJsonPath)) {
+            console.log((`💩 ${red.underline.bold("=> package.json not found at =>")} ${orange(moduleSettings.packageJsonPath)}`));
+            return;
+        }
+        if (!existsSync(moduleSettings.lucyConfigPath)) {
+            console.log((`💩 ${red.underline.bold("=> lucy.json not found at =>")} ${orange(moduleSettings.lucyConfigPath)}`));
+            return;
+        }
+        await updateLucyConfigFromPackageJson(moduleSettings.packageJsonPath, moduleSettings.lucyConfigPath);
         return;
     }
     console.log("🐕" + blue.underline.bold(' => Running dev'));

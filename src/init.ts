@@ -2,13 +2,14 @@ import chalk from 'chalk';
 import { existsSync, mkdirSync, promises as fsPromises } from 'fs';
 import fse from 'fs-extra';
 import { join } from 'path';
-import { simpleGit } from 'simple-git';
 import fs from 'fs/promises';
-import { spawnSync } from 'child_process';
 import path from 'path';
+import os from 'os';
+import enquirer from 'enquirer';
 import { ModuleSettings, ProjectSettings, blue, green, orange, red } from './index.js';
-import { gitInit, installPackages } from './helpers.js';
+import { createTemplateFolder, gitInit, installPackages } from './helpers.js';
 
+const { Select } = enquirer as any;
 /**
  * Init Lucy project
  * @param {string} cwd Current working directory
@@ -22,7 +23,46 @@ export async function init(moduleSettings: ModuleSettings, projectSettings: Proj
 		return;
 	}
 
-	await copyFolder(join(moduleSettings.packageRoot, 'files'), moduleSettings.targetFolder);
+	const templatesPath = join(os.homedir(), '.lucy-cli');
+    if (!existsSync(templatesPath)) {
+        console.log(chalk.yellow(`Templates folder not found at ${orange(templatesPath)}. Creating it with a default template...`));
+		await createTemplateFolder(moduleSettings);
+    }
+
+    const templateChoices = (await fs.readdir(templatesPath, { withFileTypes: true }))
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+    if (templateChoices.length === 0) {
+        console.log((`💩 ${red.underline.bold("=> No templates found in =>")} ${orange(templatesPath)}`));
+        return;
+    }
+
+    const prompt = new Select({
+        name: 'template',
+        message: 'Select a project template',
+        choices: templateChoices
+    });
+
+    const selectedTemplate = await prompt.run();
+    const templateDir = join(templatesPath, selectedTemplate);
+    const templateFilesDir = join(templateDir, 'files');
+    const templateSettingsPath = join(templateDir, 'settings.json');
+
+    if (!existsSync(templateSettingsPath)) {
+        console.log((`💩 ${red.underline.bold("=> Template is missing settings.json at =>")} ${orange(templateSettingsPath)}`));
+        return;
+    }
+
+    try {
+        const templateSettingsRaw = await fs.readFile(templateSettingsPath, 'utf8');
+        moduleSettings.settings = JSON.parse(templateSettingsRaw);
+    } catch (e) {
+        console.log((`💩 ${red.underline.bold("=> Error reading or parsing template settings =>")} ${orange(e)}`));
+        return;
+    }
+
+	await copyFolder(templateFilesDir, moduleSettings.targetFolder);
 
 	await editJson(moduleSettings.packageJsonPath, ['type', 'scripts'], ['module', moduleSettings.settings.scripts ]);
 	await stringReplace(join(moduleSettings.targetFolder, 'currents.config.js'), ['__ProjectName__'], [path.basename(moduleSettings.targetFolder)]);

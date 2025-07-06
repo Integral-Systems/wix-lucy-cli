@@ -17,3 +17,16 @@ export interface VeloSyncConfig {
 }
 export declare function saveConfig(config: VeloSyncConfig, file: string): Promise<void>;
 export declare function readConfig(file: string): Promise<VeloSyncConfig>;
+export declare function createTemplateFolder(moduleSettings: ModuleSettings): Promise<void>;
+export type PackageJson = {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+    [key: string]: any;
+};
+/**
+ * Updates a lucy.json file with dependencies from a package.json file.
+ * It replaces 'wixPackages' with 'dependencies' and 'devPackages' with 'devDependencies'.
+ * @param {string} packageJsonPath - Path to the package.json file.
+ * @param {string} lucyConfigPath - Path to the lucy.json file.
+ */
+export declare function updateLucyConfigFromPackageJson(packageJsonPath: string, lucyConfigPath: string): Promise<void>;
