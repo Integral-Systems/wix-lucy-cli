@@ -24,22 +24,48 @@ export async function installPackages(wixPackages: Record<string, string>, devPa
 	const devPackageNamesAndVersions = devPackageNames.map((name, index) => `${name}@${devPackageVersions[index]}`);
 
 	let success = true;
-	wixPackageNames.forEach((name, index) => {
-		console.log(`🐕 => Installing ${orange(name)}`);
-		const wixInstall = locked ? `wix install ${wixPackageNamesAndVersions}`: `wix install ${name}`;
-		const wixres = spawnSync(wixInstall, { shell: true, stdio: 'inherit' });
-		if (wixres.error) {
-			console.log((`💩 ${red.underline.bold("=> Failed to install package =>")} ${orange(wixres.error.message)}`));
+
+    // Dev packages are installed all at once with yarn.
+	if (devPackageNames.length > 0) {
+		console.log(`🐕 => Installing dev packages with yarn...`);
+		const packagesToInstall = locked ? devPackageNamesAndVersions.join(' ') : devPackageNames.join(' ');
+		const yarnAdd = `yarn add -D ${packagesToInstall}`;
+		const yarnRes = spawnSync(yarnAdd, { shell: true, stdio: 'inherit' });
+		if (yarnRes.error) {
 			success = false;
+			console.log((`💩 ${red.underline.bold("=> Failed to install dev packages =>")} ${orange(yarnRes.error.message)}`));
 		} else {
-			console.log("🐕" + blue.underline(` => Package installed!`));
+			console.log("🐕" + blue.underline(` => Dev packages installed!`));
 		}
-	});
-	const yarnAdd = locked ? `yarn add -D ${devPackageNamesAndVersions.join(' ')}` : `yarn add -D ${devPackageNames.join(' ')}`;
-	const yarnRes = spawnSync(yarnAdd, { shell: true, stdio: 'inherit' });
-	if (yarnRes.error) {
-		success = false;
-		console.log((`💩 ${red.underline.bold("=> Failed to install dev packages =>")} ${orange(yarnRes.error.message)}`));
+	}
+
+	// Packages are installed all at once with yarn.
+    if (wixPackageNames.length > 0) {
+		console.log(`🐕 => Installing packages with yarn...`);
+		const packagesToInstall = locked ? wixPackageNamesAndVersions.join(' ') : wixPackageNames.join(' ');
+		const yarnAdd = `yarn add ${packagesToInstall}`;
+		const yarnRes = spawnSync(yarnAdd, { shell: true, stdio: 'inherit' });
+		if (yarnRes.error) {
+			success = false;
+			console.log((`💩 ${red.underline.bold("=> Failed to install packages =>")} ${orange(yarnRes.error.message)}`));
+		} else {
+			console.log("🐕" + blue.underline(` => Packages installed!`));
+		}
+	}
+
+	// Wix packages are installed one by one.
+	if (wixPackageNames.length > 0) {
+		wixPackageNames.forEach((name, index) => {
+			console.log(`🐕 => Installing wix package ${orange(name)}`);
+			const wixInstall = locked ? `wix install ${wixPackageNamesAndVersions[index]}`: `wix install ${name}`;
+			const wixres = spawnSync(wixInstall, { shell: true, stdio: 'inherit' });
+			if (wixres.error) {
+				console.log((`💩 ${red.underline.bold("=> Failed to install wix package =>")} ${orange(wixres.error.message)}`));
+				success = false;
+			} else {
+				console.log("🐕" + blue.underline(` => Wix package ${orange(name)} installed!`));
+			}
+		});
 	}
 
 	if(success) {
