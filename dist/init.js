@@ -59,7 +59,7 @@ export async function init(moduleSettings, projectSettings) {
     await installPackages(moduleSettings.settings.wixPackages, moduleSettings.settings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
     await editJson(join(moduleSettings.targetFolder, 'jsconfig.json'), ['compilerOptions', 'exclude'], [moduleSettings.settings.wixSettings.compilerOptions, moduleSettings.settings.wixSettings.exclude]);
     await editJson(join(moduleSettings.targetFolder, 'typedoc.json'), ['name'], [path.basename(moduleSettings.targetFolder)]);
-    await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules);
+    await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules, moduleSettings.force);
     moduleSettings.settings.initialized = true;
     const eslintrcPath = join(moduleSettings.targetFolder, '.eslintrc.json');
     if (existsSync(eslintrcPath)) {

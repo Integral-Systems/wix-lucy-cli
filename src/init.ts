@@ -72,7 +72,7 @@ export async function init(moduleSettings: ModuleSettings, projectSettings: Proj
 	await editJson(join(moduleSettings.targetFolder, 'jsconfig.json'), ['compilerOptions', 'exclude'], [moduleSettings.settings.wixSettings.compilerOptions, moduleSettings.settings.wixSettings.exclude]);
 	await editJson(join(moduleSettings.targetFolder, 'typedoc.json'), ['name'], [path.basename(moduleSettings.targetFolder)]);
 
-	await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules);
+	await gitInit(moduleSettings.targetFolder, moduleSettings.settings.modules, moduleSettings.force);
 
 	moduleSettings.settings.initialized = true;
 

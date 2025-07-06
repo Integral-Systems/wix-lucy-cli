@@ -69,29 +69,52 @@ export async function installPackages(wixPackages, devPackages, cwd, locked) {
         console.log("🐕" + red.underline(` => Some packages failed to install!`));
     }
 }
-export async function gitInit(cwd, modules) {
+async function isSubmoduleRegistered(git, submoduleName) {
+    try {
+        const urlConfig = await git.getConfig(`submodule.${submoduleName}.url`);
+        return !!urlConfig.value;
+    }
+    catch (e) {
+        // simple-git throws an error if the config key doesn't exist
+        return false;
+    }
+}
+export async function gitInit(cwd, modules, force) {
+    const git = simpleGit({ baseDir: cwd });
+    if (!(await git.checkIsRepo())) {
+        console.log(chalk.yellow('Project is not a git repository. Initializing...'));
+        await git.init();
+    }
+    if (!modules) {
+        console.log(chalk.yellow('No submodules defined in settings, skipping.'));
+        return;
+    }
+    const dotGitmodulesPath = path.join(cwd, '.gitmodules');
     for (const [name, repo] of Object.entries(modules)) {
-        console.log(chalk.green.underline.bold(`Cloning ${name}`));
-        const git = simpleGit({ baseDir: cwd });
+        console.log(chalk.green.underline.bold(`Processing submodule ${name}`));
         try {
-            const repoPath = path.resolve(cwd, name);
-            if (!fs.existsSync(repoPath)) {
-                await git.submoduleAdd(repo.url, name);
+            const isRegistered = await isSubmoduleRegistered(git, name);
+            // Check that .gitmodules exists AND contains the entry for this specific submodule.
+            const isConfiguredInFile = fs.existsSync(dotGitmodulesPath) &&
+                fs.readFileSync(dotGitmodulesPath, 'utf-8').includes(`[submodule "${name}"]`);
+            // Add/repair if not configured in .gitmodules, or if forced by the user.
+            if (!isConfiguredInFile || force) {
+                console.log(`🐕 ${blue.underline(`Adding/updating submodule ${name}...`)}`);
+                // If git already has a config entry, we must use --force to repair it.
+                const submoduleArgs = ['add', ...(force || isRegistered ? ['--force'] : []), repo.url, name];
+                await git.subModule(submoduleArgs);
             }
-            if (fs.existsSync(repoPath)) {
-                console.log(`🐕 ${blue.underline(' => Module already cloned!')}`);
+            else {
+                console.log(`🐕 ${blue.underline(`Submodule ${name} already registered. Skipping add.`)}`);
             }
-            const localGit = simpleGit({ baseDir: `${cwd}/${name}` });
-            await localGit.checkout(repo.branch);
+            await git.submoduleUpdate(['--init', '--recursive', name]);
+            await simpleGit({ baseDir: path.join(cwd, name) }).checkout(repo.branch);
         }
         catch (err) {
-            console.log((`💩 ${red.underline.bold("=> Command failed =>")} ${orange(err)}`));
-        }
-        finally {
-            console.log("🐕" + blue.underline(` => Cloned ${orange(name)}`));
+            console.log((`💩 ${red.underline.bold(`=> Command failed for submodule ${name} =>`)} ${orange(err)}`));
         }
     }
-    console.log("🐶" + green.underline(' => All Modules cloned!'));
+    console.log("🐶" + green.underline(' => All modules processed!'));
 }
 export async function runGulp(moduleSettings, projectSettings, task) {
     // Get the directory name of the current module

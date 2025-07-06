@@ -14,6 +14,6 @@ export async function prepare(moduleSettings, projectSettings) {
         return;
     }
     await installPackages(projectSettings.lucySettings.wixPackages, projectSettings.lucySettings.devPackages, moduleSettings.targetFolder, moduleSettings.lockVersion);
-    await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules);
+    await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules, moduleSettings.force);
     console.log(chalk.greenBright.underline('🐶 => Prepare done!'));
 }

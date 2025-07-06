@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { batchCheckUpdateState, clearStale, getImageUploadUrl, insertItemBatch, isAlive, saveItemBatch } from 'backend/lib/http-functions/sync2';
+import { batchCheckUpdateState, clearStale, getImageUploadUrl, insertItemBatch, isAlive, saveItemBatch } from 'backend/lib/http-functions/sync';
 import { WixHttpFunctionRequest } from 'wix-http-functions';
 
 /**------------------------------------------------------------------------
