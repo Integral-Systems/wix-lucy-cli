@@ -1,9 +1,10 @@
 #!/usr/bin/env node --no-warnings
 export type LucySettings = {
     modules: {
-        [llibName: string]: {
+        [libName: string]: {
             url: string;
             branch: string;
+            path?: string;
         };
     };
     wixSettings: {

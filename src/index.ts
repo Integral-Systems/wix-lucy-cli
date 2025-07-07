@@ -18,9 +18,10 @@ import os from 'os';
 
 export type LucySettings = {
 	modules: {
-		[llibName: string]: {
+		[libName: string]: {
 			url: string;
 			branch: string;
+			path?: string;
 		};
 	};
 	wixSettings: {

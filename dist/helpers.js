@@ -92,23 +92,24 @@ export async function gitInit(cwd, modules, force) {
     const dotGitmodulesPath = path.join(cwd, '.gitmodules');
     for (const [name, repo] of Object.entries(modules)) {
         console.log(chalk.green.underline.bold(`Processing submodule ${name}`));
+        const clonePath = repo.path || name;
         try {
-            const isRegistered = await isSubmoduleRegistered(git, name);
+            const isRegistered = await isSubmoduleRegistered(git, clonePath);
             // Check that .gitmodules exists AND contains the entry for this specific submodule.
             const isConfiguredInFile = fs.existsSync(dotGitmodulesPath) &&
-                fs.readFileSync(dotGitmodulesPath, 'utf-8').includes(`[submodule "${name}"]`);
+                fs.readFileSync(dotGitmodulesPath, 'utf-8').includes(`[submodule "${clonePath}"]`);
             // Add/repair if not configured in .gitmodules, or if forced by the user.
             if (!isConfiguredInFile || force) {
-                console.log(`🐕 ${blue.underline(`Adding/updating submodule ${name}...`)}`);
+                console.log(`🐕 ${blue.underline(`Adding/updating submodule ${name} at ${clonePath}...`)}`);
                 // If git already has a config entry, we must use --force to repair it.
-                const submoduleArgs = ['add', ...(force || isRegistered ? ['--force'] : []), repo.url, name];
+                const submoduleArgs = ['add', ...(force || isRegistered ? ['--force'] : []), repo.url, clonePath];
                 await git.subModule(submoduleArgs);
             }
             else {
-                console.log(`🐕 ${blue.underline(`Submodule ${name} already registered. Skipping add.`)}`);
+                console.log(`🐕 ${blue.underline(`Submodule ${name} at ${clonePath} already registered. Skipping add.`)}`);
             }
-            await git.submoduleUpdate(['--init', '--recursive', name]);
-            await simpleGit({ baseDir: path.join(cwd, name) }).checkout(repo.branch);
+            await git.submoduleUpdate(['--init', '--recursive', clonePath]);
+            await simpleGit({ baseDir: path.join(cwd, clonePath) }).checkout(repo.branch);
         }
         catch (err) {
             console.log((`💩 ${red.underline.bold(`=> Command failed for submodule ${name} =>`)} ${orange(err)}`));
