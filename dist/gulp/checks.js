@@ -171,12 +171,7 @@ const customReporter = {
     },
 };
 export function checkTs(options) {
-    const folders = ['typescript'];
-    if (options.modulesSync) {
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
     // Create tasks for each folder
     const tasks = folders.map((folder) => {
         const tsProject = ts.createProject(`./local.tsconfig.json`, { noEmit: true, declaration: false, skipDefaultLibCheck: true });

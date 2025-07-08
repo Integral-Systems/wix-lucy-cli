@@ -16,12 +16,7 @@ const swcOptions = {
     },
 };
 export function buildPublic(options) {
-    const folders = ['typescript'];
-    if (options.modulesSync) {
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
     const { outputDir } = options;
     // Create tasks for each folder
     const tasks = folders.map((folder) => {

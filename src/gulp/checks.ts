@@ -186,12 +186,8 @@ const customReporter: ts.reporter.Reporter = {
 };
 
 export function checkTs(options: TaskOptions) {
-    const folders = ['typescript'];
-    if (options.modulesSync){
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
+
 
     // Create tasks for each folder
     const tasks = folders.map((folder) => {

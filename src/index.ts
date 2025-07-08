@@ -16,12 +16,19 @@ import { prepare } from './prepare.js';
 import { spawn, spawnSync } from 'child_process';
 import os from 'os';
 
+export type ModulesSettings = {
+	packageRoot: string;
+	targetFolder: string;
+	args: string[];
+	settings: LucySettings;
+}
 export type LucySettings = {
 	modules: {
 		[libName: string]: {
 			url: string;
 			branch: string;
 			path?: string;
+			noCompile?: boolean;
 		};
 	};
 	wixSettings: {

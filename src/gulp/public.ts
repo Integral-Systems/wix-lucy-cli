@@ -19,12 +19,7 @@ const swcOptions = {
 };
 
 export function buildPublic(options: TaskOptions) {
-    const folders = ['typescript'];
-    if (options.modulesSync){
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
 
     const { outputDir } = options;
 

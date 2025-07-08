@@ -23,7 +23,7 @@ import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { blue, green, magenta, orange, red } from './index.js';
-import { getModulesSync } from './gulp/helpers.js';
+import { getModulesSourcePaths, getModulesSync } from './gulp/helpers.js';
 const sass = gulpSass(dartSass);
 const outputDir = './src';
 const userHomeDir = os.homedir();
@@ -44,6 +44,7 @@ const taskOptions = {
     replaceOptions,
     cwd: process.cwd(),
     modulesSync: getModulesSync(),
+    modulesSourcePaths: getModulesSourcePaths(),
 };
 const watchTaskOptions = { ...taskOptions, isWatching: true };
 gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));

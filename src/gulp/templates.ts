@@ -4,12 +4,7 @@ import exec from 'gulp-exec';
 import { blue, orange, red } from '../index.js';
 
 export function previewTemplates(options: TaskOptions) {
-        const folders = ['typescript'];
-        if (options.modulesSync){
-            for (const module of Object.keys(options.modulesSync)) {
-                folders.push(module);
-            }
-        }
+        const folders = ['typescript', ...options.modulesSourcePaths];
         
         const taskOpt = {
             continueOnError: true,

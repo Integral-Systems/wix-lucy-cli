@@ -58,9 +58,10 @@ Lucy-CLI is designed to streamline the setup and management of TypeScript within
       ``` json
       "modules": {
         "<repoName>": {
-          "url": "String",
-          "branch": "String",
-          "path": "String" // Optional, specifies the path where the submodule should be cloned
+            "url": "String",
+            "branch": "String",
+            "path": "String", // Optional, specifies the path where the submodule should be cloned
+            "noCompile": true // Optional, if true, the module will not be compiled
         }
       }
       ```

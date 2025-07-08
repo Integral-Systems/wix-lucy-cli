@@ -23,12 +23,7 @@ const swcOptions = {
 };
 
 export function buildBackend(options: TaskOptions) {
-    const folders = ['typescript'];
-    if (options.modulesSync){
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
 
     const { outputDir } = options;
 
@@ -70,12 +65,8 @@ export function buildBackend(options: TaskOptions) {
 
 
 export function buildBackendJSW(options: TaskOptions) {
-    const folders = ['typescript'];
-    if (options.modulesSync){
-        for (const module of Object.keys(options.modulesSync)) {
-            folders.push(module);
-        }
-    }
+    const folders = ['typescript', ...options.modulesSourcePaths];
+
     const swcOptions = {
         jsc: {
             target: 'es6',

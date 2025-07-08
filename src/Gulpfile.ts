@@ -21,7 +21,7 @@ import { addTypes, updateWixTypes } from './gulp/types.js';
 import { setProdConfig } from './gulp/pipeline.js';
 import { watchAll } from './gulp/watchers.js';
 import { ModuleSettings, ProjectSettings, blue, green, magenta, orange, red } from './index.js';
-import { getModulesSync } from './gulp/helpers.js';
+import { getModulesSourcePaths, getModulesSync } from './gulp/helpers.js';
 
 const sass = gulpSass(dartSass);
 
@@ -38,6 +38,7 @@ export type TaskOptions = {
 	pageSettings: typeof pageSettings,
 	publicSettings: typeof publicSettings,
 	modulesSync: Record<string, string> | undefined;
+	modulesSourcePaths: string[];
 	cwd: string;
 	isWatching?: boolean;
 }
@@ -67,6 +68,7 @@ const taskOptions: TaskOptions = {
 	replaceOptions,
 	cwd: process.cwd(),
 	modulesSync: getModulesSync(),
+	modulesSourcePaths: getModulesSourcePaths(),
 }
 
 const watchTaskOptions: TaskOptions = { ...taskOptions, isWatching: true };

@@ -17,6 +17,7 @@ export type TaskOptions = {
     pageSettings: typeof pageSettings;
     publicSettings: typeof publicSettings;
     modulesSync: Record<string, string> | undefined;
+    modulesSourcePaths: string[];
     cwd: string;
     isWatching?: boolean;
 };

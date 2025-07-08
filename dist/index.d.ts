@@ -1,10 +1,17 @@
 #!/usr/bin/env node --no-warnings
+export type ModulesSettings = {
+    packageRoot: string;
+    targetFolder: string;
+    args: string[];
+    settings: LucySettings;
+};
 export type LucySettings = {
     modules: {
         [libName: string]: {
             url: string;
             branch: string;
             path?: string;
+            noCompile?: boolean;
         };
     };
     wixSettings: {
