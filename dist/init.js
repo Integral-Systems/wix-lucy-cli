@@ -166,7 +166,7 @@ const init_expo = () => {
         const terminal = yield* Terminal.Terminal;
         const fs = yield* FileSystem.FileSystem;
         const path = yield* Path.Path;
-        const yarn = Command.make("yarn", "add", "nativewind", "react-native-reanimated@~3.17.4", "react-native-safe-area-context@5.4.0", "@wix/sdk", "@wix/data", "expo-standard-web-crypto").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
+        const yarn = Command.make("yarn", "add", "nativewind", "react-native-reanimated@~3.17.4", "react-native-safe-area-context@5.4.0", "@wix/sdk", "@wix/data", "expo-standard-web-crypto", "effect").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
         Command.exitCode // Get the exit code
         );
         const yarnDev = Command.make("yarn", "add", "--dev", "tailwindcss@^3.4.17", "prettier-plugin-tailwindcss@^0.5.11", "@styled/typescript-styled-plugin", "typescript-eslint-language-service", "eslint-config-prettier", "eslint-plugin-jsdoc", "eslint-plugin-named-import-spacing", "eslint-plugin-only-warn", "eslint-plugin-react", "eslint-plugin-react-hooks", "eslint-plugin-simple-import-sort", "@next/eslint-plugin-next", "@styled/typescript-styled-plugin", "@stylelint/postcss-css-in-js", "@typescript-eslint/parser", "typescript-eslint", "typescript-eslint-language-service", "@total-typescript/ts-reset").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout

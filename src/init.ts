@@ -207,7 +207,8 @@ const init_expo = () => {
                 "react-native-safe-area-context@5.4.0",
                 "@wix/sdk",
                 "@wix/data",
-                "expo-standard-web-crypto"
+                "expo-standard-web-crypto",
+                "effect"
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
             Command.exitCode // Get the exit code
