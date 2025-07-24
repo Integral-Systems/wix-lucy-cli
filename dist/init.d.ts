@@ -1,8 +1,4 @@
-import { ModuleSettings, ProjectSettings } from './index.js';
-/**
- * Init Lucy project
- * @param {string} cwd Current working directory
- * @param {string} packageRoot Package root directory
- * @returns {void}
- */
-export declare function init(moduleSettings: ModuleSettings, projectSettings: ProjectSettings): Promise<void>;
+import { Effect } from "effect/index";
+import { Config } from "./config.js";
+import { Terminal, FileSystem, Path } from "@effect/platform";
+export declare const init: () => Effect.Effect<void, string | import("@effect/platform/Error").PlatformError, Config | Terminal.Terminal | FileSystem.FileSystem | Path.Path | import("@effect/platform/CommandExecutor").CommandExecutor>;
