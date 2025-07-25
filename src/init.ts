@@ -195,9 +195,6 @@ const init_expo = () => {
         const fs = yield* FileSystem.FileSystem;
         const path = yield* Path.Path;
 
-        const resolutions = {
-            "@wix/sdk@1.15.24": "patch:@wix/sdk@npm:1.15.24#./patches/@wix-sdk-npm-1.15.24-1adbec98e9.patch",
-        }
         const yarn = Command.make(
                 "yarn",
                 "add",
@@ -211,6 +208,16 @@ const init_expo = () => {
                 "node-libs-react-native",
                 "util",
                 "events",
+                "tailwindcss-animate",
+            ).pipe(
+            Command.stdout("inherit"), // Stream stdout to process.stdout
+            Command.exitCode // Get the exit code
+        )
+        const yarnVersion = Command.make(
+                "yarn",
+                "set",
+                "version",
+                "berry"
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
             Command.exitCode // Get the exit code
@@ -254,6 +261,10 @@ const init_expo = () => {
                 "clsx",
                 "tailwind-merge",
                 "expo-crypto",
+                "react-dom", 
+                "react-native-web", 
+                "@expo/metro-runtime",
+                "expo-system-ui"
             ).pipe(
                 Command.stdout("inherit"), // Stream stdout to process.stdout
                 Command.exitCode // Get the exit code
@@ -281,7 +292,7 @@ const init_expo = () => {
         if(nonGitFiles.length > 0) return yield* Effect.logError("The current directory is not empty. Please run this command in an empty directory.");
     
         if(!expoAppReady) {
-            const initExpo = Command.make("npx", "create-expo-app@latest", projectName).pipe(
+            const initExpo = Command.make("npx", "create-expo-app@latest", projectName, "--template", "blank-typescript", "--no-install").pipe(
                 Command.stdout("inherit"), // Stream stdout to process.stdout
                 Command.exitCode // Get the exit code
             )
@@ -299,21 +310,11 @@ const init_expo = () => {
         }            
         if(lucyInitialized) return yield* Effect.logError("Lucy is already initialized in this project. Please run this command in an empty directory.");
 
-        console.log("Expo project initialized with app.json:", projectName);
-
         const baseFiles = yield* fs.readDirectory(config.config.filesFolder + '/expo')
         yield* Effect.forEach(
             baseFiles,
             (file) => fs.copy(path.join(config.config.filesFolder, 'expo', file), path.join(config.config.cwd, file), { overwrite: true })
         )
-
-        let res = yield* npx
-        res = yield* yarn
-        res = yield* yarnDev
-
-        if (res !== 0) {
-            return yield* Effect.logError("Failed to install Expo dependencies. Please check the error message above.");
-        }
 
         const newScripts = {
             "dev": "expo start",
@@ -323,12 +324,15 @@ const init_expo = () => {
             "web": "expo start --web",
             "reset": "tsx ./scripts/reset-project.ts",
             "format": "prettier --write \"./*.json\" \"**/*.{ts,tsx,md,json,jsonc,json5}\"",
+            "prebuild": "expo prebuild",
+            "pods": "npxpod-install",
             "build:dev": "eas build --local --profile development",
-            "build:sim": "eas build --local --profile simulator",
+            "build:sim": "eas build --local --profile ios-simulator",
             "build:prev": "eas build --local --profile preview",
             "build:prod": "eas build --local --profile production",
             "build:web": "expo export --platform web",
-            "doctor": "expo-doctor"
+            "doctor": "expo-doctor",
+            "eas-build-pre-install": "corepack enable && yarn set version 4"
         }
 
         const packageJsonPath = path.join(config.config.cwd, "package.json")
@@ -341,7 +345,6 @@ const init_expo = () => {
         };
         packageJson.resolutions = {
             ...packageJson.resolutions,
-            ...resolutions,
         };
         packageJson.expo = {
             doctor: {
@@ -354,11 +357,23 @@ const init_expo = () => {
         yield* fs.writeFileString(path.join(config.config.cwd, 'package.json'), JSON.stringify(packageJson, null, 2));
         yield* fs.remove(path.join(config.config.cwd, "package-lock.json"), { force: true })
 
-        yield* Command.make("yarn").pipe(
-            Command.stdout("inherit"), // Stream stdout to process.stdout
-            Command.exitCode // Get the exit code
-        )
 
+        let res = yield* yarnVersion;
+        if (res !== 0) {
+            return yield* Effect.logError("Failed to set Yarn version. Please check the error message above.");
+        }
+        res = yield* yarn
+        if (res !== 0) {
+            return yield* Effect.logError("Failed to install dependencies. Please check the error message above.");
+        }
+        res = yield* yarnDev
+        if (res !== 0) {
+            return yield* Effect.logError("Failed to install dev dependencies. Please check the error message above.");
+        }
+        res = yield* npx
+        if (res !== 0) {
+            return yield* Effect.logError("Failed to install Expo dependencies. Please check the error message above.");
+        }
     })
 }
 
