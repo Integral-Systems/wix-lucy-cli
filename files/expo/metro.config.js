@@ -27,7 +27,6 @@ const config = (() => {
 	// config.resolver.unstable_conditionsByPlatform = ['ios', 'android']
 config.resolver.resolveRequest = (context, moduleName, platform) => {
 	if (platform === 'web') {
-		console.log('Resolving for web:', moduleName);
 		// Check if the module name is in our alias map
 		const alias = ALIASES_WEB[moduleName];
 		if (alias) {

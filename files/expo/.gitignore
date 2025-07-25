@@ -44,3 +44,5 @@ app-example
 *.apk
 *.aab
 *.tar.gz
+.env
+!.yarn/releases

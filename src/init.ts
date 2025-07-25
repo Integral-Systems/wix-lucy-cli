@@ -325,7 +325,7 @@ const init_expo = () => {
             "reset": "tsx ./scripts/reset-project.ts",
             "format": "prettier --write \"./*.json\" \"**/*.{ts,tsx,md,json,jsonc,json5}\"",
             "prebuild": "expo prebuild",
-            "pods": "npxpod-install",
+            "pods": "npx pod-install",
             "build:dev": "eas build --local --profile development",
             "build:sim": "eas build --local --profile ios-simulator",
             "build:prev": "eas build --local --profile preview",
