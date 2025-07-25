@@ -358,11 +358,11 @@ const init_expo = () => {
         yield* fs.remove(path.join(config.config.cwd, "package-lock.json"), { force: true })
 
 
-        let res = yield* yarnVersion;
-        if (res !== 0) {
-            return yield* Effect.logError("Failed to set Yarn version. Please check the error message above.");
-        }
-        res = yield* yarn
+        // let res = yield* yarnVersion;
+        // if (res !== 0) {
+        //     return yield* Effect.logError("Failed to set Yarn version. Please check the error message above.");
+        // }
+        let res = yield* yarn
         if (res !== 0) {
             return yield* Effect.logError("Failed to install dependencies. Please check the error message above.");
         }
