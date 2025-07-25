@@ -1,10 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // https://docs.expo.dev/guides/using-eslint/
-const { defineConfig } = require('eslint/config');
-const expoConfig = require('eslint-config-expo/flat');
-
 import eslint from '@eslint/js';
+import expoConfig from 'eslint-config-expo/flat.js';
 // @ts-ignore
-import importPlugin from 'eslint-plugin-import';
 import jsdoc from 'eslint-plugin-jsdoc';
 import namedImportSpacing from 'eslint-plugin-named-import-spacing';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -13,31 +11,28 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
 	eslint.configs.recommended,
+	// eslint-disable-next-line import/no-named-as-default-member
 	tseslint.configs.recommendedTypeChecked,
 	jsdoc.configs['flat/recommended-typescript'],
-  expoConfig,
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	expoConfig,
 	{
 		ignores: ['dist/*'],
 	},
 	{
 		plugins: {
-			'@typescript-eslint': tseslint.plugin,
 			'simple-import-sort': simpleImportSort,
-			import: importPlugin,
 			'named-import-spacing': namedImportSpacing,
-			jsdoc,
 		},
 		settings: {
 			'import/resolver': {
 				typescript: {
-					project: [
-						'typescript/tsconfig.json',
-						'lib/tsconfig.json'
-					],
+					project: './tsconfig.json',
 				}
 			}
 		},
 		languageOptions: {
+			// eslint-disable-next-line import/no-named-as-default-member
 			parser: tseslint.parser,
 			parserOptions: {
 				projectService: true,
@@ -99,7 +94,7 @@ export default tseslint.config(
 			'no-multi-spaces': 'error',
 			'import/newline-after-import': ['error', { count: 1 }],
 			'named-import-spacing/named-import-spacing': 2,
-			'no-unused-vars': 'warn',
+			'@typescript-eslint/no-unused-vars': 'warn',
 			'import/no-unresolved': [0],
 			'no-forbidden-relative-imports': [0],
 			'@typescript-eslint/triple-slash-reference': 'off',
@@ -119,8 +114,13 @@ export default tseslint.config(
 			'@typescript-eslint/naming-convention': [
 				'error',
 				{
-					selector: ['variable', 'function'],
-					format: ['camelCase'],
+					selector: ['variable'],
+					format: ['camelCase', 'UPPER_CASE'],
+					leadingUnderscore: 'allow',
+				},
+				{
+					selector: ['function'],
+					format: ['camelCase', 'PascalCase'],
 					leadingUnderscore: 'allow',
 				},
 				{
@@ -174,10 +174,6 @@ export default tseslint.config(
 				{
 					selector: 'typeLike',
 					format: ['PascalCase'],
-				},
-				{
-					selector: 'function',
-					format: ['UPPER_CASE'],
 				},
 			],
 		},

@@ -1,0 +1,20 @@
+diff --git a/build/auth/AppStrategy.js b/build/auth/AppStrategy.js
+index 36a3bbf1ef7c6e8e52f0eb3d7a20713c505ed483..1c59bf6eda0acf2a3d094a8f665a4c5f75709175 100644
+--- a/build/auth/AppStrategy.js
++++ b/build/auth/AppStrategy.js
+@@ -1,5 +1,7 @@
+ import { parsePublicKeyIfEncoded } from '../helpers.js';
+ import { getTokenInfo } from '../get-token-info.js';
++import { jwtVerify, importSPKI } from 'jose';
++
+ /**
+  * Creates an authentication strategy for Wix Apps OAuth installation process.
+  * Use this authentication strategy when making requests to Wix APIs from your Wix App backend.
+@@ -212,7 +214,6 @@ export function AppStrategy(opts) {
+             if (!opts.publicKey) {
+                 throw new Error('Missing public key. Make sure to pass it to the AppStrategy');
+             }
+-            const { jwtVerify, importSPKI } = await import('jose');
+             const publicKey = await importSPKI(parsePublicKeyIfEncoded(opts.publicKey), 'RS256');
+             const decoded = await jwtVerify(token, publicKey, verifyCallerClaims
+                 ? {

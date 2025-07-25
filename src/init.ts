@@ -187,10 +187,6 @@ import { JsonSchema } from "./schemas/index.js";
 // 		console.log(blue.underline(`🐕 => Updated file ${orange(filePath)}`));
 // 	}
 // }
-const yarn = Command.make("yarn").pipe(
-  Command.stdout("inherit"), // Stream stdout to process.stdout
-  Command.exitCode // Get the exit code
-)
 
 const init_expo = () => {
     return Effect.gen(function*() {
@@ -199,16 +195,22 @@ const init_expo = () => {
         const fs = yield* FileSystem.FileSystem;
         const path = yield* Path.Path;
 
+        const resolutions = {
+            "@wix/sdk@1.15.24": "patch:@wix/sdk@npm:1.15.24#./patches/@wix-sdk-npm-1.15.24-1adbec98e9.patch",
+        }
         const yarn = Command.make(
                 "yarn",
                 "add",
                 "nativewind",
                 "react-native-reanimated@~3.17.4",
                 "react-native-safe-area-context@5.4.0",
-                "@wix/sdk",
+                "@wix/sdk@1.15.24",
                 "@wix/data",
                 "expo-standard-web-crypto",
-                "effect"
+                "effect",
+                "node-libs-react-native",
+                "util",
+                "events",
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
             Command.exitCode // Get the exit code
@@ -236,6 +238,8 @@ const init_expo = () => {
                 "typescript-eslint",
                 "typescript-eslint-language-service",
                 "@total-typescript/ts-reset",
+                "expo-doctor",
+                "tsx",
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
             Command.exitCode // Get the exit code
@@ -297,6 +301,12 @@ const init_expo = () => {
 
         console.log("Expo project initialized with app.json:", projectName);
 
+        const baseFiles = yield* fs.readDirectory(config.config.filesFolder + '/expo')
+        yield* Effect.forEach(
+            baseFiles,
+            (file) => fs.copy(path.join(config.config.filesFolder, 'expo', file), path.join(config.config.cwd, file), { overwrite: true })
+        )
+
         let res = yield* npx
         res = yield* yarn
         res = yield* yarnDev
@@ -305,22 +315,20 @@ const init_expo = () => {
             return yield* Effect.logError("Failed to install Expo dependencies. Please check the error message above.");
         }
 
-        const baseFiles = yield* fs.readDirectory(config.config.filesFolder + '/expo')
-        yield* Effect.forEach(
-            baseFiles,
-            (file) => fs.copy(path.join(config.config.filesFolder, 'expo', file), path.join(config.config.cwd, file), { overwrite: true })
-        )
-
         const newScripts = {
             "dev": "expo start",
             "start": "expo start",
             "android": "expo start --android",
             "ios": "expo start --ios",
             "web": "expo start --web",
+            "reset": "tsx ./scripts/reset-project.ts",
             "format": "prettier --write \"./*.json\" \"**/*.{ts,tsx,md,json,jsonc,json5}\"",
-            "build:ios": "eas build --platform ios --local --profile preview",
-            "build:android": "eas build --platform android --local --profile preview",
-            "build:web": "eas build --platform web --local --profile preview",
+            "build:dev": "eas build --local --profile development",
+            "build:sim": "eas build --local --profile simulator",
+            "build:prev": "eas build --local --profile preview",
+            "build:prod": "eas build --local --profile production",
+            "build:web": "expo export --platform web",
+            "doctor": "expo-doctor"
         }
 
         const packageJsonPath = path.join(config.config.cwd, "package.json")
@@ -329,10 +337,27 @@ const init_expo = () => {
 
         packageJson.scripts = {
             ...packageJson.scripts,
-            ...newScripts
+            ...newScripts,
         };
+        packageJson.resolutions = {
+            ...packageJson.resolutions,
+            ...resolutions,
+        };
+        packageJson.expo = {
+            doctor: {
+                reactNativeDirectoryCheck: {
+                    listUnknownPackages: false,
+                },
+            }
+        }
+
         yield* fs.writeFileString(path.join(config.config.cwd, 'package.json'), JSON.stringify(packageJson, null, 2));
         yield* fs.remove(path.join(config.config.cwd, "package-lock.json"), { force: true })
+
+        yield* Command.make("yarn").pipe(
+            Command.stdout("inherit"), // Stream stdout to process.stdout
+            Command.exitCode // Get the exit code
+        )
 
     })
 }

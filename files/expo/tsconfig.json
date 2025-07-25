@@ -1,30 +1,29 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-        "strict": true,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "alwaysStrict": false,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "strictNullChecks": true,
-        "exactOptionalPropertyTypes": true,
-        "strictBindCallApply": true,
-        "strictFunctionTypes": true,
-        "strictPropertyInitialization": true,
-
-        // --- Advanced ---
-        "preserveConstEnums": true,
-        "plugins": [
-            {
-                "name": "@styled/typescript-styled-plugin"
-            },
-            {
-                "name": "typescript-eslint-language-service"
-            },
-        ],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "alwaysStrict": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    // --- Advanced ---
+    "preserveConstEnums": true,
+    "plugins": [
+      {
+        "name": "@styled/typescript-styled-plugin"
+      },
+      {
+        "name": "typescript-eslint-language-service"
+      }
+    ],
     "paths": {
       "@/*": [
         "./*"
@@ -35,6 +34,12 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "nativewind-env.d.ts",
+    "metro.config.js",
+    "eslint.config.mjs",
+    "tailwind.config.js",
+    "babel.config.js",
+    ".prettierrc.js",
   ]
 }

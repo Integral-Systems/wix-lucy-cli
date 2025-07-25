@@ -1,5 +1,5 @@
 
-import { polyfillWebCrypto } from "expo-standard-web-crypto";
+import { polyfillWebCrypto } from 'expo-standard-web-crypto';
 // import { Platform } from 'react-native';
 // // import polyfill from 'react-native-polyfill-globals';
 // import { TextDecoder, TextEncoder } from "text-encoding";
