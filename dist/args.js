@@ -9,6 +9,10 @@ export async function get_args() {
             choices: ['velo', 'expo', 'blocks'],
             demandOption: true, // Makes this positional argument required
         });
+    }).option('force', {
+        alias: 'f',
+        type: 'boolean',
+        description: 'Run with force'
     })
         // Enforce that a command must be provided (e.g., 'init')
         .demandCommand(1, 'You need to provide a command. Use --help for a list of commands.')

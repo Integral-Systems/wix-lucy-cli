@@ -1,7 +1,10 @@
-import { Context, Layer } from "effect";
+import { Context, Layer, Schema } from "effect";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync, existsSync } from "fs";
+import { lucySettings } from "./schemas/lucy.js";
+import { logger } from "./utils/logger.js";
+import os from 'os';
 export class Config extends Context.Tag("Config")() {
 }
 // In an ES module, `__dirname` is not available by default.
@@ -14,7 +17,9 @@ const __dirname = dirname(__filename);
 const packageRoot = join(__dirname, "..");
 export const ConfigLayer = (args) => {
     let packageJson = '{}';
+    let lucyJson = undefined;
     const packageJsonPath = join(process.cwd(), 'package.json');
+    const lucyJsonPath = join(process.cwd(), 'lucy.json');
     try {
         if (existsSync(packageJsonPath)) {
             const raw = readFileSync(packageJsonPath, 'utf-8');
@@ -22,7 +27,16 @@ export const ConfigLayer = (args) => {
         }
     }
     catch (error) {
-        console.error("Error reading package.json:", error);
+        logger.error("Error reading package.json:", error);
+    }
+    try {
+        if (existsSync(lucyJsonPath)) {
+            const raw = readFileSync(lucyJsonPath, 'utf-8');
+            lucyJson = Schema.decodeUnknownSync(lucySettings)(JSON.parse(raw));
+        }
+    }
+    catch (error) {
+        logger.error("Error reading lucy.json:", error);
     }
     return Layer.succeed(Config, Config.of({
         config: {
@@ -30,10 +44,24 @@ export const ConfigLayer = (args) => {
                 type: args.type,
                 action: args._[0]
             },
+            force: args.force === true ? true : false,
             cwd: process.cwd(),
+            projectName: process.cwd().split('/').pop() || 'lucy-project',
             packageRoot: packageRoot,
             filesFolder: join(packageRoot, 'files'),
-            packageJson
+            packageJson,
+            lucyHome: join(os.homedir(), '.lucy-cli'),
+            lucySettings: lucyJson || {
+                modules: {},
+                // veloSettings: null,
+                devDependencies: {},
+                dependencies: {},
+                scripts: {},
+                initialized: false,
+                type: args.type || 'velo',
+            },
+            templateFiles: '',
+            templateDir: ''
         }
     }));
 };

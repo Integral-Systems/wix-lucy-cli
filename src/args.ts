@@ -9,7 +9,7 @@ export interface LucyArgs {
     _: (string | number)[];
     $0: string;
     // Arguments for the 'init' command
-    type?: 'velo' | 'expo' | 'blocks';
+    type?: 'velo' | 'expo' | 'blocks' | 'monorepo' | 'tauri' | 'cargo';
 }
 
 export async function get_args(): Promise<LucyArgs> {
@@ -21,6 +21,10 @@ export async function get_args(): Promise<LucyArgs> {
                 choices: ['velo', 'expo', 'blocks'] as const,
                 demandOption: true, // Makes this positional argument required
             });
+        }).option('force', {
+            alias: 'f',
+            type: 'boolean',
+            description: 'Run with force'
         })
         // Enforce that a command must be provided (e.g., 'init')
         .demandCommand(1, 'You need to provide a command. Use --help for a list of commands.')

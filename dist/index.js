@@ -4,7 +4,7 @@ import { build_runtime } from "./runtime.js";
 import { get_args } from "./args.js";
 import 'dotenv/config';
 import { Config } from "./config.js";
-import { init } from "./init.js";
+import { init } from "./init/index.js";
 const lucyCLI = pipe(Effect.gen(function* (_) {
     const config = yield* Config;
     config.config.action.type;

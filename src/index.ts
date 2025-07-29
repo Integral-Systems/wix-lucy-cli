@@ -5,7 +5,7 @@ import { get_args } from "./args.js";
 import 'dotenv/config'
 import { Config } from "./config.js";
 import { ServiceInspectState } from "./states.js";
-import { init } from "./init.js";
+import { init } from "./init/index.js";
 
 
 const lucyCLI = pipe(
