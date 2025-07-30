@@ -9,3 +9,4 @@ export const copyFileSync = Effect.gen(function* () {
     const templateFiles = yield* fs.readDirectory(config.config.templateFiles);
     yield* Effect.forEach(templateFiles, (file) => fs.copy(path.join(config.config.templateFiles, file), path.join(config.config.cwd, file), { overwrite: true }));
 });
+//# sourceMappingURL=copy.js.map

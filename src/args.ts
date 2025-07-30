@@ -20,7 +20,7 @@ export async function get_args(): Promise<LucyArgs> {
                 describe: 'The type of project to initialize',
                 choices: ['velo', 'expo', 'blocks'] as const,
                 demandOption: true, // Makes this positional argument required
-            });
+            })
         }).option('force', {
             alias: 'f',
             type: 'boolean',

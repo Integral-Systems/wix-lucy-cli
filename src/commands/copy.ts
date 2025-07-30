@@ -9,8 +9,8 @@ export const copyFileSync = Effect.gen(function*() {
     const path = yield * Path.Path;
 
     const templateFiles = yield* fs.readDirectory(config.config.templateFiles)
-        yield* Effect.forEach(
-            templateFiles,
-            (file) => fs.copy(path.join(config.config.templateFiles, file), path.join(config.config.cwd, file), { overwrite: true })
-        )
+    yield* Effect.forEach(
+        templateFiles,
+        (file) => fs.copy(path.join(config.config.templateFiles, file), path.join(config.config.cwd, file), { overwrite: true })
+    )
 })

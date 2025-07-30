@@ -25,3 +25,4 @@ export async function get_args() {
     // The cast is now safer with the defined interface.
     return argv;
 }
+//# sourceMappingURL=args.js.map

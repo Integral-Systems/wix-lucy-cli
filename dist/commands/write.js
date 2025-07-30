@@ -13,3 +13,4 @@ export const writePackageJson = Effect.gen(function* (_) {
     const config = yield* Config;
     yield* fs.writeFileString(path.join(config.config.cwd, "package.json"), JSON.stringify(config.config.packageJson, null, 2));
 });
+//# sourceMappingURL=write.js.map

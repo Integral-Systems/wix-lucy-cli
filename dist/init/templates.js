@@ -15,9 +15,9 @@ export const selectTemplate = () => {
         const templatesPath = join(config.config.lucyHome, 'templates');
         const files = yield* Effect.tryPromise({
             try: () => fsp.readdir(templatesPath, { withFileTypes: true }),
-            catch: () => {
+            catch: (e) => {
                 console.log((`💩 ${red.underline.bold("=> Templates folder not found at =>")} ${orange(templatesPath)}`));
-                return [];
+                return new AppError({ cause: e, message: 'Templates folder not found' });
             }
         });
         const templateChoices = [];
@@ -91,3 +91,4 @@ export const selectTemplate = () => {
         logger.success(`Selected template: ${green(selectedTemplate.template)}`);
     });
 };
+//# sourceMappingURL=templates.js.map

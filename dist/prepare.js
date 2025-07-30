@@ -18,3 +18,4 @@
 // 	await gitInit(moduleSettings.targetFolder, projectSettings?.lucySettings?.modules, moduleSettings.force);
 // 	console.log(chalk.greenBright.underline('🐶 => Prepare done!'));
 // }
+//# sourceMappingURL=prepare.js.map

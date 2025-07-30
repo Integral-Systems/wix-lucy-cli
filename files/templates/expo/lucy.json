@@ -18,8 +18,7 @@
     "typescript-eslint": "",
     "@total-typescript/ts-reset": "",
     "expo-doctor": "",
-    "tsx": "",
-    "tailwindcss-animate": ""
+    "tsx": ""
   },
   "dependencies": {
     "nativewind": "",

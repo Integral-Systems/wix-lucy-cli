@@ -14,6 +14,7 @@
         "declaration": true,
         "strict": true,
         "noEmitOnError": false,
+        "sourceMap": true,
         "strictNullChecks": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,

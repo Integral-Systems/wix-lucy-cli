@@ -195,7 +195,7 @@ export const init = () => {
     return Effect.gen(function* (_) {
         const config = yield* Config;
         if(config.config.action.type === undefined) {
-            return yield* Effect.fail("No Params Provided");
+            return yield* Effect.fail(new AppError({ message: "No action type provided", cause: new Error("No action type provided") }));
         }
         yield* createLucyHome();
         const projectName = config.config.cwd.split('/').pop() || 'expo-project';
@@ -223,5 +223,32 @@ export const init = () => {
             return yield* init_expo();
         }
 
+        yield* Effect.fail(new AppError({ message: `Unsupported action type: ${config.config.action.type}`, cause: new Error(`Unsupported action type: ${config.config.action.type}`) }));
     })
+}
+
+const test = () => {
+    return Effect.gen(function*() {
+        const config = yield* Config;
+        if(config.config.action.type === undefined) {
+            return yield* Effect.fail(new Error("No action type provided"));
+        }
+        yield* createLucyHome();
+        const projectName = config.config.cwd.split('/').pop() || 'expo-project';
+
+        const templateQuestion = new Enquirer();
+        const choice = yield* Effect.tryPromise({
+            try: () => templateQuestion.prompt({
+                type: 'input',
+                name: 'projectName',
+                message: 'Enter a project name',
+                initial: projectName,
+                validate: (value: string) => value.trim() !== '' ? true : 'Project name cannot be empty'
+            }),
+            catch: (e) => {
+                return new AppError({ cause: e, message: 'Error selecting template' });
+            }
+        })
+    });
+
 }

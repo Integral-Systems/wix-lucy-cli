@@ -17,3 +17,4 @@ export const execCommand = Effect.gen(function* () {
         ]);
     }
 });
+//# sourceMappingURL=exec.js.map

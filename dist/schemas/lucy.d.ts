@@ -7,13 +7,13 @@ export declare const lucySettings: Schema.Struct<{
         noCompile: Schema.optional<typeof Schema.Boolean>;
     }>>;
     veloSettings: Schema.optional<Schema.NullOr<Schema.Struct<{
-        compilerOptions: Schema.NullOr<Schema.Struct<{
+        compilerOptions: Schema.optional<Schema.Struct<{
             composite: typeof Schema.Boolean;
             noEmit: typeof Schema.Boolean;
             lib: Schema.Array$<typeof Schema.String>;
             jsx: typeof Schema.String;
         }>>;
-        exclude: Schema.NullOr<Schema.Array$<typeof Schema.String>>;
+        exclude: Schema.optional<Schema.Array$<typeof Schema.String>>;
     }>>>;
     initialized: typeof Schema.Boolean;
     type: Schema.Literal<["velo", "expo", "tauri", "monorepo", "blocks", "cargo"]>;

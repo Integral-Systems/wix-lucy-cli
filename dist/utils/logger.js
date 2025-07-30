@@ -34,3 +34,4 @@ export const logger = {
         console.log("🔪" + red.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
     }
 };
+//# sourceMappingURL=logger.js.map

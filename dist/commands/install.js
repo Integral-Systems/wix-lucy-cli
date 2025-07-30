@@ -35,3 +35,4 @@ export const installPackages = Effect.gen(function* () {
         return logger.error("Failed to install dev dependencies. Please check the error message above.");
     }
 });
+//# sourceMappingURL=install.js.map

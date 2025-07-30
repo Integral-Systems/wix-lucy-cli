@@ -10,13 +10,13 @@ export const lucySettings = Schema.Struct({
         })
     }),
     veloSettings: Schema.optional(Schema.NullOr(Schema.Struct({
-        compilerOptions: Schema.NullOr(Schema.Struct({
+        compilerOptions: Schema.optional(Schema.Struct({
             composite: Schema.Boolean,
             noEmit: Schema.Boolean,
             lib: Schema.Array(Schema.String),
             jsx: Schema.String,
         })),
-        exclude: Schema.NullOr(Schema.Array(Schema.String)),
+        exclude: Schema.optional(Schema.Array(Schema.String)),
     }))),
     initialized: Schema.Boolean,
     type: Schema.Literal("velo", 'expo', 'tauri', 'monorepo', 'blocks', 'cargo'),
@@ -35,3 +35,4 @@ export const lucySettings = Schema.Struct({
     additionalCommands: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
     additionalPkgProps: Schema.optional(Schema.Object),
 });
+//# sourceMappingURL=lucy.js.map

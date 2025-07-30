@@ -16,3 +16,4 @@ export const init_expo = () => Effect.gen(function* () {
         yield* Effect.logError(`Command "${command}" produced stderr: ${res.stderr}`);
     }
 });
+//# sourceMappingURL=commands.js.map

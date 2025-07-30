@@ -10,6 +10,7 @@ import { copyFileSync } from "../commands/copy.js";
 import { readPackageJson } from "../commands/read.js";
 import { execCommand } from "../commands/exec.js";
 import { installPackages } from "../commands/install.js";
+import { AppError } from "../error.js";
 
 export const init_expo = () => {
     return Effect.gen(function*() {
@@ -27,10 +28,14 @@ export const init_expo = () => {
 
         const clean = yield* isDirectoryClean()
         if(!clean && !config.config.force) {
-            return logger.alert("The current directory is not empty. Please run this command in an empty directory.")
+            logger.alert("The current directory is not empty. Please run this command in an empty directory.")
+            yield* Effect.fail(new AppError({ message: "Directory is not clean", cause: new Error("Directory is not clean") }));
+            return;
         }
         if(config.config.lucySettings.initialized && !config.config.force) {
-            return logger.alert("Lucy is already initialized in this directory. Use --force to reinitialize.")
+            logger.alert("Lucy is already initialized in this directory. Use --force to reinitialize.")
+            yield* Effect.fail(new AppError({ message: "Lucy is already initialized in this directory", cause: new Error("Lucy is already initialized in this directory") }));
+            return;
         }
         if ((!clean && config.config.force) || (config.config.lucySettings.initialized && config.config.force)) logger.alert("Forced initialization!")
 
@@ -40,7 +45,7 @@ export const init_expo = () => {
                 Command.exitCode
             )
             if((yield* initExpo) !== 0) {
-                yield* Effect.fail("Failed to initialize Expo project. Please check the error message above.");
+                yield* Effect.fail(new AppError({ message: "Failed to initialize Expo project. Please check the error message above.", cause: new Error("Failed to initialize Expo project") }));
             }
 
             const tempPath = path.join(config.config.cwd, config.config.projectName)

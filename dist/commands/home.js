@@ -15,3 +15,4 @@ export const createLucyHome = () => {
         yield* Effect.forEach(templateFiles, (file) => fs.copy(path.join(config.config.filesFolder, file), path.join(config.config.lucyHome, file), { overwrite: true }));
     });
 };
+//# sourceMappingURL=home.js.map

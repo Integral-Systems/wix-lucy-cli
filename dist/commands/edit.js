@@ -31,3 +31,4 @@ export const mergeAdditions = Effect.gen(function* () {
         ...lucySettings.additionalPkgProps,
     };
 });
+//# sourceMappingURL=edit.js.map
