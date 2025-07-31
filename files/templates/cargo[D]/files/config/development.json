@@ -1,0 +1,10 @@
+{
+  "$schema": "schema.json",
+  "message": "Wellcome",
+  "app": {
+    "frontend_dir": "../app/dist"
+  },
+  "product": {
+    "name": "Wiicle(DEV)"
+  }
+}

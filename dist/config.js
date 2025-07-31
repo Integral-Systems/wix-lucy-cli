@@ -38,11 +38,18 @@ export const ConfigLayer = (args) => {
     catch (error) {
         logger.error("Error reading lucy.json:", error);
     }
+    const defaultModulePath = () => {
+        if (args.type === 'monorepo') {
+            return join('packages');
+        }
+        return '';
+    };
     return Layer.succeed(Config, Config.of({
         config: {
             action: {
                 type: args.type,
-                action: args._[0]
+                action: args._[0],
+                task: args.task,
             },
             force: args.force === true ? true : false,
             cwd: process.cwd(),
@@ -53,7 +60,6 @@ export const ConfigLayer = (args) => {
             lucyHome: join(os.homedir(), '.lucy-cli'),
             lucySettings: lucyJson || {
                 modules: {},
-                // veloSettings: null,
                 devDependencies: {},
                 dependencies: {},
                 scripts: {},
@@ -61,7 +67,8 @@ export const ConfigLayer = (args) => {
                 type: args.type || 'velo',
             },
             templateFiles: '',
-            templateDir: ''
+            templateDir: '',
+            defaultModuleBasePath: defaultModulePath(),
         }
     }));
 };

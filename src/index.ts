@@ -8,18 +8,29 @@ import { ServiceInspectState } from "./states.js";
 import { init } from "./init/index.js";
 import { logger } from "./utils/logger.js";
 import { AppError } from "./error.js";
-
+import { open } from "./commands/exec.js";
+import { runTask } from "./tasks/Gulpfile.js";
+import { tasks } from "./tasks/index.js";
 
 const lucyCLI = pipe(
     Effect.gen(function* (_) {
         const config = yield* Config; 
+        const t = Config; 
         config.config.action.type;
-        if (config.config.action.type === undefined) {
-            return yield* Effect.fail(new AppError({ message: "No action type provided", cause: new Error("No action type provided") }));
-        }
         if (config.config.action.action === 'init') {
             return yield* init();
         }
+        if (config.config.action.action === 'open') {
+            return yield* open;
+        }
+        if (config.config.action.action === 'task') {
+            return yield* open;
+        }
+
+        if (config.config.action.action === 'task') {
+            return yield* tasks();
+        }
+
     }),
 ).pipe(
     Effect.catchTags({

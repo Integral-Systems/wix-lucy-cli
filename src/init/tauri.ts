@@ -1,0 +1,40 @@
+import { Effect, Schema } from "effect/index"
+import { logger } from "../utils/logger.js";
+import { writeLucySettings } from "../commands/write.js";
+import { copyTemplateFiles } from "../commands/copy.js";
+import { gitInit } from "../commands/git.js";
+import { checkForDirty } from "../commands/checks.js";
+import { setInitialized } from "../commands/edit.js";
+import { Config } from "../config.js";
+import { Command, FileSystem, Path } from "@effect/platform"
+import { JsonSchema } from "../schemas/index.js";
+import { AppError } from "../error.js";
+import { installPackages } from "../commands/install.js";
+import { Terminal } from "@effect/platform"
+
+export const init_tauri = () => {
+    return Effect.gen(function*() {
+        const terminal = yield* Terminal.Terminal;
+        logger.action("Initializing Tauri project...");
+
+        yield* checkForDirty();
+
+        const initTauri = Command.make("yarn", "create", "tauri-app").pipe(
+            Command.stdin("inherit"),
+            Command.stdout("inherit"),
+            Command.stderr("inherit"),
+            Command.runInShell(true),
+            Command.exitCode
+        )
+        if((yield* initTauri) !== 0) {
+            yield* Effect.fail(new AppError({ message: "Failed to initialize Tauri project. Please check the error message above.", cause: new Error("Failed to initialize Tauri project") }));
+        }
+        yield* copyTemplateFiles;
+        yield* installPackages;
+        yield* writeLucySettings;
+        yield* gitInit();
+        yield* setInitialized;
+
+        logger.success("Tauri project initialized successfully!");
+    })
+}

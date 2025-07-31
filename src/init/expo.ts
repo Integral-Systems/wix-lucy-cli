@@ -3,14 +3,15 @@ import { Config } from "../config.js";
 import { Command, FileSystem, Path } from "@effect/platform"
 import { JsonSchema } from "../schemas/index.js";
 import { logger } from "../utils/logger.js";
-import { isDirectoryClean } from "../utils/index.js";
-import { mergeAdditions, mergeLucySettings2PackageJson } from "../commands/edit.js";
+import { mergeAdditions, mergeLucySettings2PackageJson, setInitialized } from "../commands/edit.js";
 import { writeLucySettings, writePackageJson } from "../commands/write.js";
-import { copyFileSync } from "../commands/copy.js";
+import { copyTemplateFiles } from "../commands/copy.js";
 import { readPackageJson } from "../commands/read.js";
 import { execCommand } from "../commands/exec.js";
 import { installPackages } from "../commands/install.js";
 import { AppError } from "../error.js";
+import { cleanup } from "../commands/cleanup.js";
+import { checkForDirty } from "../commands/checks.js";
 
 export const init_expo = () => {
     return Effect.gen(function*() {
@@ -26,18 +27,7 @@ export const init_expo = () => {
         const appJSON = Schema.decodeUnknownSync(JsonSchema)(appJsonRaw.toString()) as any;
         const expoAppReady = appJSON.expo ? true : false;
 
-        const clean = yield* isDirectoryClean()
-        if(!clean && !config.config.force) {
-            logger.alert("The current directory is not empty. Please run this command in an empty directory.")
-            yield* Effect.fail(new AppError({ message: "Directory is not clean", cause: new Error("Directory is not clean") }));
-            return;
-        }
-        if(config.config.lucySettings.initialized && !config.config.force) {
-            logger.alert("Lucy is already initialized in this directory. Use --force to reinitialize.")
-            yield* Effect.fail(new AppError({ message: "Lucy is already initialized in this directory", cause: new Error("Lucy is already initialized in this directory") }));
-            return;
-        }
-        if ((!clean && config.config.force) || (config.config.lucySettings.initialized && config.config.force)) logger.alert("Forced initialization!")
+        yield* checkForDirty();
 
         if(!expoAppReady) {
             const initExpo = Command.make("npx", "create-expo-app@latest", config.config.projectName, "--template", "blank-typescript", "--no-install").pipe(
@@ -64,9 +54,13 @@ export const init_expo = () => {
         yield* mergeAdditions;
         yield* writeLucySettings;
         yield* writePackageJson;
-        yield* copyFileSync;
+        yield* copyTemplateFiles;
         yield* execCommand;
         yield* installPackages;
-        yield* fs.remove(path.join(config.config.cwd, "package-lock.json"), { force: true })
+        yield* cleanup;
+        yield* setInitialized;
+        
+        logger.success("Expo project initialized successfully!");
+
     })
 }

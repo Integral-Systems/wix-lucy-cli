@@ -6,13 +6,8 @@ import { readFileSync, existsSync } from "fs";
 import { lucySettings, LucySettings } from "./schemas/lucy.js";
 import { logger } from "./utils/logger.js";
 import os from 'os';
+import { Action, Actions } from "./schemas/types.js";
 
-type Action = 'init';
-
-type Actions = {
-    action: Action;
-    type: 'velo' | 'expo' | 'blocks' | 'monorepo' | 'tauri'| 'cargo' | undefined;
-}
 export class Config extends Context.Tag("Config")<
     Config,
     {
@@ -28,9 +23,13 @@ export class Config extends Context.Tag("Config")<
             templateDir: string;
             templateFiles: string;
             projectName: string;
+            defaultModuleBasePath: string;
         }
     }
 >() {}
+
+// or, if you want just the inner config object:
+export type LucyConfig = typeof Config.Service["config"];
 
 // In an ES module, `__dirname` is not available by default.
 // We can replicate it using `import.meta.url`.
@@ -63,13 +62,20 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
     } catch (error) {
         logger.error("Error reading lucy.json:", error);
     }
+    const defaultModulePath = () => {
+        if (args.type === 'monorepo') {
+            return join('packages');
+        }
+        return '';
+    }
     return Layer.succeed(
         Config,
         Config.of({
             config: {
                 action: {
                     type: args.type,
-                    action: args._[0] as Action
+                    action: args._[0],
+                    task: args.task,
                 },
                 force: args.force === true ? true : false,
                 cwd: process.cwd(),
@@ -80,7 +86,6 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
                 lucyHome: join(os.homedir(), '.lucy-cli'),
                 lucySettings: lucyJson || {
                     modules: {},
-                    // veloSettings: null,
                     devDependencies: {},
                     dependencies: {},
                     scripts: {},
@@ -88,7 +93,8 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
                     type: args.type || 'velo',
                 },
                 templateFiles: '',
-                templateDir: ''
+                templateDir: '',
+                defaultModuleBasePath: defaultModulePath(),
             }
         })
     );

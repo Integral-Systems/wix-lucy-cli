@@ -1,0 +1,45 @@
+{
+  "modules": {
+    "lucy-typescript-config": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-typescript-config.git",
+      "branch": "1.0.0"
+    },
+    "lucy-eslint-config": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-eslint-config.git",
+      "branch": "1.0.0"
+    },
+    "lucy-i18n": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-i18n.git",
+      "branch": "1.0.0"
+    },
+    "lucy-error": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-error.git",
+      "branch": "1.0.0"
+    },
+    "lucy-cypress": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-cypress.git",
+      "branch": "1.0.0"
+    },
+    "lucy-vitest-config": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-vitest-config.git",
+      "branch": "1.0.0"
+    },
+    "lucy-schema-lib": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-schema-lib.git",
+      "branch": "1.0.0"
+    },
+    "lucy-frontend-lib": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-frontend-lib.git",
+      "branch": "1.0.0"
+    },
+    "lucy-backend-lib": {
+      "source": "git@github.com:Sunnyside-UP-GmbH/lucy-backend-lib.git",
+      "branch": "1.0.0"
+    }
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "scripts": {},
+  "initialized": false,
+  "type": "monorepo"
+}

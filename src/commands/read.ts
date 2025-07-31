@@ -4,7 +4,6 @@ import { Config } from "../config.js";
 import { JsonSchema } from "../schemas/index.js";
 import { lucySettings } from "../schemas/lucy.js";
 import { logger } from "../utils/logger.js";
-import { AppError } from "../error.js";
 
 export const readPackageJson = Effect.gen(function* () {
     const config = yield* Config;

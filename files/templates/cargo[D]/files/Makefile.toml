@@ -1,0 +1,4 @@
+[tasks.build]
+command = "cargo"
+args = ["build"]
+dependencies = ["clean"]

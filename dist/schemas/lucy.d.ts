@@ -16,7 +16,7 @@ export declare const lucySettings: Schema.Struct<{
         exclude: Schema.optional<Schema.Array$<typeof Schema.String>>;
     }>>>;
     initialized: typeof Schema.Boolean;
-    type: Schema.Literal<["velo", "expo", "tauri", "monorepo", "blocks", "cargo"]>;
+    type: Schema.Literal<["velo", "expo", "blocks", "monorepo", "tauri", "cargo", "submodules"]>;
     dependencies: Schema.Record$<typeof Schema.String, typeof Schema.String>;
     devDependencies: Schema.Record$<typeof Schema.String, typeof Schema.String>;
     scripts: Schema.Record$<typeof Schema.String, typeof Schema.String>;

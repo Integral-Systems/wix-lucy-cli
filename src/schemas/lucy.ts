@@ -1,4 +1,5 @@
 import { Schema } from "effect/index";
+import { types } from "./types.js";
 
 export const lucySettings = Schema.Struct({
 	modules: Schema.Record({
@@ -19,7 +20,7 @@ export const lucySettings = Schema.Struct({
 		exclude: Schema.optional(Schema.Array(Schema.String)),
 	}))),
 	initialized: Schema.Boolean,
-    type: Schema.Literal("velo", 'expo', 'tauri', 'monorepo', 'blocks', 'cargo'),
+    type: Schema.Literal(...types),
 	dependencies: Schema.Record({
         key: Schema.String,
         value: Schema.String,

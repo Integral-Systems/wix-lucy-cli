@@ -3,7 +3,7 @@ import { Path } from "@effect/platform"
 import { FileSystem } from "@effect/platform"
 import { Config } from "../config.js";
 
-export const copyFileSync = Effect.gen(function*() {
+export const copyTemplateFiles = Effect.gen(function*() {
     const fs = yield* FileSystem.FileSystem;
     const config = yield* Config;
     const path = yield * Path.Path;

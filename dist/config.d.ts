@@ -1,11 +1,7 @@
 import { Context, Layer } from "effect";
 import { get_args } from "./args.js";
 import { LucySettings } from "./schemas/lucy.js";
-type Action = 'init';
-type Actions = {
-    action: Action;
-    type: 'velo' | 'expo' | 'blocks' | 'monorepo' | 'tauri' | 'cargo' | undefined;
-};
+import { Actions } from "./schemas/types.js";
 declare const Config_base: Context.TagClass<Config, "Config", {
     readonly config: {
         readonly action: Actions;
@@ -19,9 +15,11 @@ declare const Config_base: Context.TagClass<Config, "Config", {
         templateDir: string;
         templateFiles: string;
         projectName: string;
+        defaultModuleBasePath: string;
     };
 }>;
 export declare class Config extends Config_base {
 }
+export type LucyConfig = typeof Config.Service["config"];
 export declare const ConfigLayer: (args: Awaited<ReturnType<typeof get_args>>) => Layer.Layer<Config, never, never>;
 export {};

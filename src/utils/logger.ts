@@ -20,10 +20,10 @@ export const logger = {
         console.log("🐕" + blue.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     exception: (message: string, ...optionalParams: any[]) => {
-        console.log("💥" + red.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
+        console.log("💥" + red(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     error: (message: string, ...optionalParams: any[]) => {
-        console.log("🛑" + red.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
+        console.log("🛑" + red(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     warning: (message: string, ...optionalParams: any[]) => {
         console.log("⚠️" + orange.underline(' => ' + message + optionalParams.map(param => ' ' + param)));

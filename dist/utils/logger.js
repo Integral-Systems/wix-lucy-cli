@@ -16,10 +16,10 @@ export const logger = {
         console.log("🐕" + blue.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     exception: (message, ...optionalParams) => {
-        console.log("💥" + red.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
+        console.log("💥" + red(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     error: (message, ...optionalParams) => {
-        console.log("🛑" + red.underline(' => ' + message + optionalParams.map(param => ' ' + param)));
+        console.log("🛑" + red(' => ' + message + optionalParams.map(param => ' ' + param)));
     },
     warning: (message, ...optionalParams) => {
         console.log("⚠️" + orange.underline(' => ' + message + optionalParams.map(param => ' ' + param)));

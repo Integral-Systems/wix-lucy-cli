@@ -1,7 +1,2 @@
-export interface LucyArgs {
-    [x: string]: unknown;
-    _: (string | number)[];
-    $0: string;
-    type?: 'velo' | 'expo' | 'blocks' | 'monorepo' | 'tauri' | 'cargo';
-}
+import { LucyArgs } from "./schemas/types.js";
 export declare function get_args(): Promise<LucyArgs>;
