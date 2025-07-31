@@ -14,12 +14,12 @@ import { Terminal } from "@effect/platform"
 
 export const init_tauri = () => {
     return Effect.gen(function*() {
-        const terminal = yield* Terminal.Terminal;
+        const config = yield* Config;
         logger.action("Initializing Tauri project...");
 
         yield* checkForDirty();
 
-        const initTauri = Command.make("yarn", "create", "tauri-app").pipe(
+        const initTauri = Command.make("yarn", "create", "tauri-app", config.config.projectName).pipe(
             Command.stdin("inherit"),
             Command.stdout("inherit"),
             Command.stderr("inherit"),

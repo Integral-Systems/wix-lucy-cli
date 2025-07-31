@@ -25,7 +25,7 @@ export const init_blocks = () => {
         const blocksAppReady = configJson.appId ? true : false;
         yield* checkForDirty();
         if (!blocksAppReady) {
-            const initBlocks = Command.make("npm", "create", "@wix/app@latest").pipe(Command.stdin("inherit"), Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode);
+            const initBlocks = Command.make("npm", "create", "@wix/app@latest", config.config.projectName).pipe(Command.stdin("inherit"), Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode);
             if ((yield* initBlocks) !== 0) {
                 yield* Effect.fail(new AppError({ message: "Failed to initialize Blocks project. Please check the error message above.", cause: new Error("Failed to initialize Blocks project") }));
             }

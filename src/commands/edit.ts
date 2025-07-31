@@ -1,7 +1,9 @@
-import { Effect } from "effect/index";
+import { Effect, Schema } from "effect/index";
 import { Config } from "../config.js";
-import { FileSystem } from "@effect/platform"
+import { FileSystem, Path } from "@effect/platform"
 import { logger } from "../utils/logger.js";
+import { JsonSchema } from "../schemas/index.js";
+import { LucySettings } from "../schemas/lucy.js";
 
 export const editJson = (json: any, keys: string[], values: string[] | Object[]) => {
     return Effect.gen(function*() {
@@ -53,7 +55,13 @@ export const setProjectName = Effect.gen(function*() {
 
 export const setInitialized = Effect.gen(function*() {
     const config = yield* Config;
-	yield * editJson(config.config.lucySettings, ["initialized"], [true]);
+    const fs = yield* FileSystem.FileSystem;
+    const path = yield* Path.Path;
+    const lucyRaw = yield* fs.readFileString(path.join(config.config.cwd, 'lucy.json'));
+    const lucyJSON = (yield* Schema.decodeUnknown(JsonSchema)(lucyRaw)) as any;
+    lucyJSON.initialized = true;
+
+    yield* fs.writeFileString(path.join(config.config.cwd, 'lucy.json'), JSON.stringify(lucyJSON, null, 2));
 })
 
 export const stringReplace = (filePath: string, keys: string[], values: string[]) => {

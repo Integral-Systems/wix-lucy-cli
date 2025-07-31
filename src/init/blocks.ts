@@ -30,7 +30,7 @@ export const init_blocks = () => {
         yield* checkForDirty();
 
         if(!blocksAppReady) {
-            const initBlocks = Command.make("npm", "create", "@wix/app@latest").pipe(
+            const initBlocks = Command.make("npm", "create", "@wix/app@latest", config.config.projectName).pipe(
                 Command.stdin("inherit"),
                 Command.stdout("inherit"),
                 Command.stderr("inherit"),
