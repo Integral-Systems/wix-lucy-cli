@@ -1,6 +1,6 @@
 import gulp from 'gulp';
-import { TaskOptions } from '../Gulpfile.js';
 import { logger } from '../../utils/logger.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 
 export function copyFiles(options: TaskOptions) {
     const folders = ['typescript', ...options.modulesSourcePaths];

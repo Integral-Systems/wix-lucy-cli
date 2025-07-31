@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import chalk from 'chalk';
-import { TaskOptions } from '../Gulpfile.js';
 import { logger, orange } from '../../utils/logger.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 
 export function compileScss(options: TaskOptions) {
     const folders = ['typescript'];

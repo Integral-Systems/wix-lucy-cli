@@ -1,2 +1,2 @@
-import { TaskOptions } from '../Gulpfile.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 export declare function buildPages(options: TaskOptions): () => any;

@@ -4,8 +4,8 @@ import { glob } from 'glob';
 import * as path from 'path';
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
-import { TaskOptions } from '../Gulpfile.js';
 import { blue, logger, red, yellow } from '../../utils/logger.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 
 // /**
 //  *  Extracts a match from a file

@@ -1,11 +1,11 @@
 import gulp from 'gulp';
-import { TaskOptions } from '../Gulpfile.js';
-import { buildBackend, buildBackendJSW } from './backend.js';
+import { buildBackend } from './backend.js';
 import { buildPublic } from './public.js';
 import { buildPages } from './pages.js';
 import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkTs } from './checks.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 let taskOptions: TaskOptions;
 
 export function watchSCSS() {
@@ -81,7 +81,7 @@ export function watchTypes() {
         '!./.wix/types/wix-code-types'
     ], 
     gulp.series(
-        'fix-wixtypes'
+        'fix-wix-types'
         )
     );
 }

@@ -10,11 +10,6 @@ export function updateWixTypes(options) {
     return () => {
         const { publicSettings, backendSettings, masterSettings, pageSettings, replaceOptions } = options;
         let count = 0;
-        const modules = Object.assign({}, options.projectSettings?.modules, options.projectSettings?.lucySettings?.modules);
-        let localModules = undefined;
-        if (options.projectSettings?.lucySettings) {
-            localModules = options.projectSettings.lucySettings.modules;
-        }
         // Add module to publicSettings
         publicSettings.compilerOptions.paths['backend/*.web'] = ["../../../typescript/backend/*.web.ts"];
         publicSettings.compilerOptions.paths['backend/*.web.js'] = ["../../../typescript/backend/*.web.ts"];
@@ -67,65 +62,63 @@ export function updateWixTypes(options) {
             // "../../../typescript/backend/**/*.web.ts",
             // "../../../typescript/backend/**/*.web"
         ];
-        if (modules) {
-            for (const [name] of Object.entries(modules)) {
-                // Add module to publicSettings
-                publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
-                publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
-                publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
-                publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
-                publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
-                publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                publicSettings.include.push(...[
-                    `../../../${name}/public/**/*`,
-                    `../../../${name}__mocks__/**/*`,
-                    // `../../../${name}/backend/**/*.jsw.ts`,
-                    // `../../../${name}/backend/**/*.web.ts`,
-                    // `../../../${name}/backend/**/*.web`
-                ]);
-                // Add module to backendSettings
-                backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                backendSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
-                backendSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
-                backendSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                backendSettings.include.push(...[
-                    `../../../${name}/public/**/*`,
-                    `../../../${name}__mocks__/**/*`,
-                    `../../../${name}/backend/**/*`,
-                    // `../../../${name}/backend/**/*.jsw.ts`,
-                    // `../../../${name}/backend/**/*.web.ts`,
-                    // `../../../${name}/backend/**/*.web`
-                ]);
-                // Add module to masterSettings
-                masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
-                masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
-                masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
-                masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
-                masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                masterSettings.include.push(...[
-                    `../../../${name}/public/**/*`,
-                    `../../../${name}__mocks__/**/*`,
-                    // `../../../${name}/backend/**/*.jsw.ts`,
-                    // `../../../${name}/backend/**/*.web.ts`,
-                    // `../../../${name}/backend/**/*.web`
-                ]);
-                // Add module to pageSettings
-                pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
-                pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
-                pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
-                pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
-                pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
-                pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
-                pageSettings.include.push(...[
-                    `../../../${name}/public/**/*`,
-                    `../../../${name}__mocks__/**/*`,
-                    // `../../../${name}/backend/**/*.jsw.ts`,
-                    // `../../../${name}/backend/**/*.web.ts`,
-                    // `../../../${name}/backend/**/*.web`
-                ]);
-            }
+        for (const name of options.modulesSourcePaths) {
+            // Add module to publicSettings
+            publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+            publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+            publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
+            publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
+            publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
+            publicSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
+            publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
+            publicSettings.include.push(...[
+                `../../../${name}/public/**/*`,
+                `../../../${name}__mocks__/**/*`,
+                // `../../../${name}/backend/**/*.jsw.ts`,
+                // `../../../${name}/backend/**/*.web.ts`,
+                // `../../../${name}/backend/**/*.web`
+            ]);
+            // Add module to backendSettings
+            backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
+            backendSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*`);
+            backendSettings.compilerOptions.paths.mocks.push(...[`../../../${name}/__mocks__/*`]);
+            backendSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
+            backendSettings.include.push(...[
+                `../../../${name}/public/**/*`,
+                `../../../${name}__mocks__/**/*`,
+                `../../../${name}/backend/**/*`,
+                // `../../../${name}/backend/**/*.jsw.ts`,
+                // `../../../${name}/backend/**/*.web.ts`,
+                // `../../../${name}/backend/**/*.web`
+            ]);
+            // Add module to masterSettings
+            masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+            masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+            masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
+            masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
+            masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
+            masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
+            masterSettings.include.push(...[
+                `../../../${name}/public/**/*`,
+                `../../../${name}__mocks__/**/*`,
+                // `../../../${name}/backend/**/*.jsw.ts`,
+                // `../../../${name}/backend/**/*.web.ts`,
+                // `../../../${name}/backend/**/*.web`
+            ]);
+            // Add module to pageSettings
+            pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts`);
+            pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts`);
+            pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts`);
+            pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts`);
+            pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*`);
+            pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*`);
+            pageSettings.include.push(...[
+                `../../../${name}/public/**/*`,
+                `../../../${name}__mocks__/**/*`,
+                // `../../../${name}/backend/**/*.jsw.ts`,
+                // `../../../${name}/backend/**/*.web.ts`,
+                // `../../../${name}/backend/**/*.web`
+            ]);
         }
         return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/**/*'])
             .pipe(flatmap(function (stream, file) {

@@ -1,5 +1,5 @@
 import gulp from 'gulp';
-import { File, TaskOptions } from '../Gulpfile.js';
+import { File, TaskOptions } from '../../schemas/gulp.js';
 import exec from 'gulp-exec';
 import { logger, orange } from '../../utils/logger.js';
 import path from 'path';

@@ -48,7 +48,7 @@ export function watchTypes() {
     return gulp.watch([
         './.wix/types/**/*.d.ts',
         '!./.wix/types/wix-code-types'
-    ], gulp.series('fix-wixtypes'));
+    ], gulp.series('fix-wix-types'));
 }
 export function watchAll(options) {
     taskOptions = options;

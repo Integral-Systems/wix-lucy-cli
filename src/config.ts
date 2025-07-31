@@ -28,9 +28,6 @@ export class Config extends Context.Tag("Config")<
     }
 >() {}
 
-// or, if you want just the inner config object:
-export type LucyConfig = typeof Config.Service["config"];
-
 // In an ES module, `__dirname` is not available by default.
 // We can replicate it using `import.meta.url`.
 const __filename = fileURLToPath(import.meta.url);

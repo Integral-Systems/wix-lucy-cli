@@ -20,6 +20,5 @@ declare const Config_base: Context.TagClass<Config, "Config", {
 }>;
 export declare class Config extends Config_base {
 }
-export type LucyConfig = typeof Config.Service["config"];
 export declare const ConfigLayer: (args: Awaited<ReturnType<typeof get_args>>) => Layer.Layer<Config, never, never>;
 export {};

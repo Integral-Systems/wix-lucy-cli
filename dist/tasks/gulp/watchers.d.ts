@@ -1,4 +1,4 @@
-import { TaskOptions } from '../Gulpfile.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 export declare function watchSCSS(): import("fs").FSWatcher;
 export declare function watchBackend(): import("fs").FSWatcher;
 export declare function watchPublic(): import("fs").FSWatcher;

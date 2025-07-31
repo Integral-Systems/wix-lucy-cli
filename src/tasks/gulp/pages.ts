@@ -1,8 +1,8 @@
 import gulp from 'gulp';
-import { TaskOptions } from '../Gulpfile.js';
 import * as path from 'path';
 import swc from 'gulp-swc';
 import { logger } from '../../utils/logger.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 
 const swcOptions = {
     jsc: {

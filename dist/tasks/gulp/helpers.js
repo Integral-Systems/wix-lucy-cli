@@ -1,10 +1,8 @@
-// export function getModulesSync(): Record<string, string> | undefined {
-//     const absolutePath = path.resolve('./lucy.json');
-//     const fileContent = fs.readFileSync(absolutePath, 'utf8') as any;
-//     return JSON.parse(fileContent).modules;
-// }
-export function getModulesSourcePaths(config) {
-    const data = config.lucySettings.modules;
+import { Effect } from 'effect/index';
+import { Config } from '../../config.js';
+export const getModulesSourcePaths = Effect.gen(function* () {
+    const config = yield* Config;
+    const data = config.config.lucySettings.modules;
     const paths = [];
     for (const module of Object.keys(data)) {
         if (!data[module].noCompile) {
@@ -17,5 +15,5 @@ export function getModulesSourcePaths(config) {
         }
     }
     return paths;
-}
+});
 //# sourceMappingURL=helpers.js.map

@@ -1,9 +1,9 @@
 import gulp from 'gulp';
 import rename from 'gulp-rename';
 import * as path from 'path';
-import { TaskOptions } from '../Gulpfile.js';
 import swc from 'gulp-swc';
 import { logger } from '../../utils/logger.js';
+import { TaskOptions } from '../../schemas/gulp.js';
 
 const swcOptions = {
     jsc: {

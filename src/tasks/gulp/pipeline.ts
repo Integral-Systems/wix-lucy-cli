@@ -1,9 +1,8 @@
 import gulp from 'gulp';
 import * as path from 'path';
-import { File } from '../Gulpfile.js';
 import replace from 'gulp-string-replace';
 import { logger } from '../../utils/logger.js';
-
+import { File } from "../../schemas/gulp.js";
 export function setProdConfig() {
     const tag = process.env.GIT_TAG || 'development';
     const regexGit = /gitTag:\s*(.*),/g;

@@ -19,13 +19,9 @@ export const tasks = () => {
             || config.config.action.task === 'build' 
             || config.config.action.task === 'build-prod'
             || config.config.action.task === 'build-pipeline'
-        ) {
-            return yield* Effect.tryPromise({
-                try: () => runTask(config.config),
-                catch: (err: any) => {
-                    return new AppError({ message: err.message, cause: err });
-                }
-            });
+        ) 
+        {
+            yield* runTask;
         }
         yield* Effect.fail(new AppError({ message: `Unsupported action type: ${config.config.action.type}`, cause: new Error(`Unsupported action type: ${config.config.action.type}`) }));
     })

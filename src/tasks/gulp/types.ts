@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import * as path from 'path';
-import { File, TaskOptions } from '../Gulpfile.js';
+import { File, TaskOptions } from '../../schemas/gulp.js';
 import replace from 'gulp-string-replace';
 import flatmap from 'gulp-flatmap';
 import jeditor from 'gulp-json-editor';
@@ -14,12 +14,7 @@ export function updateWixTypes(options: TaskOptions) {
 		const { publicSettings, backendSettings, masterSettings, pageSettings, replaceOptions } = options;
 		let count = 0;
 		
-		const modules: Record<string, string>  = Object.assign({}, options.projectSettings?.modules, options.projectSettings?.lucySettings?.modules);
 
-		let localModules: Record<string, string> | undefined = undefined;
-		if(options.projectSettings?.lucySettings) {
-			localModules = options.projectSettings.lucySettings.modules as unknown as Record<string, string>;
-		}
 		// Add module to publicSettings
 		publicSettings.compilerOptions.paths['backend/*.web'] = [ "../../../typescript/backend/*.web.ts" ] as never;
 		publicSettings.compilerOptions.paths['backend/*.web.js'] = [ "../../../typescript/backend/*.web.ts" ] as never;
@@ -74,65 +69,63 @@ export function updateWixTypes(options: TaskOptions) {
 			// "../../../typescript/backend/**/*.web"
 		] as never;
 
-		if (modules) {
-			for (const [name] of Object.entries(modules)) {
-				// Add module to publicSettings
-				publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
-				publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
-				publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
-				publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
-				publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
-				publicSettings.compilerOptions.paths.mocks.push(...[ `../../../${name}/__mocks__/*` as never ]);
-				publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
-				publicSettings.include.push(...[
-					`../../../${name}/public/**/*`, 
-					`../../../${name}__mocks__/**/*`, 
-					// `../../../${name}/backend/**/*.jsw.ts`,
-					// `../../../${name}/backend/**/*.web.ts`,
-					// `../../../${name}/backend/**/*.web`
-				] as never[]);
-				// Add module to backendSettings
-				backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
-				backendSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*` as never);
-				backendSettings.compilerOptions.paths.mocks.push(...[ `../../../${name}/__mocks__/*` ] as never[]);
-				backendSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
-				backendSettings.include.push(...[
-					`../../../${name}/public/**/*`, 
-					`../../../${name}__mocks__/**/*`, 
-					`../../../${name}/backend/**/*`,
-					// `../../../${name}/backend/**/*.jsw.ts`,
-					// `../../../${name}/backend/**/*.web.ts`,
-					// `../../../${name}/backend/**/*.web`
-				] as never[]);
-				// Add module to masterSettings
-				masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
-				masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
-				masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
-				masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
-				masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
-				masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
-				masterSettings.include.push(...[
-					`../../../${name}/public/**/*`, 
-					`../../../${name}__mocks__/**/*`, 
-					// `../../../${name}/backend/**/*.jsw.ts`,
-					// `../../../${name}/backend/**/*.web.ts`,
-					// `../../../${name}/backend/**/*.web`
-				] as never[]);
-				// Add module to pageSettings
-				pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
-				pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
-				pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
-				pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
-				pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
-				pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
-				pageSettings.include.push(...[
-					`../../../${name}/public/**/*`, 
-					`../../../${name}__mocks__/**/*`, 
-					// `../../../${name}/backend/**/*.jsw.ts`,
-					// `../../../${name}/backend/**/*.web.ts`,
-					// `../../../${name}/backend/**/*.web`
-				] as never[]);
-			}
+		for (const name of options.modulesSourcePaths) {
+			// Add module to publicSettings
+			publicSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
+			publicSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+			publicSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
+			publicSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
+			publicSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
+			publicSettings.compilerOptions.paths.mocks.push(...[ `../../../${name}/__mocks__/*` as never ]);
+			publicSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
+			publicSettings.include.push(...[
+				`../../../${name}/public/**/*`, 
+				`../../../${name}__mocks__/**/*`, 
+				// `../../../${name}/backend/**/*.jsw.ts`,
+				// `../../../${name}/backend/**/*.web.ts`,
+				// `../../../${name}/backend/**/*.web`
+			] as never[]);
+			// Add module to backendSettings
+			backendSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
+			backendSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*` as never);
+			backendSettings.compilerOptions.paths.mocks.push(...[ `../../../${name}/__mocks__/*` ] as never[]);
+			backendSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
+			backendSettings.include.push(...[
+				`../../../${name}/public/**/*`, 
+				`../../../${name}__mocks__/**/*`, 
+				`../../../${name}/backend/**/*`,
+				// `../../../${name}/backend/**/*.jsw.ts`,
+				// `../../../${name}/backend/**/*.web.ts`,
+				// `../../../${name}/backend/**/*.web`
+			] as never[]);
+			// Add module to masterSettings
+			masterSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
+			masterSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+			masterSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
+			masterSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
+			masterSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
+			masterSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
+			masterSettings.include.push(...[
+				`../../../${name}/public/**/*`, 
+				`../../../${name}__mocks__/**/*`, 
+				// `../../../${name}/backend/**/*.jsw.ts`,
+				// `../../../${name}/backend/**/*.web.ts`,
+				// `../../../${name}/backend/**/*.web`
+			] as never[]);
+			// Add module to pageSettings
+			pageSettings.compilerOptions.paths['backend/*.web.js'].push(`../../../${name}/backend/*.web.ts` as never);
+			pageSettings.compilerOptions.paths['backend/*.web'].push(`../../../${name}/backend/*.web.ts` as never);
+			pageSettings.compilerOptions.paths['backend/*'].push(`../../../${name}/backend/*.web.ts` as never);
+			pageSettings.compilerOptions.paths['backend/*.jsw'].push(`../../../${name}/backend/*.jsw.ts` as never);
+			pageSettings.compilerOptions.paths['public/*'].push(`../../../${name}/public/*` as never);
+			pageSettings.compilerOptions.paths['types/*'].push(`../../../${name}/types/*` as never);
+			pageSettings.include.push(...[
+				`../../../${name}/public/**/*`, 
+				`../../../${name}__mocks__/**/*`, 
+				// `../../../${name}/backend/**/*.jsw.ts`,
+				// `../../../${name}/backend/**/*.web.ts`,
+				// `../../../${name}/backend/**/*.web`
+			] as never[]);
 		}
 
 		return gulp.src(['./.wix/types/**/*.json', '!./.wix/types/wix-code-types/**/*'])
