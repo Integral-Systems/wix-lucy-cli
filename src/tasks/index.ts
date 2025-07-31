@@ -14,7 +14,12 @@ export const tasks = () => {
             return yield* Effect.fail(new AppError({ message: "No action task provided", cause: new Error("No action task provided") }));
         }
 
-        if(config.config.action.task === 'dev') {
+        if(
+            config.config.action.task === 'dev' 
+            || config.config.action.task === 'build' 
+            || config.config.action.task === 'build-prod'
+            || config.config.action.task === 'build-pipeline'
+        ) {
             return yield* Effect.tryPromise({
                 try: () => runTask(config.config),
                 catch: (err: any) => {

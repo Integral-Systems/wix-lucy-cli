@@ -1,5 +1,5 @@
 export const types = ["velo", "expo", "blocks", "monorepo", "tauri", "cargo", 'submodules'] as const;
-export const tasks = ["dev"] as const;
+export const tasks = ["dev", "build", "build-prod", "build-pipeline"] as const;
 
 export type Action = 'init' | 'open' | 'task';
 
