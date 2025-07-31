@@ -3,7 +3,6 @@ import * as path from 'path';
 import replace from 'gulp-string-replace';
 import flatmap from 'gulp-flatmap';
 import jeditor from 'gulp-json-editor';
-import merge from 'merge-stream';
 import * as insert from 'gulp-insert';
 import tap from 'gulp-tap';
 import { logger, orange, yellow } from '../../utils/logger.js';
@@ -185,30 +184,42 @@ export function addTypes(options, done) {
     const interfaceRegex = /^(\s*)interface\s/gm;
     const enumRegex = /^(\s*)enum\s/gm;
     const typeRegex = /^(\s*)type\s/gm;
-    const exportTypes = gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        // The replacement string '$1export...' uses the captured whitespace to preserve indentation.
-        .pipe(replace(interfaceRegex, 'export interface ', replaceOptions))
-        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
-        .pipe(replace(typeRegex, 'export type ', replaceOptions))
-        .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
-    const exportTypesBeta = gulp.src(['./.wix/types/wix-code-types/dist/types/beta/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/beta/common/$w.d.ts'])
-        .pipe(replace(interfaceRegex, '$1export interface ', replaceOptions))
-        .pipe(replace(enumRegex, 'export enum ', replaceOptions))
-        .pipe(replace(typeRegex, 'export type ', replaceOptions))
-        .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/'));
-    const processCommon = gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
-        .pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
-        .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
-    return merge(processCommon, exportTypesBeta, exportTypes)
-        .on('error', function (e) {
-        logger.error(' => Updating WIX failed!');
-        logger.error(` => Error: ${orange(e.message)}`);
-        this.emit('end');
-        done();
-    })
-        .on('end', function () {
-        logger.success(' => Updating WIX succeeded!');
-        done();
+    const streams = [
+        // Stream for common types
+        gulp.src(['./.wix/types/wix-code-types/dist/types/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
+            .pipe(replace(interfaceRegex, 'export interface ', replaceOptions))
+            .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+            .pipe(replace(typeRegex, 'export type ', replaceOptions))
+            .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/')),
+        // Stream for beta types
+        gulp.src(['./.wix/types/wix-code-types/dist/types/beta/common/*.d.ts', '!./.wix/types/wix-code-types/dist/types/beta/common/$w.d.ts'])
+            .pipe(replace(interfaceRegex, 'export interface ', replaceOptions))
+            .pipe(replace(enumRegex, 'export enum ', replaceOptions))
+            .pipe(replace(typeRegex, 'export type ', replaceOptions))
+            .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/beta/common/')),
+        // Stream for processing $w.d.ts
+        gulp.src(['./.wix/types/wix-code-types/dist/types/common/$w.d.ts'])
+            .pipe(insert.prepend("import '@total-typescript/ts-reset';\n"))
+            .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'))
+    ];
+    let completedStreams = 0;
+    let hasErrored = false;
+    streams.forEach(stream => {
+        stream.on('end', () => {
+            completedStreams++;
+            if (completedStreams === streams.length && !hasErrored) {
+                logger.success(' => Updating WIX succeeded!');
+                done();
+            }
+        });
+        stream.on('error', (e) => {
+            if (!hasErrored) {
+                hasErrored = true;
+                logger.error(' => Updating WIX failed!');
+                logger.error(` => Error: ${orange(e.message)}`);
+                done(e);
+            }
+        });
     });
 }
 ;

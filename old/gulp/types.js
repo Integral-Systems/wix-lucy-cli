@@ -201,8 +201,8 @@ export function addTypes(options, done) {
         .pipe(gulp.dest('./.wix/types/wix-code-types/dist/types/common/'));
     return merge(processCommon, exportTypesBeta, exportTypes)
         .on('error', function (e) {
-        console.log("💩" + red.underline.bold(' => Updating WIX failed!'));
-        console.log("💩" + red.underline.bold(` => Error: ${orange(e.message)}`));
+        console.log("💩" + red.underline.bold('Updating WIX failed!'));
+        console.log("💩" + red.underline.bold(`Error: ${orange(e.message)}`));
         this.emit('end');
         done();
     })

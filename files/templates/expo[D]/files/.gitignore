@@ -38,11 +38,11 @@ yarn-error.*
 
 app-example
 
-.yarn/
 *.ipa
 *.tar
 *.apk
 *.aab
 *.tar.gz
 .env
+.yarn/
 !.yarn/releases

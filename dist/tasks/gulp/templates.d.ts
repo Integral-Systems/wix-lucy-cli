@@ -1,2 +1,2 @@
 import { TaskOptions } from '../Gulpfile.js';
-export declare function previewTemplates(options: TaskOptions): import("undertaker").TaskFunction;
+export declare function previewTemplates(options: TaskOptions): (done: () => void) => void;

@@ -6,5 +6,7 @@ jsconfig.json
 .wix/debug.log
 config.json
 *.db
-.yarn/
+docs
+coverage
+.env
 !.yarn/releases

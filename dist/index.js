@@ -19,9 +19,6 @@ const lucyCLI = pipe(Effect.gen(function* (_) {
         return yield* open;
     }
     if (config.config.action.action === 'task') {
-        return yield* open;
-    }
-    if (config.config.action.action === 'task') {
         return yield* tasks();
     }
 })).pipe(Effect.catchTags({

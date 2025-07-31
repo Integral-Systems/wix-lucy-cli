@@ -24,10 +24,6 @@ const lucyCLI = pipe(
             return yield* open;
         }
         if (config.config.action.action === 'task') {
-            return yield* open;
-        }
-
-        if (config.config.action.action === 'task') {
             return yield* tasks();
         }
 

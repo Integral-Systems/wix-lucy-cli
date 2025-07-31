@@ -195,7 +195,7 @@ gulp.task('build-prod', gulp.series(
 gulp.task('start-dev-env', gulp.parallel(
 	watchAll(watchTaskOptions),
 	'test',
-	'start-wix',
+	// 'start-wix',
 	'check-ts',
 	(done) => checkPages(false, taskOptions.moduleSettings?.force ?? false).then(() => done(), (err) => done(err)),
 ));
@@ -246,6 +246,7 @@ export async function runTask(config: LucyConfig) {
 	await gulpTaskRunner(task || 'dev');
 	} catch (err) {
 		logger.error("Error starting tasks:", err);
+		throw err;
 	}
 	logger.report("Task completed successfully:", task);
 }

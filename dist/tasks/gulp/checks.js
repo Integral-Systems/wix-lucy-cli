@@ -116,7 +116,8 @@ export async function checkPages(fail, force) {
             }
             if (obsoleteInTs.length > 0) {
                 if (!force) {
-                    logger.error('Obsolete pages in TS folder.', '\n', obsoleteInTs);
+                    const formattedList = obsoleteInTs.map(page => `  • ${page}`).join('\n');
+                    logger.error('Obsolete pages in TS folder:\n' + yellow(formattedList));
                 }
                 if (force) {
                     for (const page of obsoleteInTs) {
