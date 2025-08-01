@@ -1,5 +1,5 @@
 import { Schema } from "effect/index";
-export declare const lucySettings: Schema.Struct<{
+export declare const lucySettings: Schema.mutable<Schema.Struct<{
     modules: Schema.Record$<typeof Schema.String, Schema.Struct<{
         source: typeof Schema.String;
         branch: typeof Schema.String;
@@ -17,10 +17,10 @@ export declare const lucySettings: Schema.Struct<{
     }>>>;
     initialized: typeof Schema.Boolean;
     type: Schema.Literal<["velo", "expo", "blocks", "monorepo", "tauri", "cargo", "submodules"]>;
-    dependencies: Schema.Record$<typeof Schema.String, typeof Schema.String>;
-    devDependencies: Schema.Record$<typeof Schema.String, typeof Schema.String>;
+    dependencies: Schema.mutable<Schema.Record$<typeof Schema.String, typeof Schema.String>>;
+    devDependencies: Schema.mutable<Schema.Record$<typeof Schema.String, typeof Schema.String>>;
     scripts: Schema.Record$<typeof Schema.String, typeof Schema.String>;
     additionalCommands: Schema.optional<Schema.Array$<Schema.Array$<typeof Schema.String>>>;
     additionalPkgProps: Schema.optional<typeof Schema.Object>;
-}>;
+}>>;
 export type LucySettings = typeof lucySettings.Type;

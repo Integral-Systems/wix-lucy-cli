@@ -1,6 +1,6 @@
 import { Schema } from "effect/index";
 import { types } from "./types.js";
-export const lucySettings = Schema.Struct({
+export const lucySettings = Schema.mutable(Schema.Struct({
     modules: Schema.Record({
         key: Schema.String,
         value: Schema.Struct({
@@ -21,19 +21,19 @@ export const lucySettings = Schema.Struct({
     }))),
     initialized: Schema.Boolean,
     type: Schema.Literal(...types),
-    dependencies: Schema.Record({
+    dependencies: Schema.mutable(Schema.Record({
         key: Schema.String,
         value: Schema.String,
-    }),
-    devDependencies: Schema.Record({
+    })),
+    devDependencies: Schema.mutable(Schema.Record({
         key: Schema.String,
         value: Schema.String,
-    }),
+    })),
     scripts: Schema.Record({
         key: Schema.String,
         value: Schema.String,
     }),
     additionalCommands: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
     additionalPkgProps: Schema.optional(Schema.Object),
-});
+}));
 //# sourceMappingURL=lucy.js.map

@@ -10,8 +10,13 @@ import { open } from "./commands/exec.js";
 import { tasks } from "./tasks/index.js";
 import { cleanupWatchers, killAllProcesses } from "./helpers.js";
 let exitReason = 'none';
+let needsCleanup = false;
+export function setNeedsCleanup(value) {
+    needsCleanup = value;
+}
 process.on('exit', (code) => {
-    // exitReason = "exit";
+    if (!needsCleanup)
+        return;
     if (exitReason === 'none') {
         killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
         killAllProcesses('wix:dev');

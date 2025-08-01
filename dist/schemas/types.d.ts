@@ -1,5 +1,5 @@
 export declare const types: readonly ["velo", "expo", "blocks", "monorepo", "tauri", "cargo", "submodules"];
-export declare const tasks: readonly ["dev", "build", "build-prod", "build-pipeline"];
+export declare const tasks: readonly ["dev", "build", "build-prod", "build-pipeline", "sync-settings"];
 export type Action = 'init' | 'open' | 'task';
 export type Actions = {
     action: Action;

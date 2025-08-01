@@ -1,10 +1,9 @@
 import { Effect, Schema } from "effect/index"
 import { Config } from "../config.js";
-import Enquirer from "enquirer";
 import { AppError } from "../error.js";
-import { createLucyHome } from "../commands/home.js";
-import { readLucyJsonFromTemplate } from "../commands/read.js";
-import { runTask } from "./Gulpfile.js";
+import { task_runGulp } from "./Gulpfile.js";
+import { task_syncSettings } from "./syncSettings.js";
+import { setNeedsCleanup } from "../index.js";
 
 
 export const tasks = () => {
@@ -21,8 +20,11 @@ export const tasks = () => {
             || config.config.action.task === 'build-pipeline'
         ) 
         {
-            yield* runTask;
+            setNeedsCleanup(true);
+            return yield* task_runGulp;
         }
+        if(config.config.action.task === 'sync-settings') return yield* task_syncSettings;
+
         yield* Effect.fail(new AppError({ message: `Unsupported action type: ${config.config.action.type}`, cause: new Error(`Unsupported action type: ${config.config.action.type}`) }));
     })
 }

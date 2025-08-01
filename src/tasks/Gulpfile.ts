@@ -30,7 +30,7 @@ import { TaskOptions } from '../schemas/gulp.js';
 
 const sass = gulpSass(dartSass);
 
-export const runTask = Effect.gen(function* (_) {
+export const task_runGulp = Effect.gen(function* (_) {
 	const config = (yield* Config).config;
 	const task = config.action.task || "dev";	
 
