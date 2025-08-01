@@ -8,6 +8,33 @@ import { init } from "./init/index.js";
 import { logger } from "./utils/logger.js";
 import { open } from "./commands/exec.js";
 import { tasks } from "./tasks/index.js";
+import { cleanupWatchers, killAllProcesses } from "./helpers.js";
+let exitReason = 'none';
+process.on('exit', (code) => {
+    // exitReason = "exit";
+    if (exitReason === 'none') {
+        killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+        killAllProcesses('wix:dev');
+        cleanupWatchers();
+    }
+    logger.info(`🛑 Process exited with code: ${code}`);
+});
+process.on('SIGINT', () => {
+    exitReason = "SIGINT";
+    logger.info(`🐕 Received Ctrl+C (SIGINT), cleaning up...`);
+    killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+    killAllProcesses('wix:dev');
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
+process.on('SIGTERM', () => {
+    exitReason = "SIGTERM";
+    logger.info(`🛑 Received termination signal (SIGTERM), cleaning up...`);
+    killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+    killAllProcesses('wix:dev');
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
 const lucyCLI = pipe(Effect.gen(function* (_) {
     const config = yield* Config;
     const t = Config;

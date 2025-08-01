@@ -47,7 +47,7 @@ export const runTask = Effect.gen(function* (_) {
         modulesSourcePaths: yield* getModulesSourcePaths,
         isWatching: config.action.task === 'dev' ? true : false
     };
-    logger.action(`Running task: ${task} with options:`, taskOptions);
+    logger.action(`Running task: ${task}`);
     gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));
     gulp.task('scss', gulp.parallel(compileScss(taskOptions)));
     gulp.task('build-backend', gulp.parallel(buildBackend(taskOptions), buildBackendJSW(taskOptions)));
@@ -86,9 +86,7 @@ export const runTask = Effect.gen(function* (_) {
     gulp.task('build', gulp.parallel('build-backend', 'build-public', 'preview-templates', buildPages(taskOptions), compileScss(taskOptions), 'copy-files'));
     gulp.task('build-pipeline', gulp.series(cleanSrc(taskOptions), 'set-production', 'check-ts', 'fix-wix-types', 'add-wix-types', 'test-ci', 'build'));
     gulp.task('build-prod', gulp.series((done) => checkPages(true, false).then(() => done(), (err) => done(err)), cleanSrc(taskOptions), 'set-production', 'fix-wix', 'check-ts', 'test-ci', 'build-backend', 'build-public', buildPages(taskOptions), 'copy-files', compileScss(taskOptions)));
-    gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 
-    // 'start-wix',
-    'check-ts', (done) => checkPages(false, config.force).then(() => done(), (err) => done(err))));
+    gulp.task('start-dev-env', gulp.parallel(watchAll(taskOptions), 'test', 'start-wix', 'check-ts', (done) => checkPages(false, config.force).then(() => done(), (err) => done(err))));
     gulp.task('dev', gulp.series(cleanSrc(taskOptions), 'fix-wix', 'build', 'start-dev-env'));
     yield* Effect.tryPromise({
         try: () => {

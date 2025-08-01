@@ -53,7 +53,7 @@ export const runTask = Effect.gen(function* (_) {
 	};
 
 	
-	logger.action(`Running task: ${task} with options:`, taskOptions);
+	logger.action(`Running task: ${task}`);
 
 	gulp.task('check-ts', gulp.parallel( 
 		checkTs(taskOptions),
@@ -168,11 +168,10 @@ export const runTask = Effect.gen(function* (_) {
 		// 'gen-docs'
 	));
 
-
 	gulp.task('start-dev-env', gulp.parallel(
 		watchAll(taskOptions),
 		'test',
-		// 'start-wix',
+		'start-wix',
 		'check-ts',
 		(done) => checkPages(false, config.force).then(() => done(), (err) => done(err)),
 	));

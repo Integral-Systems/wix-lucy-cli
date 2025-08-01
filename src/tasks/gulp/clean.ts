@@ -28,7 +28,7 @@ export function cleanSrc(options: TaskOptions) {
 		.pipe(clean({ force: true }))
 		.on('error', function (e: Error) {
 			logger.error('Cleaning of output files failed!');
-			logger.error(` => Error: ${e.message}`);
+			logger.error(`Error: ${e.message}`);
 			this.emit('end');
 		})
 		.on('end', function() {

@@ -4,13 +4,9 @@ import { TaskOptions } from '../../schemas/gulp.js';
 
 export function copyFiles(options: TaskOptions) {
     const folders = ['typescript', ...options.modulesSourcePaths];
-
-    // Create tasks for each folder
     const tasks = folders.map((folder) => {
 		const { outputDir} = options;
-
         const taskName = `copy-${folder}`; // Create a unique name for each task
-
         const task = () =>
 			gulp.src([
 				`${folder}/**/*`, 
@@ -23,14 +19,12 @@ export function copyFiles(options: TaskOptions) {
 			])
 			.pipe(gulp.dest(outputDir))
                 .on('error', function (e: Error) {
-                    logger.error(` => Copy of files for ${folder} failed!`);
-                    logger.error(` => Error: ${e.message}`);
-
-                    
+                    logger.error(`Copy of files for ${folder} failed!`);
+                    logger.error(`Error: ${e.message}`);
                     this.emit('end');
                 })
                 .on('end', function () {
-                    logger.success(` => Copy of files for ${folder} succeeded!`);
+                    logger.success(`Copy of files for ${folder} succeeded!`);
                 });
 
         // Register the task with Gulp

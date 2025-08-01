@@ -115,7 +115,8 @@ export async function checkPages(fail: boolean, force: boolean) {
 			const obsoleteInTs = Array.from(tsPagesSet).filter((item: string) => !sourcePages.includes(item));
 			if (missingInTs.length > 0){
 				if(!force){
-					logger.error('Missing pages in ts folder:', '\n', missingInTs);
+					const formattedList = missingInTs.map(page => `  • ${page}`).join('\n');
+						logger.error('Missing pages in ts folder::\n' + yellow(formattedList));
 				}
 				if(force) {
 					for (const page of missingInTs) {
@@ -137,7 +138,7 @@ export async function checkPages(fail: boolean, force: boolean) {
 				}
 			}
 			if (missingInTs.length === 0 && obsoleteInTs.length === 0) {
-				logger.info("All pages are in-sync!");
+				logger.success("All pages are in-sync!");
 			} else if(fail){
 				process.exit(1);
 			};

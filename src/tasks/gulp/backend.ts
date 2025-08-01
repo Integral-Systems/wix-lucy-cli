@@ -39,20 +39,20 @@ export function buildBackend(options: TaskOptions) {
             ])
                 .pipe(swc(swcOptions))
                 .on('error', function (e: Error) {
-                    logger.error(` => Build of Backend files for ${folder} failed!`);
-                    logger.error(` => Error: ${e.message}`);
+                    logger.error(`Build of Backend files for ${folder} failed!`);
+                    logger.error(`Error: ${e.message}`);
 
                     this.emit('end');
                 })
                 .pipe(gulp.dest(path.join(outputDir, 'backend')))
                 .on('error', function (e: Error) {
-                    logger.error(` => Build of Backend files for ${folder} failed!`);
-                    logger.error(` => Error: ${e.message}`);
+                    logger.error(`Build of Backend files for ${folder} failed!`);
+                    logger.error(`Error: ${e.message}`);
 
                     this.emit('end');
                 })
                 .on('end', function () {
-                    logger.success(` => Build of Backend files for ${folder} succeeded!`);
+                    logger.success(`Build of Backend files for ${folder} succeeded!`);
                 });
 
         // Register the task with Gulp
@@ -85,21 +85,21 @@ export function buildBackendJSW(options: TaskOptions) {
             ])
             .pipe(swc(swcOptions))
             .on('error', function (e: Error) {
-                logger.error(` => Build of JSW files for ${folder} failed!`);
-                logger.error(` => Error: ${e.message}`);
+                logger.error(`Build of JSW files for ${folder} failed!`);
+                logger.error(`Error: ${e.message}`);
 
                 this.emit('end');
             })
             .pipe(rename({ extname: '' }))
             .pipe(gulp.dest(path.join(outputDir, 'backend')))
             .on('error', function (e: Error) {
-                logger.error(` => Build of JSW files for ${folder} failed!`);
-                logger.error(` => Error: ${e.message}`);
+                logger.error(`Build of JSW files for ${folder} failed!`);
+                logger.error(`Error: ${e.message}`);
 
                 this.emit('end');
             })
             .on('end', function () {
-                logger.success(` => Build of JSW files for ${folder} succeeded!`);
+                logger.success(`Build of JSW files for ${folder} succeeded!`);
             });
 
         // Register the task with Gulp

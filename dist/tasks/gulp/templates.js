@@ -28,12 +28,12 @@ export function previewTemplates(options) {
         ])
             .pipe(exec((file) => `npx tsx --tsconfig ./local.tsconfig.json ${file.path}`, taskOpt))
             .on('error', function (e) {
-            logger.error(` => Render of Template for ${orange(folder)} failed!`);
-            logger.error(` => Error: ${orange(e.message)}`);
+            logger.error(`Render of Template for ${orange(folder)} failed!`);
+            logger.error(`Error: ${orange(e.message)}`);
             this.emit('end');
         })
             .on('end', function () {
-            logger.success(` => Render of Template for ${orange(folder)} succeeded!`);
+            logger.success(`Render of Template for ${orange(folder)} succeeded!`);
         });
         // Register the task with Gulp
         Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging

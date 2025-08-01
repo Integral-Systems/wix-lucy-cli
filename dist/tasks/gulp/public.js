@@ -27,18 +27,18 @@ export function buildPublic(options) {
         ])
             .pipe(swc(swcOptions))
             .on('error', function (e) {
-            logger.error(` => Build of Public files for ${folder} failed!`);
-            logger.error(` => Error: ${e.message}`);
+            logger.error(`Build of Public files for ${folder} failed!`);
+            logger.error(`Error: ${e.message}`);
             this.emit('end');
         })
             .pipe(gulp.dest(path.join(outputDir, 'public')))
             .on('error', function (e) {
-            logger.error(` => Build of Public files for ${folder} failed!`);
-            logger.error(` => Error: ${e.message}`);
+            logger.error(`Build of Public files for ${folder} failed!`);
+            logger.error(`Error: ${e.message}`);
             this.emit('end');
         })
             .on('end', function () {
-            logger.success(` => Build of Public files for ${folder} succeeded!`);
+            logger.success(`Build of Public files for ${folder} succeeded!`);
         });
         // Register the task with Gulp
         Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging

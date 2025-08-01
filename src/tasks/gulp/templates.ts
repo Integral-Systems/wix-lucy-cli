@@ -35,12 +35,12 @@ export function previewTemplates(options: TaskOptions) {
                 ])
                 .pipe(exec((file: File) => `npx tsx --tsconfig ./local.tsconfig.json ${file.path}`, taskOpt))
                     .on('error', function (e: Error) {
-                        logger.error(` => Render of Template for ${orange(folder)} failed!`);
-                        logger.error(` => Error: ${orange(e.message)}`);
+                        logger.error(`Render of Template for ${orange(folder)} failed!`);
+                        logger.error(`Error: ${orange(e.message)}`);
                         this.emit('end');
                     })
                     .on('end', function () {
-                        logger.success(` => Render of Template for ${orange(folder)} succeeded!`);
+                        logger.success(`Render of Template for ${orange(folder)} succeeded!`);
                     });
     
             // Register the task with Gulp

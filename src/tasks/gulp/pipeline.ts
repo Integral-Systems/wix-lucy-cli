@@ -20,12 +20,12 @@ export function setProdConfig() {
                 return path.join(`${outputDir}/constants`);
             }))
             .on('error', function (e: Error) {
-                logger.error(' => Setting the git tag failed!');
-                logger.error(` => Error: ${e.message}`);
+                logger.error('Setting the git tag failed!');
+                logger.error(`Error: ${e.message}`);
                 this.emit('end');
             })
             .on('end', function() {
-                logger.success(' => Setting the git tag succeeded!');
+                logger.success('Setting the git tag succeeded!');
             });
     }
 }

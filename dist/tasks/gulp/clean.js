@@ -22,7 +22,7 @@ export function cleanSrc(options) {
             .pipe(clean({ force: true }))
             .on('error', function (e) {
             logger.error('Cleaning of output files failed!');
-            logger.error(` => Error: ${e.message}`);
+            logger.error(`Error: ${e.message}`);
             this.emit('end');
         })
             .on('end', function () {

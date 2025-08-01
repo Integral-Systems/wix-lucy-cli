@@ -163,7 +163,7 @@ export function updateWixTypes(options) {
         }))
             .on('error', function (e) {
             logger.error('Modification of WIX configs failed!');
-            logger.error(` => Error: ${orange(e.message)}`);
+            logger.error(`Error: ${orange(e.message)}`);
             this.emit('end');
         })
             .on('end', function () { logger.success(`Modification of ${yellow(count)} WIX configs succeeded!`); });
@@ -201,15 +201,15 @@ export function addTypes(options, done) {
         stream.on('end', () => {
             completedStreams++;
             if (completedStreams === streams.length && !hasErrored) {
-                logger.success(' => Updating WIX succeeded!');
+                logger.success('Updating WIX succeeded!');
                 done();
             }
         });
         stream.on('error', (e) => {
             if (!hasErrored) {
                 hasErrored = true;
-                logger.error(' => Updating WIX failed!');
-                logger.error(` => Error: ${orange(e.message)}`);
+                logger.error('Updating WIX failed!');
+                logger.error(`Error: ${orange(e.message)}`);
                 done(e);
             }
         });

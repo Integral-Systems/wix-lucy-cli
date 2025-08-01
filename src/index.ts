@@ -1,16 +1,46 @@
 #!/usr/bin/env node
-import { Chunk, Duration, Effect, pipe, Schedule, Array, Ref } from "effect";
+import { Effect, pipe} from "effect";
 import { build_runtime } from "./runtime.js";
 import { get_args } from "./args.js";
 import 'dotenv/config'
 import { Config } from "./config.js";
-import { ServiceInspectState } from "./states.js";
 import { init } from "./init/index.js";
 import { logger } from "./utils/logger.js";
-import { AppError } from "./error.js";
 import { open } from "./commands/exec.js";
-import { runTask } from "./tasks/Gulpfile.js";
 import { tasks } from "./tasks/index.js";
+import { cleanupWatchers, killAllProcesses } from "./helpers.js";
+
+let exitReason: 'SIGINT' | 'SIGTERM' | 'none' = 'none'
+process.on('exit', (code) => {
+    // exitReason = "exit";
+    if(exitReason === 'none') {
+	    killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+        killAllProcesses('wix:dev');   
+        cleanupWatchers();
+    }
+
+    logger.info(`🛑 Process exited with code: ${code}`);
+});
+
+process.on('SIGINT', () => {
+    exitReason = "SIGINT";
+
+	logger.info(`🐕 Received Ctrl+C (SIGINT), cleaning up...`);
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
+
+process.on('SIGTERM', () => {
+    exitReason = "SIGTERM";
+
+	logger.info(`🛑 Received termination signal (SIGTERM), cleaning up...`);
+	killAllProcesses('@wix/cli/bin/wix.cjs'); // Matches processes running the Wix CLI
+	killAllProcesses('wix:dev');  
+    cleanupWatchers();
+    process.exit(); // Exit explicitly after handling
+});
 
 const lucyCLI = pipe(
     Effect.gen(function* (_) {
