@@ -11,7 +11,7 @@ declare const Config_base: Context.TagClass<Config, "Config", {
         readonly packageRoot: string;
         readonly filesFolder: string;
         readonly veloSyncArguments?: {
-            file?: string;
+            data?: string;
             collection?: string;
             schema?: string;
             dry: boolean;
@@ -33,9 +33,11 @@ export declare const packageJsonName = "package.json";
 export declare const lucyJsonName = "lucy.json";
 export declare const wixSyncJsonName = "wix-sync.json";
 export declare const wixSDKSettingsJsonName = "wix-sdk-settings.json";
+export declare const syncDataName = "sync-data";
 export declare const packageJsonPath: string;
 export declare const lucyJsonPath: string;
 export declare const veloSyncJsonPath: string;
 export declare const wixSDKSettingsJsonPath: string;
+export declare const syncFilesSource: string;
 export declare const ConfigLayer: (args: Awaited<ReturnType<typeof get_args>>) => Layer.Layer<Config, import("effect/ParseResult").ParseError | import("@effect/platform/Error").PlatformError, never>;
 export {};

@@ -1,0 +1,11 @@
+{
+  "keyField": "ID",
+  "fields": {
+    "Image": "Image",
+    "Artist": "Reference",
+    "Location": "string",
+    "Description": "string",
+    "ID": "string",
+    "Name": "string"
+  }
+}

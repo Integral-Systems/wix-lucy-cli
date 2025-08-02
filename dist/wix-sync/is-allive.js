@@ -4,7 +4,7 @@ import Enquirer from "enquirer";
 import { AppError } from "../error.js";
 import { logger } from "../utils/logger.js";
 import veloAPI from 'velo-sync/dist/velo/velo-api.js';
-export const wix_sync_alive = Effect.gen(function* (_) {
+export const is_alive = Effect.gen(function* (_) {
     const config = yield* Config;
     const prompter = new Enquirer();
     const veloSyncSettings = config.config.veloSyncSettings;

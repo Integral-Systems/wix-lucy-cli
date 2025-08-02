@@ -5,8 +5,9 @@ import { AppError } from "../error.js";
 import { writeVeloSyncSettings } from "../commands/write.js";
 import { veloSyncSettings } from "../schemas/index.js";
 import { logger } from "../utils/logger.js";
-import { wix_sync_alive } from "./is-allive.js";
-export const wix_sync_init = Effect.gen(function* (_) {
+import { is_alive } from "./is-alive.js";
+import { copySyncFiles } from "../commands/copy.js";
+export const init = Effect.gen(function* (_) {
     const config = yield* Config;
     const prompter = new Enquirer();
     const choice = yield* Effect.tryPromise({
@@ -17,7 +18,7 @@ export const wix_sync_init = Effect.gen(function* (_) {
                 message: 'Enter a project URL',
                 initial: config.config.veloSyncSettings?.siteUrl || 'https://example.com',
                 validate: (value) => {
-                    const urlPattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$/;
+                    const urlPattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                     if (!value.trim())
                         return 'Project URL cannot be empty';
                     if (!urlPattern.test(value.trim()))
@@ -39,6 +40,21 @@ export const wix_sync_init = Effect.gen(function* (_) {
     });
     config.config.veloSyncSettings = yield* Schema.decodeUnknown(veloSyncSettings)(choice);
     yield* writeVeloSyncSettings;
+    const copyFilesQuestion = new Enquirer();
+    const copyFiles = yield* Effect.tryPromise({
+        try: () => copyFilesQuestion.prompt({
+            type: 'confirm',
+            name: 'copyFiles',
+            message: 'Do you want to copy the velo-sync files to your project?',
+        }),
+        catch: (e) => {
+            return new AppError({ cause: e, message: 'Error copying velo-sync files' });
+        }
+    });
+    const copy = yield* Schema.decodeUnknown(Schema.Struct({ copyFiles: Schema.Boolean }))(copyFiles);
+    if (copy.copyFiles) {
+        yield* copySyncFiles;
+    }
     const question = new Enquirer();
     const verify = yield* Effect.tryPromise({
         try: () => question.prompt({
@@ -52,7 +68,7 @@ export const wix_sync_init = Effect.gen(function* (_) {
     });
     const verifySync = yield* Schema.decodeUnknown(Schema.Struct({ verify: Schema.Boolean }))(verify);
     if (verifySync.verify)
-        yield* wix_sync_alive;
+        yield* is_alive;
     logger.success(`Velo-sync settings initialized successfully!`);
 });
 //# sourceMappingURL=init.js.map

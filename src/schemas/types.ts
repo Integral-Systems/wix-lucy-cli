@@ -1,8 +1,11 @@
 export const initTypes = ["velo", "expo", "blocks", "monorepo", "tauri", "cargo", 'submodules', 'wix-sdk'] as const;
 export const taskNames = ["dev", "build", "build-prod", "build-pipeline", "sync-settings"] as const;
-export const syncActions = ["sync", "import", "init", "is-alive"] as const;
+export const syncActions = ["sync", "import", "init", "is-alive", "migrate", "export"] as const;
 export const WixSDKActions = ["init", ""] as const;
 export type Action = 'init' | 'open' | 'task' | 'wix-sync';
+
+export type SyncTaskType = (filename: string, collection: string, schemaFilename: string, importOnly: boolean, dryrun: boolean) => Promise<void>;
+export type MigrateFileCache = () => Promise<void>;
 
 export type Actions = {
     action: Action;
@@ -23,10 +26,10 @@ export interface LucyArgs {
     syncAction?: Actions['syncAction'];
     wixSDKAction?: Actions['wixSDKAction'];
     // wix-sync options
-    file?: string;        // Alias for -f
+    input?: string;        // Alias for -f
     collection?: string;  // Alias for -c
     schema?: string;      // Alias for -s
-    dry?: boolean;    
+    d?: boolean;    
 }
 
 export interface VeloSyncConfig {

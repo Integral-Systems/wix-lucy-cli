@@ -5,20 +5,15 @@ import { AppError } from "../error.js";
 import { logger } from "../utils/logger.js";
 import veloAPI from 'velo-sync/dist/velo/velo-api.js';
 
-export const wix_export = Effect.gen(function* (_) {
+export const exportData = Effect.gen(function* (_) {
     const config = yield* Config;
     const veloSyncSettings = config.config.veloSyncSettings;
     if (!veloSyncSettings) return yield* Effect.fail(new AppError({ message: 'Velo-sync settings not found', cause: new Error('Velo-sync settings not found') }));
 
-    logger.action(`Checking if the API for site ${veloSyncSettings.siteUrl} is alive...`);
+    logger.action(`Exporting data for site ${veloSyncSettings.siteUrl}...`);
 
-    const res = yield* Effect.tryPromise({
-        try: () => veloAPI.isAlive(veloSyncSettings),
-        catch: (e) => {
-            return new AppError({ cause: e, message: 'Error checking if the API is alive' });
-        }
-    })
+    logger.warning('Not implemented yet, please use the Velo Sync CLI for now.');
 
-    logger.success(`API for site ${veloSyncSettings.siteUrl} is alive and working!`);
+    // logger.success(`Data for site ${veloSyncSettings.siteUrl} exported successfully!`);
     return
 })

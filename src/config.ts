@@ -19,7 +19,7 @@ export class Config extends Context.Tag("Config")<
             readonly packageRoot: string;
             readonly filesFolder: string;
             readonly veloSyncArguments?:{
-                    file?: string;
+                    data?: string;
                     collection?: string;
                     schema?: string;
                     dry: boolean;    
@@ -41,16 +41,19 @@ export class Config extends Context.Tag("Config")<
 // We can replicate it using `import.meta.url`.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const packageRoot = join(__dirname, "..");
+
 export const packageJsonName = "package.json";
 export const lucyJsonName = "lucy.json";
 export const wixSyncJsonName = "wix-sync.json";
 export const wixSDKSettingsJsonName = "wix-sdk-settings.json";
+export const syncDataName = 'sync-data';
 export const packageJsonPath = join(process.cwd(), packageJsonName);
 export const lucyJsonPath = join(process.cwd(), lucyJsonName);
 export const veloSyncJsonPath = join(process.cwd(), wixSyncJsonName);
 export const wixSDKSettingsJsonPath = join(process.cwd(), wixSDKSettingsJsonName);
+export const syncFilesSource= join(packageRoot, 'files', syncDataName);
 
-const packageRoot = join(__dirname, "..");
 
 export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
     return Layer.effect(
@@ -115,10 +118,10 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
                     lucyHome: join(os.homedir(), '.lucy-cli'),
                     veloSyncSettings: veloSyncJson,
                     veloSyncArguments: {
-                        file: args.file,
+                        data: path.join(process.cwd(), args.input || ''),
                         collection: args.collection,
-                        schema: args.schema,
-                        dry: args.dry || false,
+                        schema: path.join(process.cwd(), args.schema || ''),
+                        dry: args.d || false,
                     },
                     wixSDKSettings: wixSDKSettingsJson,
                     lucySettings: lucyJson || {

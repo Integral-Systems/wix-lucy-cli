@@ -29,8 +29,8 @@ export async function get_args() {
             choices: syncActions,
             demandOption: true,
         })
-            .option('f', {
-            alias: 'file',
+            .option('input', {
+            alias: 'i',
             type: 'string',
             describe: 'The CSV file to import',
             demandOption: false,
@@ -47,7 +47,7 @@ export async function get_args() {
             describe: 'The schema file',
             demandOption: false,
         })
-            .option('dry', {
+            .option('d', {
             type: 'boolean',
             describe: 'Run in dry-run mode',
             demandOption: false,
