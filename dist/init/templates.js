@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect/index";
-import { Config } from "../config.js";
+import { Config, lucyJsonName, lucyJsonPath } from "../config.js";
 import { orange, red, green, logger } from "../utils/logger.js";
 import { FileSystem } from "@effect/platform";
 import { join } from 'path';
@@ -23,11 +23,10 @@ export const selectTemplate = () => {
         const templateChoices = [];
         for (const dirent of files) {
             if (dirent.isDirectory()) {
-                const lucyJsonPath = join(templatesPath, dirent.name, 'lucy.json');
-                const lucyRaw = yield* fs.readFileString(lucyJsonPath, 'utf-8');
+                const lucyRaw = yield* fs.readFileString(lucyJsonPath);
                 const lucySettingsJSON = yield* Schema.decodeUnknown(JsonSchema)(lucyRaw);
                 const lucySetting = yield* Schema.decodeUnknown(lucySettings)(lucySettingsJSON);
-                if (lucySetting.type === config.config.action.type) {
+                if (lucySetting.type === config.config.action.initType) {
                     templateChoices.push(dirent.name);
                 }
             }
@@ -53,16 +52,16 @@ export const selectTemplate = () => {
         const templateFilesDir = join(templateDir, 'files');
         config.config.templateDir = templateDir;
         config.config.templateFiles = templateFilesDir;
-        const templateSettingsPath = join(templateDir, 'lucy.json');
+        const templateSettingsPath = join(templateDir, lucyJsonName);
         if (!(yield* fs.exists(templateSettingsPath))) {
-            logger.warning((`💩 ${red.underline.bold("=> Template is missing lucy.json at =>")} ${orange(templateSettingsPath)}`));
-            yield* Effect.fail(new AppError({ message: 'Template is missing lucy.json', cause: templateSettingsPath }));
+            logger.warning((`💩 ${red.underline.bold(`Template is missing ${lucyJsonName} at =>`)} ${orange(templateSettingsPath)}`));
+            yield* Effect.fail(new AppError({ message: `Template is missing ${lucyJsonName}`, cause: templateSettingsPath }));
         }
-        const lucySettingsRaw = yield* fs.readFileString(templateSettingsPath, 'utf-8');
+        const lucySettingsRaw = yield* fs.readFileString(templateSettingsPath);
         const newLucySettings = yield* Schema.decodeUnknown(lucySettings)(JSON.parse(lucySettingsRaw));
-        if (newLucySettings.type !== config.config.action.type)
+        if (newLucySettings.type !== config.config.action.initType)
             return yield* Effect.fail(new AppError({
-                message: `Template type ${newLucySettings.type} does not match action type ${config.config.action.type}`,
+                message: `Template type ${newLucySettings.type} does not match action type ${config.config.action.initType}`,
                 cause: newLucySettings.type
             }));
         if (config.config.lucySettings.initialized) {
@@ -71,7 +70,7 @@ export const selectTemplate = () => {
                 try: () => overwriteQuestion.prompt({
                     type: 'confirm',
                     name: 'overwrite',
-                    message: 'Overwrite existing lucy.json settings?',
+                    message: `Overwrite existing ${lucyJsonName} settings?`,
                 }),
                 catch: (e) => {
                     return new AppError({
@@ -85,7 +84,7 @@ export const selectTemplate = () => {
                 config.config.lucySettings = newLucySettings;
             }
             else {
-                logger.info(`Existing lucy.json settings will be used.`);
+                logger.info(`Existing ${lucyJsonName} settings will be used.`);
             }
         }
         logger.success(`Selected template: ${green(selectedTemplate.template)}`);

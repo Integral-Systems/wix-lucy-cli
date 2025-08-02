@@ -93,3 +93,7 @@ typings/
 # Misc
 .DS_Store
 *.pem
+
+# wix secrets files
+wix-sync.json
+wix-sdk-settings.json

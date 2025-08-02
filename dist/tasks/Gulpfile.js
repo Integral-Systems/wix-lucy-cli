@@ -29,9 +29,9 @@ import { AppError } from '../error.js';
 const sass = gulpSass(dartSass);
 export const task_runGulp = Effect.gen(function* (_) {
     const config = (yield* Config).config;
-    const task = config.action.task || "dev";
+    const task = config.action.tasksName || "dev";
     const taskOptions = {
-        enableIncrementalBuild: config.action.task === 'dev' ? true : false,
+        enableIncrementalBuild: config.action.tasksName === 'dev' ? true : false,
         outputDir: './src',
         sass,
         pageSettings,
@@ -45,7 +45,7 @@ export const task_runGulp = Effect.gen(function* (_) {
         },
         cwd: process.cwd(),
         modulesSourcePaths: yield* getModulesSourcePaths,
-        isWatching: config.action.task === 'dev' ? true : false
+        isWatching: config.action.tasksName === 'dev' ? true : false
     };
     logger.action(`Running task: ${task}`);
     gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));

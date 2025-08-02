@@ -1,75 +1,100 @@
-import { Context, Layer, Schema } from "effect";
+import { Context, Effect, Layer, Schema } from "effect";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { readFileSync, existsSync } from "fs";
 import { lucySettings } from "./schemas/lucy.js";
-import { logger } from "./utils/logger.js";
 import os from 'os';
+import { JsonSchema, veloSyncSettings, wixSDKSettings } from "./schemas/index.js";
+import { FileSystem, Path } from "@effect/platform";
+import { NodeContext } from "@effect/platform-node/index";
 export class Config extends Context.Tag("Config")() {
 }
 // In an ES module, `__dirname` is not available by default.
 // We can replicate it using `import.meta.url`.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-// Assuming your compiled output is in a 'dist' folder at the project root,
-// and your source `config.ts` is in `src`, the running `config.js` will be
-// in something like `dist/src`. To get to the package root, we go up two levels.
+export const packageJsonName = "package.json";
+export const lucyJsonName = "lucy.json";
+export const wixSyncJsonName = "wix-sync.json";
+export const wixSDKSettingsJsonName = "wix-sdk-settings.json";
+export const packageJsonPath = join(process.cwd(), packageJsonName);
+export const lucyJsonPath = join(process.cwd(), lucyJsonName);
+export const veloSyncJsonPath = join(process.cwd(), wixSyncJsonName);
+export const wixSDKSettingsJsonPath = join(process.cwd(), wixSDKSettingsJsonName);
 const packageRoot = join(__dirname, "..");
 export const ConfigLayer = (args) => {
-    let packageJson = '{}';
-    let lucyJson = undefined;
-    const packageJsonPath = join(process.cwd(), 'package.json');
-    const lucyJsonPath = join(process.cwd(), 'lucy.json');
-    try {
-        if (existsSync(packageJsonPath)) {
-            const raw = readFileSync(packageJsonPath, 'utf-8');
-            packageJson = JSON.parse(raw);
+    return Layer.effect(Config, Effect.gen(function* () {
+        const fs = yield* FileSystem.FileSystem;
+        const path = yield* Path.Path;
+        let packageJson = {};
+        let lucyJson = undefined;
+        let veloSyncJson = undefined;
+        let wixSDKSettingsJson = undefined;
+        // Read package.json
+        if (yield* fs.exists(packageJsonPath)) {
+            const raw = yield* fs.readFileString(packageJsonPath, 'utf-8');
+            packageJson = yield* Schema.decodeUnknown(JsonSchema)(raw);
         }
-    }
-    catch (error) {
-        logger.error("Error reading package.json:", error);
-    }
-    try {
-        if (existsSync(lucyJsonPath)) {
-            const raw = readFileSync(lucyJsonPath, 'utf-8');
-            lucyJson = Schema.decodeUnknownSync(lucySettings)(JSON.parse(raw));
+        // Read lucy.json
+        if (yield* fs.exists(lucyJsonPath)) {
+            const raw = yield* fs.readFileString(lucyJsonPath, 'utf-8');
+            const lucyJsonRaw = yield* Schema.decodeUnknown(JsonSchema)(raw);
+            lucyJson = yield* Schema.decodeUnknown(lucySettings)(lucyJsonRaw);
         }
-    }
-    catch (error) {
-        logger.error("Error reading lucy.json:", error);
-    }
-    const defaultModulePath = () => {
-        if (args.type === 'monorepo') {
-            return join('packages');
+        // Read wix-sync.json
+        if (yield* fs.exists(veloSyncJsonPath)) {
+            const raw = yield* fs.readFileString(veloSyncJsonPath, 'utf-8');
+            const veloSyncSettingsRaw = yield* Schema.decodeUnknown(JsonSchema)(raw);
+            veloSyncJson = yield* Schema.decodeUnknown(veloSyncSettings)(veloSyncSettingsRaw);
         }
-        return '';
-    };
-    return Layer.succeed(Config, Config.of({
-        config: {
-            action: {
-                type: args.type,
-                action: args._[0],
-                task: args.task,
-            },
-            force: args.force === true ? true : false,
-            cwd: process.cwd(),
-            projectName: process.cwd().split('/').pop() || 'lucy-project',
-            packageRoot: packageRoot,
-            filesFolder: join(packageRoot, 'files'),
-            packageJson,
-            lucyHome: join(os.homedir(), '.lucy-cli'),
-            lucySettings: lucyJson || {
-                modules: {},
-                devDependencies: {},
-                dependencies: {},
-                scripts: {},
-                initialized: false,
-                type: args.type || 'velo',
-            },
-            templateFiles: '',
-            templateDir: '',
-            defaultModuleBasePath: defaultModulePath(),
+        // Read wix-sdk-settings.json
+        if (yield* fs.exists(wixSDKSettingsJsonPath)) {
+            const raw = yield* fs.readFileString(wixSDKSettingsJsonPath, 'utf-8');
+            const wixSDKSettingsRaw = yield* Schema.decodeUnknown(JsonSchema)(raw);
+            wixSDKSettingsJson = yield* Schema.decodeUnknown(wixSDKSettings)(wixSDKSettingsRaw);
         }
-    }));
+        const defaultModulePath = () => {
+            if (args.type === 'monorepo') {
+                return join('packages');
+            }
+            return '';
+        };
+        return Config.of({
+            config: {
+                action: {
+                    initType: args.initType,
+                    action: args._[0],
+                    tasksName: args.tasksName,
+                    syncAction: args.syncAction,
+                    wixSDKAction: args.wixSDKAction,
+                },
+                force: args.force === true ? true : false,
+                cwd: process.cwd(),
+                projectName: process.cwd().split('/').pop() || 'lucy-project',
+                packageRoot,
+                filesFolder: join(packageRoot, 'files'),
+                packageJson,
+                lucyHome: join(os.homedir(), '.lucy-cli'),
+                veloSyncSettings: veloSyncJson,
+                veloSyncArguments: {
+                    file: args.file,
+                    collection: args.collection,
+                    schema: args.schema,
+                    dry: args.dry || false,
+                },
+                wixSDKSettings: wixSDKSettingsJson,
+                lucySettings: lucyJson || {
+                    modules: {},
+                    devDependencies: {},
+                    dependencies: {},
+                    scripts: {},
+                    initialized: false,
+                    type: args.initType || 'velo',
+                },
+                templateFiles: '',
+                templateDir: '',
+                defaultModuleBasePath: defaultModulePath(),
+            }
+        });
+    }).pipe(Effect.provide(NodeContext.layer)));
 };
 //# sourceMappingURL=config.js.map

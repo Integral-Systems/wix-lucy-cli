@@ -1,14 +1,14 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { LucyArgs, tasks, types } from "./schemas/types.js";
+import { initTypes, LucyArgs, taskNames, syncActions } from "./schemas/types.js";
 
 export async function get_args(): Promise<LucyArgs> {
     const argv = await yargs(hideBin(process.argv))
         .usage('Usage: $0 <command> [options]')
-        .command('init <type>', 'Initialize a new Lucy project', (yargs) => {
-            return yargs.positional('type', {
+        .command('init <initType>', 'Initialize a new Lucy project', (yargs) => {
+            return yargs.positional('initType', {
                 describe: 'The type of project to initialize',
-                choices: types,
+                choices: initTypes,
                 demandOption: true,
             })
         }).option('force', {
@@ -17,12 +17,49 @@ export async function get_args(): Promise<LucyArgs> {
             description: 'Run with force'
         })
         .command('open', 'Open the Lucy home directory')
-        .command('task <task>', 'Run a task', (yargs) => {
-            return yargs.positional('task', {
+        .command('task <tasksName>', 'Run a task', (yargs) => {
+            return yargs.positional('tasksName', {
                 describe: 'The task to run',
-                choices: tasks,
+                choices: taskNames,
                 demandOption: true,
             })
+        })
+        .command('wix-sync <syncAction>', 'Run a velo-sync action', (yargs) => {
+            return yargs.positional("syncAction", {
+                describe: "The velo-sync action to run",
+                choices: syncActions,
+                demandOption: true,
+            })
+            .option('f', {
+                alias: 'file',
+                type: 'string',
+                describe: 'The CSV file to import',
+                demandOption: false,
+            })
+            .option('c', {
+                alias: 'collection',
+                type: 'string',
+                describe: 'The name of the collection to import data into',
+                demandOption: false,
+            })
+            .option('s', {
+                alias: 'schema',
+                type: 'string',
+                describe: 'The schema file',
+                demandOption: false,
+            })
+            .option('dry', {
+                type: 'boolean',
+                describe: 'Run in dry-run mode',
+                demandOption: false,
+            });
+        })
+        .command('wix-sdk <wixSDKAction>', 'Run a velo-sync action', (yargs) => {
+            return yargs.positional("wixSDKAction", {
+                describe: "The velo-sync action to run",
+                choices: syncActions,
+                demandOption: true,
+            });
         })
         .demandCommand(1, 'You need to provide a command. Use --help for a list of commands.')
         .help()

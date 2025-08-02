@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect/index";
-import { Config } from "../config.js";
+import { Config, lucyJsonPath } from "../config.js";
 import { FileSystem, Path } from "@effect/platform"
 import { logger } from "../utils/logger.js";
 import { JsonSchema } from "../schemas/index.js";
@@ -57,11 +57,11 @@ export const setInitialized = Effect.gen(function*() {
     const config = yield* Config;
     const fs = yield* FileSystem.FileSystem;
     const path = yield* Path.Path;
-    const lucyRaw = yield* fs.readFileString(path.join(config.config.cwd, 'lucy.json'));
+    const lucyRaw = yield* fs.readFileString(lucyJsonPath);
     const lucyJSON = (yield* Schema.decodeUnknown(JsonSchema)(lucyRaw)) as any;
     lucyJSON.initialized = true;
 
-    yield* fs.writeFileString(path.join(config.config.cwd, 'lucy.json'), JSON.stringify(lucyJSON, null, 2));
+    yield* fs.writeFileString(lucyJsonPath, JSON.stringify(lucyJSON, null, 2));
 })
 
 export const stringReplace = (filePath: string, keys: string[], values: string[]) => {

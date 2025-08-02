@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect/index";
-import { Config } from "../config.js";
+import { Config, lucyJsonName } from "../config.js";
 import { Command, FileSystem, Path } from "@effect/platform";
 import { JsonSchema } from "../schemas/index.js";
 import { logger } from "../utils/logger.js";
@@ -30,7 +30,7 @@ export const init_blocks = () => {
                 yield* Effect.fail(new AppError({ message: "Failed to initialize Blocks project. Please check the error message above.", cause: new Error("Failed to initialize Blocks project") }));
             }
             const files = yield* fs.readDirectory(config.config.cwd, { recursive: false });
-            const allExcludes = ['.git', 'lucy.json'];
+            const allExcludes = ['.git', lucyJsonName];
             const filteredFiles = files.filter(file => !allExcludes.includes(file));
             const t = yield* fs.stat(filteredFiles[0]);
             t.type === 'Directory';

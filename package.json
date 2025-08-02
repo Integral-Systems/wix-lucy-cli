@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "postinstall": "patch-package"
   },
   "repository": {
     "type": "git",
@@ -36,7 +37,10 @@
     "@effect/platform-node": "^0.94.0",
     "@swc/core": "^1.9.3",
     "@wix/cli": "^1.0.83",
+    "@wix/data": "^1.0.270",
     "@wix/eslint-plugin-cli": "^1.0.1",
+    "@wix/sdk": "^1.15.26",
+    "@wix/sites": "^1.0.24",
     "chalk": "^5.3.0",
     "effect": "^3.17.1",
     "enquirer": "^2.4.1",
@@ -98,6 +102,7 @@
     "eslint-plugin-named-import-spacing": "^1.0.3",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "npm": "^11.0.0",
+    "patch-package": "^8.0.0",
     "ts-node": "^10.9.1"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"

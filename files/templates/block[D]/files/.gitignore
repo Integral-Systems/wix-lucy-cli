@@ -10,3 +10,7 @@ docs
 coverage
 .env
 !.yarn/releases
+
+# wix secrets files
+wix-sync.json
+wix-sdk-settings.json

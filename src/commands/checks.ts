@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect/index";
 import { Command, FileSystem, Path } from "@effect/platform"
-import { Config } from "../config.js";
+import { Config, lucyJsonName } from "../config.js";
 import { logger } from "../utils/logger.js";
 import { AppError } from "../error.js";
 import { JsonSchema } from "../schemas/index.js";
@@ -11,7 +11,7 @@ export const isDirectoryClean =(excludes: string[] = []) => {
         const config = yield* Config;
 
         const files = yield* fs.readDirectory(config.config.cwd);
-        const allExcludes = [...excludes, '.git', 'lucy.json'];
+        const allExcludes = [...excludes, '.git', lucyJsonName];
         const filteredFiles = files.filter(file => !allExcludes.includes(file));
 
         return filteredFiles.length > 0 ? false : true;

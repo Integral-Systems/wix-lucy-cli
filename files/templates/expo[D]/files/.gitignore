@@ -46,3 +46,7 @@ app-example
 .env
 .yarn/
 !.yarn/releases
+
+# wix secrets files
+wix-sync.json
+wix-sdk-settings.json

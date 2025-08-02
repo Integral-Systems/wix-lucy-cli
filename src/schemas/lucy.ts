@@ -1,5 +1,5 @@
 import { Schema } from "effect/index";
-import { types } from "./types.js";
+import { initTypes } from "./types.js";
 
 export const lucySettings = Schema.mutable(Schema.Struct({
 	modules: Schema.Record({
@@ -20,7 +20,7 @@ export const lucySettings = Schema.mutable(Schema.Struct({
 		exclude: Schema.optional(Schema.Array(Schema.String)),
 	}))),
 	initialized: Schema.Boolean,
-    type: Schema.Literal(...types),
+    type: Schema.Literal(...initTypes),
 	dependencies: Schema.mutable(Schema.Record({
         key: Schema.String,
         value: Schema.String,
@@ -36,4 +36,5 @@ export const lucySettings = Schema.mutable(Schema.Struct({
 	additionalCommands: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
 	additionalPkgProps: Schema.optional(Schema.Object),
 }));
+
 export type LucySettings = typeof lucySettings.Type;

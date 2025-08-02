@@ -3,9 +3,13 @@
 // import {createDataSync, LoggingStatistics, LoggerRejectsReporter} from 'velo-sync';
 // import veloAPI from 'velo-sync/dist/velo/velo-api.js';
 // import syncTask from 'velo-sync/dist/tasks/sync-task.js';
-// import { readConfig, saveConfig, VeloSyncConfig } from "./helpers.js";
+// // import { readConfig, saveConfig, VeloSyncConfig } from "./helpers.js";
 // import optimist from 'optimist';
 // import migrateFileCache from 'velo-sync/dist/tasks/migrate-files-cache-task.js';
+// import { Effect, Schema } from "effect/index";
+// import { Config } from "../config.js";
+// import Enquirer from "enquirer";
+// import { AppError } from "../error.js";
 // function printUsage() {
 //     console.log('Usage:  ');
 //     console.log('');
@@ -39,9 +43,17 @@
 //     //@ts-ignore
 //     syncTask.default(filename, collection, schema, importOnly, dryrun);
 // }
+// // syncTask.default(filename, collection, schema, importOnly, dryrun);
 
-// export async function sync() {
+//                 let siteUrl = await askQuestion(orange('what is the url of the site homepage? '));
+//         let secret = await askQuestion(orange('what is the velo-sync secret? '));
+//         rl.close();
+//         let config: VeloSyncConfig = { siteUrl, secret };
+//         await saveConfig(config, moduleSettings.veloConfigName);
+//         return console.log(chalk.green("🐕" + ' => config saved!'));
 
+//     })  
+// }
 //     if(moduleSettings.args.includes('-h') || moduleSettings.args.includes('help')) return printUsage();
 //     if(moduleSettings.args.includes('init')) {
 //         const rl = readline.createInterface({

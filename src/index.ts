@@ -9,6 +9,8 @@ import { logger } from "./utils/logger.js";
 import { open } from "./commands/exec.js";
 import { tasks } from "./tasks/index.js";
 import { cleanupWatchers, killAllProcesses } from "./helpers.js";
+import { wix_sync } from "./wix-sync/index.js";
+import { wix_sdk } from "./wix-sdk/index.js";
 
 let exitReason: 'SIGINT' | 'SIGTERM' | 'none' = 'none'
 let needsCleanup = false;
@@ -51,17 +53,21 @@ const lucyCLI = pipe(
     Effect.gen(function* (_) {
         const config = yield* Config; 
         const t = Config; 
-        config.config.action.type;
         if (config.config.action.action === 'init') {
-            return yield* init();
+            return yield* init;
         }
         if (config.config.action.action === 'open') {
             return yield* open;
         }
         if (config.config.action.action === 'task') {
-            return yield* tasks();
+            return yield* tasks;
         }
-
+        if (config.config.action.action === 'wix-sync') {
+            return yield* wix_sync;
+        }
+        if (config.config.action.action === 'wix-sdk') {
+            return yield* wix_sdk;
+        }
     }),
 ).pipe(
     Effect.catchTags({
@@ -101,7 +107,6 @@ main().then(() => {
 }).catch((error) => {
     if (error instanceof Error) {
         logger.error(error.message);
-        console.debug(JSON.stringify(error, null, 2));
     }
     process.exit(1);
 });
