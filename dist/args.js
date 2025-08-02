@@ -1,6 +1,7 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { initTypes, taskNames, syncActions } from "./schemas/types.js";
+import pkg from "../package.json" assert { type: "json" };
 export async function get_args() {
     const argv = await yargs(hideBin(process.argv))
         .usage('Usage: $0 <command> [options]')
@@ -61,6 +62,8 @@ export async function get_args() {
         });
     })
         .demandCommand(1, 'You need to provide a command. Use --help for a list of commands.')
+        .version('v', 'Show version number', pkg.version)
+        .alias('v', 'version')
         .help()
         .alias('h', 'help')
         .strict()
