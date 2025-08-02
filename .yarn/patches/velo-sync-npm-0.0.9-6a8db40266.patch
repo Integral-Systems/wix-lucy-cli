@@ -1,0 +1,13 @@
+diff --git a/dist/tasks/sync-task.js b/dist/tasks/sync-task.js
+index bf9e91cebf7741fec0f822123aa8ca4d53863225..9a351ec093419815637ef67983ba0ce23e83b635 100644
+--- a/dist/tasks/sync-task.js
++++ b/dist/tasks/sync-task.js
+@@ -30,7 +30,7 @@ exports.default = syncTask;
+ function runImport(filename, collection, schemaFilename, importOnly, dryrun) {
+     return new Promise(async (resolve) => {
+         let stats = new statistics_1.LoggingStatistics();
+-        let config = await config_1.readConfig('config.json');
++        let config = await config_1.readConfig('wix-sync.json');
+         let schema = await schema_1.readSchema(schemaFilename);
+         let loggerRejectsReporter = new rejects_reporter_1.LoggerRejectsReporter(stats);
+         let uploadFileCache = new SQLiteFileUploadCache_1.SQLiteFileUploadCache('./.upload-cache.sqlite.db');
