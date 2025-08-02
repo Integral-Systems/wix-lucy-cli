@@ -4,5 +4,8 @@ node_modules
 
 config.json
 
-.yarn/
 config.json
+.yarn/*
+!.yarn/patches# wix secrets files
+wix-sync.json
+wix-sdk-settings.json

@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "tsc -w",
-    "postinstall": "patch-package"
+    "dev": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -75,7 +74,7 @@
     "ts-node": "^10.9.1",
     "typedoc": "0.28.8",
     "typescript": "^5.6.3",
-    "velo-sync": "^0.0.9",
+    "velo-sync": "patch:velo-sync@npm%3A0.0.9#~/.yarn/patches/velo-sync-npm-0.0.9-6a8db40266.patch",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
@@ -102,7 +101,6 @@
     "eslint-plugin-named-import-spacing": "^1.0.3",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "npm": "^11.0.0",
-    "patch-package": "^8.0.0",
     "ts-node": "^10.9.1"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
