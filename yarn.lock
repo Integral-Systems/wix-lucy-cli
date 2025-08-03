@@ -8983,7 +8983,7 @@ __metadata:
     ts-node: "npm:^10.9.1"
     typedoc: "npm:0.28.8"
     typescript: "npm:^5.6.3"
-    velo-sync: "npm:^0.0.9"
+    velo-sync: "npm:0.0.9"
     yargs: "npm:^18.0.0"
   bin:
     lucy-cli: ./dist/index.js
@@ -12800,7 +12800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"velo-sync@npm:^0.0.9":
+"velo-sync@npm:0.0.9":
   version: 0.0.9
   resolution: "velo-sync@npm:0.0.9"
   dependencies:
