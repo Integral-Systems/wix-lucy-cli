@@ -6,8 +6,9 @@ import { copyFiles } from './copy.js';
 import { previewTemplates } from './templates.js';
 import { checkTs } from './checks.js';
 import { TaskOptions } from '../../schemas/gulp.js';
+import { TaskType } from '../../schemas/types.js';
 
-export function watchAll(options: TaskOptions) {
+export function watchAll(options: TaskOptions): TaskType {
     function watchSCSS() {
         return gulp.watch([
             '*/styles/**/*.scss'

@@ -1,3 +1,4 @@
 import { TaskOptions } from '../../schemas/gulp.js';
-export declare function buildBackend(options: TaskOptions): import("undertaker").TaskFunction;
-export declare function buildBackendJSW(options: TaskOptions): import("undertaker").TaskFunction;
+import { TaskType } from '../../schemas/types.js';
+export declare function buildBackend(options: TaskOptions): TaskType;
+export declare function buildBackendJSW(options: TaskOptions): TaskType;

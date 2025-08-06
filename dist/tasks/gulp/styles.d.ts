@@ -1,2 +1,3 @@
 import { TaskOptions } from '../../schemas/gulp.js';
-export declare function compileScss(options: TaskOptions): import("undertaker").TaskFunction;
+import { TaskType } from '../../schemas/types.js';
+export declare function compileScss(options: TaskOptions): TaskType;

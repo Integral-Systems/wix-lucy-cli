@@ -1,7 +1,9 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { initTypes, taskNames, syncActions } from "./schemas/types.js";
-import pkg from "../package.json" assert { type: "json" };
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const pkg = require("../package.json");
 export async function get_args() {
     const argv = await yargs(hideBin(process.argv))
         .usage('Usage: $0 <command> [options]')

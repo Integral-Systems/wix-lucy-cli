@@ -4,6 +4,7 @@ import * as path from 'path';
 import swc from 'gulp-swc';
 import { logger } from '../../utils/logger.js';
 import { TaskOptions } from '../../schemas/gulp.js';
+import { TaskType } from '../../schemas/types.js';
 
 const swcOptions = {
     jsc: {
@@ -21,7 +22,7 @@ const swcOptions = {
     },
 };
 
-export function buildBackend(options: TaskOptions) {
+export function buildBackend(options: TaskOptions): TaskType {
     const folders = ['typescript', ...options.modulesSourcePaths];
 
     const { outputDir } = options;
@@ -65,7 +66,7 @@ export function buildBackend(options: TaskOptions) {
 }
 
 
-export function buildBackendJSW(options: TaskOptions) {
+export function buildBackendJSW(options: TaskOptions): TaskType {
     const folders = ['typescript', ...options.modulesSourcePaths];
 
     const swcOptions = {

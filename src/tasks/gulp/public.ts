@@ -3,6 +3,7 @@ import * as path from 'path';
 import swc from 'gulp-swc';
 import { logger } from '../../utils/logger.js';
 import { TaskOptions } from '../../schemas/gulp.js';
+import { TaskType } from '../../schemas/types.js';
 
 const swcOptions = {
     jsc: {
@@ -18,7 +19,7 @@ const swcOptions = {
     },
 };
 
-export function buildPublic(options: TaskOptions) {
+export function buildPublic(options: TaskOptions): TaskType {
     const folders = ['typescript', ...options.modulesSourcePaths];
 
     const { outputDir } = options;

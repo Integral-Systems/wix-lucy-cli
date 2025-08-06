@@ -3,8 +3,10 @@ export declare const taskNames: readonly ["dev", "build", "build-prod", "build-p
 export declare const syncActions: readonly ["sync", "import", "init", "is-alive", "migrate", "export"];
 export declare const WixSDKActions: readonly ["init", ""];
 export type Action = 'init' | 'open' | 'task' | 'wix-sync';
+import gulp from 'gulp';
 export type SyncTaskType = (filename: string, collection: string, schemaFilename: string, importOnly: boolean, dryrun: boolean) => Promise<void>;
 export type MigrateFileCache = () => Promise<void>;
+export type TaskType = ReturnType<typeof gulp.parallel>;
 export type Actions = {
     action: Action;
     initType?: typeof initTypes[number];

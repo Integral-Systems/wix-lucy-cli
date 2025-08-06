@@ -1,8 +1,9 @@
 import gulp from 'gulp';
 import { logger } from '../../utils/logger.js';
 import { TaskOptions } from '../../schemas/gulp.js';
+import { TaskType } from '../../schemas/types.js';
 
-export function copyFiles(options: TaskOptions) {
+export function copyFiles(options: TaskOptions): TaskType {
     const folders = ['typescript', ...options.modulesSourcePaths];
     const tasks = folders.map((folder) => {
 		const { outputDir} = options;
@@ -31,7 +32,7 @@ export function copyFiles(options: TaskOptions) {
         Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging
         return task;
     });
-
+    const t = gulp.parallel(...tasks);
     // Run all tasks in parallel
     return gulp.parallel(...tasks);
 }

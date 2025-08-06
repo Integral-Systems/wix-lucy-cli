@@ -6,6 +6,7 @@ import gulp from 'gulp';
 import ts from 'gulp-typescript';
 import { blue, logger, red, yellow } from '../../utils/logger.js';
 import { TaskOptions } from '../../schemas/gulp.js';
+import { TaskType } from '../../schemas/types.js';
 
 // /**
 //  *  Extracts a match from a file
@@ -172,7 +173,7 @@ const customReporter: ts.reporter.Reporter = {
 	},
 };
 
-export function checkTs(options: TaskOptions) {
+export function checkTs(options: TaskOptions): TaskType {
     const folders = ['typescript', ...options.modulesSourcePaths];
 
 

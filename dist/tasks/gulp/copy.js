@@ -27,6 +27,7 @@ export function copyFiles(options) {
         Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging
         return task;
     });
+    const t = gulp.parallel(...tasks);
     // Run all tasks in parallel
     return gulp.parallel(...tasks);
 }

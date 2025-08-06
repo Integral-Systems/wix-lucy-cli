@@ -1,11 +1,9 @@
-import { Effect, Schema } from "effect/index"
+import { Effect } from "effect/index"
 import { Config } from "../config.js";
 import { AppError } from "../error.js";
 import { task_runGulp } from "./Gulpfile.js";
 import { task_syncSettings } from "./syncSettings.js";
 import { setNeedsCleanup } from "../index.js";
-
-
 export const tasks = Effect.gen(function* (_) {
     const config = yield* Config;
     if(config.config.action.tasksName === undefined) {

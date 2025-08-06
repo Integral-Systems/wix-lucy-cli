@@ -1,2 +1,3 @@
 import { TaskOptions } from '../../schemas/gulp.js';
-export declare function copyFiles(options: TaskOptions): import("undertaker").TaskFunction;
+import { TaskType } from '../../schemas/types.js';
+export declare function copyFiles(options: TaskOptions): TaskType;
