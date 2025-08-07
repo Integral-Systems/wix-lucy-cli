@@ -7,10 +7,8 @@ import { checkForDirty } from "../commands/checks.js";
 import { setInitialized } from "../commands/edit.js";
 import { Config } from "../config.js";
 import { Command, FileSystem, Path } from "@effect/platform"
-import { JsonSchema } from "../schemas/index.js";
 import { AppError } from "../error.js";
 import { installPackages } from "../commands/install.js";
-import { Terminal } from "@effect/platform"
 
 export const init_tauri = () => {
     return Effect.gen(function*() {
@@ -30,7 +28,7 @@ export const init_tauri = () => {
             yield* Effect.fail(new AppError({ message: "Failed to initialize Tauri project. Please check the error message above.", cause: new Error("Failed to initialize Tauri project") }));
         }
         yield* copyTemplateFiles;
-        yield* installPackages;
+        yield* installPackages();
         yield* writeLucySettings;
         yield* gitInit();
         yield* setInitialized;

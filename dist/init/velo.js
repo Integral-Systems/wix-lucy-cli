@@ -6,7 +6,7 @@ import { mergeAdditions, mergeLucySettings2PackageJson, setInitialized, setProje
 import { writeLucySettings, writePackageJson } from "../commands/write.js";
 import { copyTemplateFiles } from "../commands/copy.js";
 import { readPackageJson } from "../commands/read.js";
-import { installVeloPackages, yarnSetVersion } from "../commands/install.js";
+import { installVeloPackages, runInstall } from "../commands/install.js";
 import { cleanup } from "../commands/cleanup.js";
 import { gitInit } from "../commands/git.js";
 import { checkForVelo } from "../commands/checks.js";
@@ -48,8 +48,8 @@ export const init_velo = () => {
         yield* writeLucySettings;
         yield* writePackageJson;
         yield* gitInit();
-        yield* yarnSetVersion;
         yield* installVeloPackages;
+        yield* runInstall;
         yield* cleanup;
         yield* setInitialized;
         logger.success("Velo initialized successfully!");

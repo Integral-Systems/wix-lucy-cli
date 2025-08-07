@@ -1,0 +1,10 @@
+packages:
+  - packages/*
+  - apps/*
+  - shared/*
+
+nodeLinker: hoisted
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - nx

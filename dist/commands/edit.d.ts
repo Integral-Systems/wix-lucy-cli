@@ -1,10 +1,10 @@
 import { Effect } from "effect/index";
 import { Config } from "../config.js";
-import { FileSystem, Path } from "@effect/platform";
+import { FileSystem } from "@effect/platform";
 export declare const editJson: (json: any, keys: string[], values: string[] | Object[]) => Effect.Effect<void, never, Config>;
 export declare const mergeLucySettings2PackageJson: Effect.Effect<void, never, Config>;
 export declare const setModule: Effect.Effect<void, never, Config>;
 export declare const mergeAdditions: Effect.Effect<void, never, Config>;
 export declare const setProjectName: Effect.Effect<void, never, Config>;
-export declare const setInitialized: Effect.Effect<void, import("effect/ParseResult").ParseError | import("@effect/platform/Error").PlatformError, Config | FileSystem.FileSystem | Path.Path>;
+export declare const setInitialized: Effect.Effect<void, import("effect/ParseResult").ParseError | import("@effect/platform/Error").PlatformError, FileSystem.FileSystem>;
 export declare const stringReplace: (filePath: string, keys: string[], values: string[]) => Effect.Effect<void, import("@effect/platform/Error").PlatformError, FileSystem.FileSystem>;

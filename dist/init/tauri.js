@@ -19,7 +19,7 @@ export const init_tauri = () => {
             yield* Effect.fail(new AppError({ message: "Failed to initialize Tauri project. Please check the error message above.", cause: new Error("Failed to initialize Tauri project") }));
         }
         yield* copyTemplateFiles;
-        yield* installPackages;
+        yield* installPackages();
         yield* writeLucySettings;
         yield* gitInit();
         yield* setInitialized;

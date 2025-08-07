@@ -73,7 +73,7 @@ export const init_blocks = () => {
         yield* writePackageJson;
         yield* copyTemplateFiles;
         yield* execCommand;
-        yield* installPackages;
+        yield* installPackages();
         yield* cleanup;
         yield* setInitialized;
 

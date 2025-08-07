@@ -69,6 +69,7 @@
   },
   "initialized": false,
   "type": "expo",
+  "packageManager": "pnpm",
   "additionalPkgProps": {
     "expo": {
       "doctor": {

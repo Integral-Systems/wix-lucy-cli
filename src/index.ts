@@ -52,7 +52,6 @@ process.on('SIGTERM', () => {
 const lucyCLI = pipe(
     Effect.gen(function* (_) {
         const config = yield* Config; 
-        const t = Config; 
         if (config.config.action.action === 'init') {
             return yield* init;
         }

@@ -10,5 +10,6 @@
   "dependencies": {},
   "scripts": {},
   "initialized": false,
-  "type": "cargo"
+  "type": "cargo",
+  "packageManager": "pnpm"
 }

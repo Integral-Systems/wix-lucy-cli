@@ -76,5 +76,6 @@ export async function get_args(): Promise<LucyArgs> {
         .parseAsync();
 
     // The cast is now safer with the defined interface.
+    
     return argv as LucyArgs;
 }

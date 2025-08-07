@@ -22,7 +22,6 @@ declare const Config_base: Context.TagClass<Config, "Config", {
         templateDir: string;
         templateFiles: string;
         projectName: string;
-        defaultModuleBasePath: string;
         veloSyncSettings?: VeloSyncSettings;
         wixSDKSettings?: WixSDKSettings;
     };

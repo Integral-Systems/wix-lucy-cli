@@ -4,5 +4,6 @@
   "dependencies": {},
   "scripts": {},
   "initialized": false,
-  "type": "tauri"
+  "type": "tauri",
+  "packageManager": "pnpm"
 }

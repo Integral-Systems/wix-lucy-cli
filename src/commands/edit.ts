@@ -54,9 +54,7 @@ export const setProjectName = Effect.gen(function*() {
 })
 
 export const setInitialized = Effect.gen(function*() {
-    const config = yield* Config;
     const fs = yield* FileSystem.FileSystem;
-    const path = yield* Path.Path;
     const lucyRaw = yield* fs.readFileString(lucyJsonPath);
     const lucyJSON = (yield* Schema.decodeUnknown(JsonSchema)(lucyRaw)) as any;
     lucyJSON.initialized = true;

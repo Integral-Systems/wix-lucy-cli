@@ -25,7 +25,7 @@ export const selectTemplate = () => {
         const templateChoices: string[] = [];
         for (const dirent of files) {
             if (dirent.isDirectory()) {
-                const lucyRaw = yield* fs.readFileString(lucyJsonPath);   
+                const lucyRaw = yield* fs.readFileString(join(templatesPath, dirent.name, lucyJsonName));   
                 const lucySettingsJSON = yield* Schema.decodeUnknown(JsonSchema)(lucyRaw); 
                 const lucySetting = yield* Schema.decodeUnknown(lucySettings)(lucySettingsJSON)
                 if (lucySetting.type === config.config.action.initType) {

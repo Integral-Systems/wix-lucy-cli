@@ -41,7 +41,7 @@ export const init_expo = () => {
         yield* writePackageJson;
         yield* copyTemplateFiles;
         yield* execCommand;
-        yield* installPackages;
+        yield* installPackages();
         yield* cleanup;
         yield* setInitialized;
         logger.success("Expo project initialized successfully!");

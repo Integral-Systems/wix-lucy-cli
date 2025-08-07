@@ -4,5 +4,6 @@
   "dependencies": {},
   "scripts": {},
   "initialized": false,
-  "type": "blocks"
+  "type": "blocks",
+  "packageManager": "pnpm"
 }

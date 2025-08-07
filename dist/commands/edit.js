@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect/index";
 import { Config, lucyJsonPath } from "../config.js";
-import { FileSystem, Path } from "@effect/platform";
+import { FileSystem } from "@effect/platform";
 import { logger } from "../utils/logger.js";
 import { JsonSchema } from "../schemas/index.js";
 export const editJson = (json, keys, values) => {
@@ -42,9 +42,7 @@ export const setProjectName = Effect.gen(function* () {
     yield* editJson(packageJson, ["name"], [config.config.projectName]);
 });
 export const setInitialized = Effect.gen(function* () {
-    const config = yield* Config;
     const fs = yield* FileSystem.FileSystem;
-    const path = yield* Path.Path;
     const lucyRaw = yield* fs.readFileString(lucyJsonPath);
     const lucyJSON = (yield* Schema.decodeUnknown(JsonSchema)(lucyRaw));
     lucyJSON.initialized = true;

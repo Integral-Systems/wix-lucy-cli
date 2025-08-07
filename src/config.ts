@@ -30,7 +30,6 @@ export class Config extends Context.Tag("Config")<
             templateDir: string;
             templateFiles: string;
             projectName: string;
-            defaultModuleBasePath: string;
             veloSyncSettings?: VeloSyncSettings;
             wixSDKSettings?: WixSDKSettings;
         }
@@ -95,7 +94,7 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
 
             const defaultModulePath = () => {
                 if (args.type === 'monorepo') {
-                    return join('packages');
+                    return 'packages';
                 }
                 return '';
             };
@@ -131,10 +130,11 @@ export const ConfigLayer = (args: Awaited<ReturnType<typeof get_args>>) => {
                         scripts: {},
                         initialized: false,
                         type: args.initType || 'velo',
+                        packageManager: 'npm',
+                        defaultModulePath: ''
                     },
                     templateFiles: '',
-                    templateDir: '',
-                    defaultModuleBasePath: defaultModulePath(),
+                    templateDir: '',                    
                 }
             });
         }).pipe(Effect.provide(NodeContext.layer))

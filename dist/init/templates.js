@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect/index";
-import { Config, lucyJsonName, lucyJsonPath } from "../config.js";
+import { Config, lucyJsonName } from "../config.js";
 import { orange, red, green, logger } from "../utils/logger.js";
 import { FileSystem } from "@effect/platform";
 import { join } from 'path';
@@ -23,7 +23,7 @@ export const selectTemplate = () => {
         const templateChoices = [];
         for (const dirent of files) {
             if (dirent.isDirectory()) {
-                const lucyRaw = yield* fs.readFileString(lucyJsonPath);
+                const lucyRaw = yield* fs.readFileString(join(templatesPath, dirent.name, lucyJsonName));
                 const lucySettingsJSON = yield* Schema.decodeUnknown(JsonSchema)(lucyRaw);
                 const lucySetting = yield* Schema.decodeUnknown(lucySettings)(lucySettingsJSON);
                 if (lucySetting.type === config.config.action.initType) {

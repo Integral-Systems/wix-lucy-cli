@@ -56,7 +56,7 @@ export const ConfigLayer = (args) => {
         }
         const defaultModulePath = () => {
             if (args.type === 'monorepo') {
-                return join('packages');
+                return 'packages';
             }
             return '';
         };
@@ -91,10 +91,11 @@ export const ConfigLayer = (args) => {
                     scripts: {},
                     initialized: false,
                     type: args.initType || 'velo',
+                    packageManager: 'npm',
+                    defaultModulePath: ''
                 },
                 templateFiles: '',
                 templateDir: '',
-                defaultModuleBasePath: defaultModulePath(),
             }
         });
     }).pipe(Effect.provide(NodeContext.layer)));

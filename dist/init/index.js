@@ -12,6 +12,7 @@ import { init_blocks } from "./blocks.js";
 import { init_velo } from "./velo.js";
 import { init_submodules } from "./gitModules.js";
 import { init_tauri } from "./tauri.js";
+import { pkgManagers } from "../schemas/lucy.js";
 export const init = Effect.gen(function* (_) {
     const config = yield* Config;
     if (config.config.action.initType === undefined) {
@@ -36,6 +37,20 @@ export const init = Effect.gen(function* (_) {
     config.config.projectName = selectedName.projectName.trim();
     yield* selectTemplate();
     yield* readLucyJsonFromTemplate;
+    const pkgMgrQuestion = new Enquirer();
+    const pkgMgr = yield* Effect.tryPromise({
+        try: () => pkgMgrQuestion.prompt({
+            type: 'select',
+            name: 'packageManager',
+            message: 'Select a package manager',
+            choices: [...pkgManagers],
+        }),
+        catch: (e) => {
+            return new AppError({ cause: e, message: 'Error selecting package manager' });
+        }
+    });
+    const selectedPkgMgr = yield* Schema.decodeUnknown(Schema.Struct({ packageManager: Schema.Literal(...pkgManagers) }))(pkgMgr);
+    config.config.lucySettings.packageManager = selectedPkgMgr.packageManager;
     if (config.config.action.initType === 'expo') {
         return yield* init_expo();
     }

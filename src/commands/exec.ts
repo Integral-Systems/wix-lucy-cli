@@ -1,8 +1,10 @@
-import { Effect } from "effect/index";
+import { Effect, Schema } from "effect/index";
 import { Config } from "../config.js";
 import { Command } from "@effect/platform/index";
 import { logger } from "../utils/logger.js";
 import { FileSystem } from "@effect/platform"
+import Enquirer from "enquirer";
+import { AppError } from "../error.js";
 
 export const execCommand = Effect.gen(function*() {
     const config = yield* Config;
@@ -35,3 +37,32 @@ export const open = Effect.scoped(Effect.gen(function*() {
     command.pipe().pipe(Command.stdout("inherit"), Command.exitCode);
     yield* command.pipe().pipe(Command.stdout("inherit"), Command.exitCode);
 }))
+
+export const openVSCode = Effect.gen(function*() {
+    const config = yield* Config;
+    const open = Command.make(
+        "code", 
+        config.config.cwd,
+        ).pipe(
+        Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.exitCode // Get the exit code
+    )
+    const overwriteQuestion = new Enquirer();
+    const openVScodeQuestion = yield* Effect.tryPromise({
+        try: () => overwriteQuestion.prompt({
+            type: 'confirm',
+            name: 'openVSCode',
+            message: `Do you want to open the project in VSCode?`,
+        }),
+        catch: (e) => {
+            return new AppError({
+                cause: e,
+                message: "Error opening VSCode",
+            });
+        }
+    })
+    const choice = yield* Schema.decodeUnknown(Schema.Struct({ openVSCode: Schema.Boolean }))(openVScodeQuestion);
+    if (choice.openVSCode) {
+        yield* open
+    }
+})

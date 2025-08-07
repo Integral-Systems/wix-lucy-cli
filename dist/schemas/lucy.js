@@ -1,5 +1,6 @@
 import { Schema } from "effect/index";
 import { initTypes } from "./types.js";
+export const pkgManagers = ['npm', 'yarn', 'pnpm'];
 export const lucySettings = Schema.mutable(Schema.Struct({
     modules: Schema.Record({
         key: Schema.String,
@@ -35,5 +36,7 @@ export const lucySettings = Schema.mutable(Schema.Struct({
     }),
     additionalCommands: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
     additionalPkgProps: Schema.optional(Schema.Object),
+    packageManager: Schema.mutable(Schema.Literal(...pkgManagers)),
+    defaultModulePath: Schema.optional(Schema.String),
 }));
 //# sourceMappingURL=lucy.js.map

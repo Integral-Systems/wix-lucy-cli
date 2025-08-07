@@ -1,5 +1,5 @@
 import { Effect, Schema } from "effect/index";
-import { Command, FileSystem, Path } from "@effect/platform"
+import { FileSystem, Path } from "@effect/platform"
 import { Config, lucyJsonName } from "../config.js";
 import { logger } from "../utils/logger.js";
 import { AppError } from "../error.js";

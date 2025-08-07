@@ -61,7 +61,7 @@ export const initSubmodules = (update: boolean = false) => Effect.gen(function* 
 
     for (const [name, repo] of Object.entries(config.config.lucySettings.modules)) {
         logger.action(`Processing submodule ${name}`);
-		const clonePath = repo.path || path.join(config.config.defaultModuleBasePath, name);
+		const clonePath = repo.path || path.join(config.config.lucySettings.defaultModulePath ?? '', name);
 
         const isRegistered = yield* isSubmoduleRegistered(git, clonePath);
         const isConfiguredInFile = (yield* fs.exists(gitmodulesPath)) && (yield* fs.readFileString(gitmodulesPath, 'utf-8')).includes(`[submodule "${clonePath}"]`);
