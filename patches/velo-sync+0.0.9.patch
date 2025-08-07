@@ -1,7 +1,7 @@
-diff --git a/dist/tasks/sync-task.js b/dist/tasks/sync-task.js
-index bf9e91cebf7741fec0f822123aa8ca4d53863225..9a351ec093419815637ef67983ba0ce23e83b635 100644
---- a/dist/tasks/sync-task.js
-+++ b/dist/tasks/sync-task.js
+diff --git a/node_modules/velo-sync/dist/tasks/sync-task.js b/node_modules/velo-sync/dist/tasks/sync-task.js
+index bf9e91c..9a351ec 100644
+--- a/node_modules/velo-sync/dist/tasks/sync-task.js
++++ b/node_modules/velo-sync/dist/tasks/sync-task.js
 @@ -30,7 +30,7 @@ exports.default = syncTask;
  function runImport(filename, collection, schemaFilename, importOnly, dryrun) {
      return new Promise(async (resolve) => {

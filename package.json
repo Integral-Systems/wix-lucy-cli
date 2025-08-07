@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "lucy-cli",
-  "version": "2.0.0-alpha.17",
+  "version": "2.0.0-alpha.18",
   "description": "Lucy Framework for WIX Studio Editor",
   "main": ".dist/index.js",
   "scripts": {
@@ -69,7 +69,6 @@
     "merge2": "^1.4.1",
     "optimist": "^0.6.1",
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.0.3",
     "sass": "^1.65.1",
     "simple-git": "^3.20.0",
@@ -77,7 +76,7 @@
     "ts-node": "^10.9.1",
     "typedoc": "0.28.8",
     "typescript": "^5.6.3",
-    "velo-sync": "0.0.9",
+    "velo-sync": "^0.0.9",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
