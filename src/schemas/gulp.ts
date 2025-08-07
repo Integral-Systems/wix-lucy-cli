@@ -23,7 +23,6 @@ export type TaskOptions = {
     publicSettings: typeof publicSettings,
     modulesSourcePaths: string[];
     cwd: string;
-    isWatching?: boolean;
 }
 
 export interface File {

@@ -24,7 +24,7 @@ export function watchAll(options: TaskOptions): TaskType {
             '!*/backend/**/*.jsw.ts', 
             '!src/**/*',
         ], gulp.parallel(
-            checkTs(options),
+            checkTs(options, true),
             buildBackend(options),
         ));
     }

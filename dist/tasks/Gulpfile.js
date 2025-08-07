@@ -45,7 +45,6 @@ export const task_runGulp = Effect.gen(function* (_) {
         },
         cwd: process.cwd(),
         modulesSourcePaths: yield* getModulesSourcePaths,
-        isWatching: config.action.tasksName === 'dev' ? true : false
     };
     logger.action(`Running task: ${task}`);
     gulp.task('check-ts', gulp.parallel(checkTs(taskOptions)));

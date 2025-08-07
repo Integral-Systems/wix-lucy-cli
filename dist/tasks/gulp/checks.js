@@ -3,7 +3,7 @@ import { glob } from 'glob';
 import * as path from 'path';
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
-import { blue, logger, red, yellow } from '../../utils/logger.js';
+import { logger, red, yellow } from '../../utils/logger.js';
 // /**
 //  *  Extracts a match from a file
 //  * @param {string} filePath File path
@@ -151,46 +151,52 @@ const customReporter = {
         const line = startPosition ? startPosition.line + 1 : 0;
         const col = startPosition ? startPosition.character + 1 : 0;
         const message = tsInstance.flattenDiagnosticMessageText(error.diagnostic.messageText, '\n');
-        logger.info(`${blue.underline(relativePath)}:${yellow(String(line))}:${yellow(String(col))}`);
-        logger.error(`  ${red('error')} ${yellow(`TS${error.diagnostic.code}`)}: ${message}`);
+        logger.error(`${red.underline(relativePath)}:${yellow(String(line))}:${yellow(String(col))}`);
+        logger.error(`${red('error')} ${yellow(`TS${error.diagnostic.code}`)}: ${message}`);
     },
     finish: (results) => {
         const errorCount = results.transpileErrors + results.semanticErrors + results.declarationErrors;
         if (errorCount > 0) {
-            logger.error(`\n${red.bold(`Found ${errorCount} error${errorCount > 1 ? 's' : ''}.`)}`);
+            logger.error(`${red.bold(`Found ${errorCount} error${errorCount > 1 ? 's' : ''}.`)}`);
         }
     },
 };
-export function checkTs(options) {
-    const folders = ['typescript', ...options.modulesSourcePaths];
-    // Create tasks for each folder
+export function checkTs(options, watching = false) {
+    const folders = ["typescript", ...options.modulesSourcePaths];
     const tasks = folders.map((folder) => {
-        const tsProject = ts.createProject(`./local.tsconfig.json`, { noEmit: true, declaration: false, skipDefaultLibCheck: true });
-        const taskName = `test-${folder}`; // Create a unique name for each task
-        const task = () => {
+        const tsProject = ts.createProject(`./local.tsconfig.json`, {
+            noEmit: true,
+            declaration: false,
+            skipDefaultLibCheck: true,
+        });
+        const taskName = `test-${folder}`;
+        const task = (done) => {
             let hasError = false;
-            const stream = gulp.src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`])
+            const stream = gulp
+                .src([`${folder}/**/*.ts`, `!${folder}/types/**/*.ts`])
                 .pipe(tsProject(customReporter))
-                .on('error', () => {
+                .on("error", (error) => {
                 hasError = true;
+                logger.error(`Error in ${folder}: ${error.message}`);
+                if (watching) {
+                    stream.emit("end");
+                }
+                else {
+                    logger.error(`TypeScript check failed for ${folder}.`);
+                    process.exit(1); // Exit with error code
+                }
             });
-            if (options.isWatching) {
-                stream.on('error', function () {
-                    this.emit('end');
-                });
-            }
-            stream.on('end', () => {
+            stream.on("end", () => {
                 if (!hasError) {
                     logger.success(`Typescript check for ${folder} succeeded!`);
                 }
+                stream.emit("finish");
             });
             return stream;
         };
-        // Register the task with Gulp
-        Object.defineProperty(task, 'name', { value: taskName }); // Set a unique name for debugging
+        Object.defineProperty(task, "name", { value: taskName });
         return task;
     });
-    // Run all tasks in parallel
     return gulp.parallel(...tasks);
 }
 //# sourceMappingURL=checks.js.map

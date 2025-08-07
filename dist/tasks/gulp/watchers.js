@@ -17,7 +17,7 @@ export function watchAll(options) {
             '*/backend/**/*.tsx',
             '!*/backend/**/*.jsw.ts',
             '!src/**/*',
-        ], gulp.parallel(checkTs(options), buildBackend(options)));
+        ], gulp.parallel(checkTs(options, true), buildBackend(options)));
     }
     function watchPublic() {
         return gulp.watch([

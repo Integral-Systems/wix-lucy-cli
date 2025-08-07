@@ -49,7 +49,6 @@ export const task_runGulp = Effect.gen(function* (_) {
 		},
 		cwd: process.cwd(),
 		modulesSourcePaths: yield* getModulesSourcePaths,
-		isWatching: config.action.tasksName === 'dev' ? true : false
 	};
 
 	
