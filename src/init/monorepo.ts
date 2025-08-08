@@ -6,7 +6,7 @@ import { mergeAdditions, mergeLucySettings2PackageJson, setInitialized, setProje
 import { writeLucySettings, writePackageJson } from "../commands/write.js";
 import { copyTemplateFiles } from "../commands/copy.js";
 import { readPackageJson } from "../commands/read.js";
-import { installPackages, runInstall } from "../commands/install.js";
+import { approveBuilds, installPackages, runInstall } from "../commands/install.js";
 import { cleanup } from "../commands/cleanup.js";
 import { gitInit } from "../commands/git.js";
 import { checkForDirty } from "../commands/checks.js";
@@ -35,6 +35,7 @@ export const init_monorepo = () => {
             "--formatter=prettier"
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
+            Command.stderr("inherit"), // Stream stderr to process.stderr
             Command.exitCode // Get the exit code
         )
 
@@ -60,10 +61,12 @@ export const init_monorepo = () => {
         yield* gitInit();
         yield* runInstall;
         yield* installPackages(true);
+        yield* approveBuilds;
         yield* cleanup;
         yield* setInitialized;
-        yield* openVSCode;
 
         logger.success("Monorepo initialized successfully!");
+
+        yield* openVSCode;
     })
 }

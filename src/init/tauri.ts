@@ -8,7 +8,8 @@ import { setInitialized } from "../commands/edit.js";
 import { Config } from "../config.js";
 import { Command, FileSystem, Path } from "@effect/platform"
 import { AppError } from "../error.js";
-import { installPackages } from "../commands/install.js";
+import { approveBuilds, installPackages } from "../commands/install.js";
+import { openVSCode } from "../commands/exec.js";
 
 export const init_tauri = () => {
     return Effect.gen(function*() {
@@ -29,10 +30,13 @@ export const init_tauri = () => {
         }
         yield* copyTemplateFiles;
         yield* installPackages();
+        yield* approveBuilds;
         yield* writeLucySettings;
         yield* gitInit();
         yield* setInitialized;
 
         logger.success("Tauri project initialized successfully!");
+
+        yield* openVSCode;
     })
 }

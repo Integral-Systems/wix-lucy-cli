@@ -61,6 +61,7 @@ export const installPackages = (workspace: boolean = false) => {
                 ...pkgs,
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
+            Command.stderr("inherit"), // Stream stderr to process.stderr
             Command.exitCode // Get the exit code
         )
 
@@ -72,6 +73,7 @@ export const installPackages = (workspace: boolean = false) => {
                 ...devPkgs,
             ).pipe(
             Command.stdout("inherit"), // Stream stdout to process.stdout
+            Command.stderr("inherit"), // Stream stderr to process.stderr
             Command.exitCode // Get the exit code
         )
 
@@ -97,6 +99,7 @@ export const runInstall = Effect.gen(function*() {
         "install",
     ).pipe(
         Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.stderr("inherit"), // Stream stderr to process.stderr
         Command.exitCode // Get the exit code
     )
     yield* install;
@@ -159,6 +162,7 @@ export const installVeloPackages = Effect.gen(function*() {
                         `${key}@${value}`
                 ).pipe(
                     Command.stdout("inherit"),
+                    Command.stderr("inherit"),
                     Command.exitCode
                 )
             )
@@ -173,6 +177,7 @@ export const installVeloPackages = Effect.gen(function*() {
                     `${key}`
             ).pipe(
                 Command.stdout("inherit"),
+                Command.stderr("inherit"),
                 Command.exitCode
             ),
         ))
@@ -229,9 +234,11 @@ export const approveBuilds = Effect.gen(function*() {
     const manager = config.config.lucySettings.packageManager;
     const approve = Command.make(
         "pnpm",
-        "approve-build",
+        "approve-builds",
     ).pipe(
         Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.stderr("inherit"), // Stream stderr to process.stderr
+        Command.stdin("inherit"),
         Command.exitCode // Get the exit code
     )
     if (manager !== "pnpm") {

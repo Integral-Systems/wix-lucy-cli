@@ -43,7 +43,8 @@
     "syncpack": "",
     "typescript-eslint": "",
     "typescript-eslint-language-service": "",
-    "@typescript-eslint/parser": ""
+    "@typescript-eslint/parser": "",
+    "@lucy/vitest-config": "workspace:*"
   },
   "dependencies": {},
   "scripts": {

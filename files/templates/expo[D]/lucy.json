@@ -31,7 +31,8 @@
     "node-libs-react-native": "",
     "util": "",
     "events": "",
-    "tailwindcss-animate": ""
+    "tailwindcss-animate": "",
+    "papaparse": ""
   },
   "additionalCommands": [
     [
@@ -46,7 +47,10 @@
       "react-dom",
       "react-native-web",
       "@expo/metro-runtime",
-      "expo-system-ui"
+      "expo-system-ui",
+      "expo-localization",
+      "expo-file-system",
+      "expo-asset"
     ]
   ],
   "scripts": {

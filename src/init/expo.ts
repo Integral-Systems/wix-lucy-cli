@@ -7,8 +7,8 @@ import { mergeAdditions, mergeLucySettings2PackageJson, setInitialized } from ".
 import { writeLucySettings, writePackageJson } from "../commands/write.js";
 import { copyTemplateFiles } from "../commands/copy.js";
 import { readPackageJson } from "../commands/read.js";
-import { execCommand } from "../commands/exec.js";
-import { installPackages } from "../commands/install.js";
+import { execCommand, openVSCode } from "../commands/exec.js";
+import { approveBuilds, installPackages } from "../commands/install.js";
 import { AppError } from "../error.js";
 import { cleanup } from "../commands/cleanup.js";
 import { checkForDirty } from "../commands/checks.js";
@@ -32,6 +32,7 @@ export const init_expo = () => {
         if(!expoAppReady) {
             const initExpo = Command.make("npx", "create-expo-app@latest", config.config.projectName, "--template", "blank-typescript", "--no-install").pipe(
                 Command.stdout("inherit"),
+                Command.stderr("inherit"),
                 Command.exitCode
             )
             if((yield* initExpo) !== 0) {
@@ -57,10 +58,12 @@ export const init_expo = () => {
         yield* copyTemplateFiles;
         yield* execCommand;
         yield* installPackages();
+        yield* approveBuilds;
         yield* cleanup;
         yield* setInitialized;
         
         logger.success("Expo project initialized successfully!");
 
+        yield* openVSCode;
     })
 }

@@ -1,5 +1,5 @@
 import { Schema } from "effect/index";
-export declare const pkgManagers: readonly ["npm", "yarn", "pnpm"];
+export declare const pkgManagers: readonly ["pnpm", "npm", "yarn"];
 export declare const lucySettings: Schema.mutable<Schema.Struct<{
     modules: Schema.Record$<typeof Schema.String, Schema.Struct<{
         source: typeof Schema.String;
@@ -23,7 +23,7 @@ export declare const lucySettings: Schema.mutable<Schema.Struct<{
     scripts: Schema.Record$<typeof Schema.String, typeof Schema.String>;
     additionalCommands: Schema.optional<Schema.Array$<Schema.Array$<typeof Schema.String>>>;
     additionalPkgProps: Schema.optional<typeof Schema.Object>;
-    packageManager: Schema.mutable<Schema.Literal<["npm", "yarn", "pnpm"]>>;
+    packageManager: Schema.mutable<Schema.Literal<["pnpm", "npm", "yarn"]>>;
     defaultModulePath: Schema.optional<typeof Schema.String>;
 }>>;
 export type LucySettings = typeof lucySettings.Type;

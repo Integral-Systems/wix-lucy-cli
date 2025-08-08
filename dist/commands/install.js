@@ -48,10 +48,12 @@ export const installPackages = (workspace = false) => {
         }
         logger.info("Installing dependencies");
         const install = Command.make(manager, ...pkgMgrParamsInstall(), ...workspaceEnabled(), ...pkgs).pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.stderr("inherit"), // Stream stderr to process.stderr
         Command.exitCode // Get the exit code
         );
         logger.info("Installing dev dependencies");
         const installDev = Command.make(manager, ...pkgMgrParamsInstallDev(), ...workspaceEnabled(), ...devPkgs).pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.stderr("inherit"), // Stream stderr to process.stderr
         Command.exitCode // Get the exit code
         );
         if (Object.keys(config.config.lucySettings.dependencies).length > 0) {
@@ -70,6 +72,7 @@ export const runInstall = Effect.gen(function* () {
     const config = yield* Config;
     const manager = config.config.lucySettings.packageManager;
     const install = Command.make(manager, "install").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
+    Command.stderr("inherit"), // Stream stderr to process.stderr
     Command.exitCode // Get the exit code
     );
     yield* install;
@@ -113,10 +116,10 @@ export const installVeloPackages = Effect.gen(function* () {
     });
     for (const [key, value] of Object.entries(config.config.lucySettings.dependencies)) {
         if (value.length > 0) {
-            wixPkgs.push(wixInstall(Command.make("wix", "install", `${key}@${value}`).pipe(Command.stdout("inherit"), Command.exitCode)));
+            wixPkgs.push(wixInstall(Command.make("wix", "install", `${key}@${value}`).pipe(Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode)));
             continue;
         }
-        wixPkgs.push(wixInstall(Command.make("wix", "install", `${key}`).pipe(Command.stdout("inherit"), Command.exitCode)));
+        wixPkgs.push(wixInstall(Command.make("wix", "install", `${key}`).pipe(Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode)));
     }
     const devPkgs = [];
     for (const [key, value] of Object.entries(config.config.lucySettings.devDependencies)) {
@@ -149,8 +152,9 @@ export const installVeloPackages = Effect.gen(function* () {
 export const approveBuilds = Effect.gen(function* () {
     const config = yield* Config;
     const manager = config.config.lucySettings.packageManager;
-    const approve = Command.make("pnpm", "approve-build").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
-    Command.exitCode // Get the exit code
+    const approve = Command.make("pnpm", "approve-builds").pipe(Command.stdout("inherit"), // Stream stdout to process.stdout
+    Command.stderr("inherit"), // Stream stderr to process.stderr
+    Command.stdin("inherit"), Command.exitCode // Get the exit code
     );
     if (manager !== "pnpm") {
         logger.warning("The 'approve-build' command is only available for pnpm. Skipping...");

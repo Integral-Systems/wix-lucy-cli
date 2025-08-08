@@ -17,7 +17,7 @@ export const execCommand = Effect.gen(function*() {
             ...cmds.map((cmd) => {
             return Command.make(cmd[0], ...cmd.slice(1))
                 .pipe()
-                .pipe(Command.stdout("inherit"), Command.exitCode);
+                .pipe(Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode);
             }),
         ]);
     }
@@ -33,9 +33,9 @@ export const open = Effect.scoped(Effect.gen(function*() {
         case 'win32': command = Command.make('start', config.config.lucyHome); break;
         default: command = Command.make('xdg-open', config.config.lucyHome); break;
     }
-    
-    command.pipe().pipe(Command.stdout("inherit"), Command.exitCode);
-    yield* command.pipe().pipe(Command.stdout("inherit"), Command.exitCode);
+
+    command.pipe().pipe(Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode);
+    yield* command.pipe().pipe(Command.stdout("inherit"), Command.stderr("inherit"), Command.exitCode);
 }))
 
 export const openVSCode = Effect.gen(function*() {
@@ -45,6 +45,7 @@ export const openVSCode = Effect.gen(function*() {
         config.config.cwd,
         ).pipe(
         Command.stdout("inherit"), // Stream stdout to process.stdout
+        Command.stderr("inherit"), // Stream stderr to process.stderr
         Command.exitCode // Get the exit code
     )
     const overwriteQuestion = new Enquirer();

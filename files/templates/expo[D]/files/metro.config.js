@@ -19,6 +19,12 @@ const config = (() => {
 	config.transformer = {
 		...transformer,
 	};
+	
+	const assetExts = config.resolver.assetExts;
+	if (!assetExts.includes('csv')) {
+		assetExts.push('csv');
+	}
+
 	config.resolver = {
 		...resolver,
 	};

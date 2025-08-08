@@ -13,6 +13,7 @@ import { checkForVelo } from "../commands/checks.js";
 import { AppError } from "../error.js";
 import Enquirer from "enquirer";
 import { prepareVelo } from "./prepareVelo.js";
+import { openVSCode } from "../commands/exec.js";
 
 export const init_velo = () => {
     return Effect.gen(function*() {
@@ -58,5 +59,7 @@ export const init_velo = () => {
         yield* setInitialized;
         
         logger.success("Velo initialized successfully!");
+
+        yield* openVSCode;
     })
 }

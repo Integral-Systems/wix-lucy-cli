@@ -5,6 +5,7 @@ import { copyTemplateFiles } from "../commands/copy.js";
 import { gitInit } from "../commands/git.js";
 import { checkForDirty } from "../commands/checks.js";
 import { setInitialized } from "../commands/edit.js";
+import { openVSCode } from "../commands/exec.js";
 
 export const init_cargo = () => {
     return Effect.gen(function*() {
@@ -18,5 +19,7 @@ export const init_cargo = () => {
         yield* setInitialized;
         
         logger.success("Cargo project initialized successfully!");
+
+        yield* openVSCode;
     })
 }
