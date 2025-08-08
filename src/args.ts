@@ -72,7 +72,48 @@ export async function get_args(): Promise<LucyArgs> {
         .alias('h', 'help')
         .strict()
         .wrap(yargs().terminalWidth())
-        .epilogue('For more information, visit https://github.com/your-repo/wix-lucy-cli')
+        .epilogue(`
+🦮 Lucy CLI - Complete Command Overview
+
+📋 Available Commands:
+  init <type>        Initialize a new Lucy project (types: ${initTypes.join(', ')})
+  open               Open the Lucy home directory
+  task <name>        Run a task (tasks: ${taskNames.join(', ')})
+  wix-sync <action>  Run velo-sync actions (actions: ${syncActions.join(', ')})
+  wix-sdk <action>   Run Wix SDK actions
+
+🔧 Available Tasks:
+  dev                Start development environment
+  build              Build the project
+  build-prod         Build for production
+  build-pipeline     Build pipeline
+  sync-settings      Sync settings
+
+🔄 Wix Sync Actions:
+  sync               Synchronize collections
+  import             Import data from CSV
+  init               Initialize sync configuration
+  is-alive           Check if sync is alive
+  migrate            Migrate data
+  export             Export data
+
+⚙️ Global Options:
+  -h, --help         Show this help message
+  -v, --version      Show version number
+  -f, --force        Force execution (use with caution)
+
+📁 Project Types:
+  velo               Wix Velo project
+  expo               React Native with Expo
+  blocks             Wix Blocks
+  monorepo           Monorepo setup
+  tauri              Tauri desktop app
+  cargo              Rust project
+  submodules         Git submodules
+  wix-sdk            Wix SDK setup
+
+For more information, visit https://github.com/your-repo/wix-lucy-cli
+        `)
         .parseAsync();
 
     // The cast is now safer with the defined interface.
