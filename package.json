@@ -7,11 +7,12 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "start": "NODE_OPTIONS='--no-warnings' node dist/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Integral-Systems/wix-lucy-cli.git"
+    "url": "git+https://github.com/Sunnyside-UP-GmbH/lucy-cli.git"
   },
   "keywords": [
     "WIX",
@@ -24,10 +25,10 @@
   "author": "Gradlon von Känel",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Integral-Systems/wix-lucy-cli/issues"
+    "url": "https://github.com/Sunnyside-UP-GmbH/lucy-cli/issues"
   },
-  "homepage": "https://github.com/Integral-Systems/wix-lucy-cli#readme",
-  "bin": "./dist/index.js",
+  "homepage": "https://github.com/Sunnyside-UP-GmbH/lucy-cli#readme",
+  "bin": "./lucy",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

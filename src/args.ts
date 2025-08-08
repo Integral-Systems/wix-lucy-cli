@@ -112,7 +112,7 @@ export async function get_args(): Promise<LucyArgs> {
   submodules         Git submodules
   wix-sdk            Wix SDK setup
 
-For more information, visit https://github.com/your-repo/wix-lucy-cli
+For more information, visit https://github.com/Sunnyside-UP-GmbH/lucy-cli
         `)
         .parseAsync();
 

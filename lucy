@@ -1,0 +1,4 @@
+#!/usr/bin/env node --no-warnings
+
+// This is a wrapper script that runs the lucy-cli with warnings suppressed
+import('./dist/index.js').catch(console.error);
